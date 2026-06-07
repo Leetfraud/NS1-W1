@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexioSol — The Studio That Builds & Ships Software</title>
+  <meta name="description" content="NexioSol is an elite technical studio. We design, build, and ship production-grade software, AI systems, and automation — engineered to scale." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white: #ffffff;
+      --off: #f9f8f6;
+      --subtle: #f2f1ee;
+      --border: rgba(0,0,0,0.08);
+      --border-strong: rgba(0,0,0,0.14);
+      --text: #111110;
+      --ink: #0c0c0b;          /* hero/dark bg */
+      --muted: #6b6b67;
+      --faint: #9c9c97;
+      --red: #861211;
+      --red-bright: #b91c1a;
+      --red-light: #fdf2f2;
+      --red-tint: rgba(134,18,17,0.06);
+      --font-display: 'DM Serif Display', serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --ease: cubic-bezier(.22,.61,.36,1);
+      --maxw: 1280px;
+    }
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body { font-family: var(--font-body); color: var(--text); background: var(--white); font-size: 15px; line-height: 1.65; overflow-x: hidden; }
+    ::selection { background: var(--red); color: #fff; }
+    a { color: inherit; text-decoration: none; }
+
+    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 6%; }
+    .mono { font-family: var(--font-mono); }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 14px;
+      font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.04em;
+      color: var(--red); text-transform: uppercase;
+    }
+    .eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--red); opacity: .55; }
+    .eyebrow.on-dark { color: rgba(255,255,255,0.55); }
+    .eyebrow.on-dark::before { background: rgba(255,255,255,0.3); }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}
+    @media (prefers-reduced-motion: reduce){ .reveal{opacity:1!important;transform:none!important} *{animation:none!important} }
+
+    /* ── NAV (scroll-morphing pill) ── */
+    #nav { position: fixed; z-index: 100; top: 0; left: 0; right: 0; transition: all .5s var(--ease); }
+    #nav.scrolled { top: 16px; left: 16px; right: 16px; }
+    .nav-inner {
+      max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;
+      height: 78px; padding: 0 32px; transition: all .5s var(--ease);
+      border: 1px solid transparent; border-radius: 0; background: transparent;
+    }
+    #nav.scrolled .nav-inner {
+      height: 60px; max-width: 1160px; border-radius: 16px;
+      background: rgba(255,255,255,0.8); backdrop-filter: blur(18px) saturate(150%);
+      border-color: var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    }
+    .nav-logo { display: flex; align-items: baseline; gap: 6px; }
+    .nav-logo .lg { font-family: var(--font-display); font-size: 23px; letter-spacing: -.4px; color: #fff; transition: color .5s, font-size .5s var(--ease); }
+    #nav.scrolled .nav-logo .lg { color: var(--text); font-size: 20px; }
+    .nav-logo .lg span { color: var(--red-bright); }
+    #nav.scrolled .nav-logo .lg span { color: var(--red); }
+    .nav-logo .tm { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.5); transition: color .5s; }
+    #nav.scrolled .nav-logo .tm { color: var(--muted); }
+    .nav-links { display: flex; align-items: center; gap: 38px; list-style: none; }
+    .nav-links a { font-family: var(--font-mono); font-size: 13px; color: rgba(255,255,255,0.65); position: relative; transition: color .3s; }
+    #nav.scrolled .nav-links a { color: var(--muted); }
+    .nav-links a::after { content: ''; position: absolute; left: 0; bottom: -5px; height: 1px; width: 0; background: currentColor; transition: width .3s var(--ease); }
+    .nav-links a:hover { color: #fff; }
+    #nav.scrolled .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-right { display: flex; align-items: center; gap: 22px; }
+    .nav-signin { font-family: var(--font-mono); font-size: 13px; color: rgba(255,255,255,0.65); transition: color .3s; }
+    #nav.scrolled .nav-signin { color: var(--muted); }
+    .nav-signin:hover { color: #fff; }
+    #nav.scrolled .nav-signin:hover { color: var(--text); }
+    .nav-cta {
+      background: #fff; color: var(--ink); padding: 10px 22px; border-radius: 100px;
+      font-size: 13.5px; font-weight: 500; transition: all .4s var(--ease); will-change: transform;
+    }
+    #nav.scrolled .nav-cta { background: var(--red); color: #fff; padding: 8px 18px; font-size: 12.5px; }
+    .nav-cta:hover { background: var(--red); color: #fff; }
+    .nav-toggle { display: none; background: none; border: none; font-size: 24px; color: #fff; cursor: pointer; }
+    #nav.scrolled .nav-toggle { color: var(--text); }
+
+    /* ════ HERO (dark + ASCII torus) ════ */
+    #hero {
+      position: relative; min-height: 100vh; background: var(--ink); color: #fff;
+      display: flex; flex-direction: column; justify-content: center; overflow: hidden;
+    }
+    #asciiCanvas { position: absolute; inset: 0; z-index: 0; display: block; }
+    /* radial vignette + left fade for text legibility */
+    .hero-veil { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(12,12,11,0.92) 0%, rgba(12,12,11,0.55) 42%, rgba(12,12,11,0.1) 70%, transparent 100%),
+        radial-gradient(120% 90% at 70% 50%, transparent 30%, rgba(12,12,11,0.55) 100%);
+    }
+    /* faint engineering grid */
+    .hero-grid { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .5;
+      background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 8.33% 12.5%;
+    }
+    .hero-content { position: relative; z-index: 2; width: 100%; max-width: 1400px; margin: 0 auto; padding: 120px 6% 0; }
+    .hero-eyebrow { margin-bottom: 34px; opacity: 0; transform: translateY(16px); animation: fadeUp .8s var(--ease) .1s forwards; }
+    .hero-h1 {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(2.4rem, 6.2vw, 6.6rem); line-height: 0.96; letter-spacing: -2.5px;
+      max-width: 60%; opacity: 0; transform: translateY(28px); animation: fadeUp 1s var(--ease) .25s forwards;
+    }
+    .hero-h1 .line { display: block; white-space: nowrap; }
+    .cycle-word { color: var(--red-bright); display: inline-block; }
+    @keyframes fadeUp { to { opacity: 1; transform: none; } }
+    .hero-stats { position: absolute; bottom: 48px; left: 0; right: 0; z-index: 2; opacity: 0; animation: fadeUp .8s var(--ease) .8s forwards; }
+    .hero-stats-inner { max-width: 1400px; margin: 0 auto; padding: 0 6%; display: flex; gap: 64px; flex-wrap: wrap; }
+    .hstat .num { font-family: var(--font-display); font-size: clamp(28px,3vw,40px); letter-spacing: -.5px; line-height: 1; }
+    .hstat .lbl { font-family: var(--font-mono); font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 8px; max-width: 160px; line-height: 1.4; }
+
+    /* ════ SECTION SHARED ════ */
+    section.blk { position: relative; padding: 130px 0; }
+    .sec-head { max-width: 720px; margin-bottom: 70px; }
+    .sec-head h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px,5vw,68px); line-height: .98; letter-spacing: -1.5px; margin: 22px 0 18px; }
+    .sec-head p { color: var(--muted); font-size: 17px; font-weight: 300; max-width: 560px; }
+
+    /* ════ CAPABILITIES (numbered) ════ */
+    #capabilities { background: var(--white); }
+    .feat-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+    .feat {
+      position: relative; padding: 48px 44px 48px 0; border-top: 1px solid var(--border);
+      display: grid; grid-template-columns: auto 1fr; gap: 28px; transition: background .3s;
+    }
+    .feat:nth-child(odd) { padding-right: 64px; }
+    .feat:nth-child(even) { padding-left: 44px; }
+    .feat::after { content: ''; position: absolute; left: 0; bottom: -1px; height: 1px; width: 0; background: var(--red); transition: width .6s var(--ease); }
+    .feat:hover::after { width: 100%; }
+    .feat-num { font-family: var(--font-mono); font-size: 13px; color: var(--red); padding-top: 6px; }
+    .feat-title { font-family: var(--font-display); font-size: 27px; letter-spacing: -.4px; margin-bottom: 12px; transition: transform .4s var(--ease); }
+    .feat:hover .feat-title { transform: translateX(6px); }
+    .feat-desc { font-size: 14.5px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+    .feat-stat { margin-top: 20px; display: flex; align-items: baseline; gap: 10px; }
+    .feat-stat .v { font-family: var(--font-display); font-size: 26px; color: var(--text); }
+    .feat-stat .l { font-family: var(--font-mono); font-size: 11.5px; color: var(--faint); text-transform: uppercase; letter-spacing: .05em; }
+
+    /* ════ PROCESS (dark, code snippets) ════ */
+    #process { background: var(--ink); color: #fff; overflow: hidden; }
+    #process .sec-head h2 { color: #fff; }
+    #process .sec-head p { color: rgba(255,255,255,0.55); }
+    .proc-glow { position: absolute; width: 460px; height: 460px; border-radius: 50%; background: rgba(134,18,17,0.18); filter: blur(120px); bottom: -120px; left: 10%; pointer-events: none; }
+    .proc-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: center; position: relative; z-index: 1; }
+    .proc-steps { display: flex; flex-direction: column; gap: 4px; }
+    .proc-step { padding: 24px 26px; border-radius: 14px; cursor: pointer; border: 1px solid transparent; transition: all .4s var(--ease); }
+    .proc-step.active { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+    .proc-step-top { display: flex; align-items: center; gap: 16px; }
+    .proc-step .n { font-family: var(--font-mono); font-size: 12px; color: var(--red-bright); }
+    .proc-step h3 { font-family: var(--font-display); font-size: 26px; font-weight: 400; letter-spacing: -.3px; }
+    .proc-step h3 .sub { color: rgba(255,255,255,0.4); }
+    .proc-step p { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 300; margin-top: 10px; max-height: 0; overflow: hidden; opacity: 0; transition: all .5s var(--ease); }
+    .proc-step.active p { max-height: 90px; opacity: 1; margin-top: 12px; }
+    .proc-code {
+      background: #08110d; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+    .code-bar { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .code-bar .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .code-bar .dot:nth-child(1){background:#ff5f56}.code-bar .dot:nth-child(2){background:#ffbd2e}.code-bar .dot:nth-child(3){background:#27c93f}
+    .code-bar .fname { font-family: var(--font-mono); font-size: 12px; color: rgba(255,255,255,0.4); margin-left: 10px; }
+    .proc-code pre { padding: 26px; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.85; color: rgba(255,255,255,0.85); overflow-x: auto; min-height: 220px; }
+    .proc-code .k { color: #ff8f8e; } .proc-code .s { color: #c0e8a0; } .proc-code .c { color: rgba(255,255,255,0.3); } .proc-code .f { color: #f0c674; }
+
+    /* ════ METRICS (scrambling counters) ════ */
+    #metrics { background: var(--off); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+    .metric { padding: 0 48px; position: relative; }
+    .metric + .metric::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: 1px; background: var(--border); }
+    .metric .big { font-family: var(--font-display); font-size: clamp(46px,6vw,82px); line-height: 1; letter-spacing: -2px; font-variant-numeric: tabular-nums; }
+    .metric .big .pre, .metric .big .suf { color: var(--red); }
+    .metric .lbl { font-size: 15px; font-weight: 500; margin-top: 18px; }
+    .metric .sub { font-family: var(--font-mono); font-size: 12px; color: var(--faint); margin-top: 5px; }
+
+    /* ════ START A PROJECT ════ */
+    #start { background: var(--white); }
+    .form-shell { max-width: 600px; margin: 0 auto; text-align: center; }
+    .steps-bar { display: flex; align-items: center; justify-content: center; margin: 30px auto 46px; max-width: 340px; }
+    .sb-step { display: flex; align-items: center; flex: 1; }
+    .sb-step:last-child { flex: 0; }
+    .sb-dot { width: 32px; height: 32px; border-radius: 50%; flex: 0 0 auto; border: 1px solid var(--border-strong); background: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 12.5px; color: var(--faint); transition: all .35s var(--ease); }
+    .sb-line { flex: 1; height: 1px; background: var(--border-strong); position: relative; }
+    .sb-line::after { content: ''; position: absolute; inset: 0; width: 0; background: var(--red); transition: width .4s var(--ease); }
+    .sb-step.done .sb-line::after { width: 100%; }
+    .sb-step.active .sb-dot, .sb-step.done .sb-dot { border-color: var(--red); background: var(--red); color: #fff; }
+    .step-counter { font-family: var(--font-mono); color: var(--faint); font-size: 13px; margin-top: 8px; letter-spacing: .04em; }
+    .step-counter b { color: var(--red); }
+    .form-stage { text-align: left; }
+    .form-panel { display: none; animation: panelIn .5s var(--ease); }
+    .form-panel.active { display: block; }
+    @keyframes panelIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .04em; }
+    .input { width: 100%; padding: 14px 16px; border: 1px solid var(--border-strong); border-radius: 10px; font-family: var(--font-body); font-size: 15px; color: var(--text); background: var(--white); outline: none; transition: border-color .25s, box-shadow .25s; }
+    .input:focus { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-tint); }
+    .input::placeholder { color: var(--faint); }
+    textarea.input { resize: none; min-height: 120px; line-height: 1.6; }
+    select.input { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b67' fill='none' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+    .pill-group { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill { padding: 10px 18px; border: 1px solid var(--border-strong); border-radius: 100px; font-size: 13.5px; color: var(--muted); cursor: pointer; background: var(--white); transition: all .25s var(--ease); }
+    .pill:hover { border-color: var(--red); color: var(--red); }
+    .pill.selected { background: var(--red); border-color: var(--red); color: #fff; }
+    .form-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 30px; }
+    .btn { display: inline-flex; align-items: center; gap: 9px; padding: 14px 30px; border-radius: 100px; font-size: 14.5px; font-weight: 500; cursor: pointer; border: 1px solid transparent; will-change: transform; transition: transform .3s var(--ease), background .25s, color .25s; }
+    .btn i { transition: transform .3s var(--ease); }
+    .btn-primary { background: var(--red); color: #fff; }
+    .btn-primary:hover i { transform: translateX(4px); }
+    .btn-back { background: none; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: color .25s, gap .25s; }
+    .btn-back:hover { color: var(--text); gap: 10px; }
+    .btn-back[hidden] { visibility: hidden; }
+    .form-success { text-align: center; padding: 30px 0; display: none; }
+    .form-success.show { display: block; animation: panelIn .5s var(--ease); }
+    .success-icon { width: 66px; height: 66px; border-radius: 50%; background: var(--red-light); color: var(--red); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 20px; }
+    .form-success h3 { font-family: var(--font-display); font-size: 30px; margin-bottom: 10px; }
+    .form-success p { color: var(--muted); font-weight: 300; }
+
+    /* ════ FOOTER ════ */
+    footer { background: var(--ink); color: rgba(255,255,255,0.7); padding: 90px 0 40px; }
+    .foot-grid { display: grid; grid-template-columns: 1.7fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .foot-brand .flogo { font-family: var(--font-display); font-size: 28px; color: #fff; }
+    .foot-brand .flogo span { color: var(--red-bright); }
+    .foot-brand p { font-size: 14.5px; font-weight: 300; line-height: 1.7; margin: 16px 0 24px; max-width: 330px; }
+    .foot-socials { display: flex; gap: 10px; }
+    .foot-socials a { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; transition: background .25s, transform .3s var(--ease), border-color .25s; }
+    .foot-socials a:hover { background: var(--red); border-color: var(--red); transform: translateY(-3px); }
+    .foot-col h4 { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 18px; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .foot-col a { font-size: 14.5px; font-weight: 300; color: rgba(255,255,255,0.7); transition: color .25s, padding-left .25s; }
+    .foot-col a:hover { color: #fff; padding-left: 4px; }
+    .foot-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 28px; font-family: var(--font-mono); font-size: 12.5px; color: rgba(255,255,255,0.4); flex-wrap: wrap; gap: 10px; }
+
+    /* ════ MOBILE ════ */
+    @media (max-width: 960px) {
+      .hero-h1 { max-width: 100%; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .feat:nth-child(odd), .feat:nth-child(even) { padding: 40px 0; }
+      .proc-layout { grid-template-columns: 1fr; gap: 40px; }
+      .foot-grid { grid-template-columns: 1fr 1fr; }
+      .foot-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 640px) {
+      .nav-links, .nav-signin { display: none; }
+      .nav-toggle { display: block; }
+      .nav-links.open { display: flex; position: fixed; inset: 76px 16px auto 16px; flex-direction: column; gap: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 16px; padding: 8px 18px; }
+      .nav-links.open a { color: var(--text); padding: 14px 0; border-bottom: 1px solid var(--border); }
+      .nav-links.open li:last-child a { border: none; }
+      section.blk { padding: 84px 0; }
+      .metric-grid { grid-template-columns: 1fr; gap: 40px; }
+      .metric { padding: 0; } .metric + .metric::before { display: none; }
+      .hero-stats-inner { gap: 32px; }
+      .foot-grid { grid-template-columns: 1fr; }
+      .foot-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<header id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo"><span class="lg">Nexio<span>Sol</span></span><span class="tm">™</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#metrics">Impact</a></li>
+      <li><a href="#start">Start</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="mailto:humanresource@nexiosol.com?subject=Project%20inquiry%20%E2%80%94%20Let%27s%20talk&body=Hi%20NexioSol%20team%2C%0A%0AI%27d%20love%20to%20explore%20working%20together.%20Here%27s%20a%20quick%20overview%3A%0A%0A%E2%80%A2%20Company%2Fname%3A%20%0A%E2%80%A2%20What%20we%27re%20building%3A%20%0A%E2%80%A2%20What%20we%20need%20help%20with%20(software%2C%20AI%2C%20web3%2C%20refactor)%3A%20%0A%E2%80%A2%20Rough%20timeline%3A%20%0A%E2%80%A2%20Estimated%20budget%3A%20%0A%0AThanks%2C%20looking%20forward%20to%20hearing%20from%20you.%0A%0ABest%2C%0A" class="nav-signin">Say hello</a>
+      <a href="#start" class="nav-cta">Start a project</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="ti ti-menu-2"></i></button>
+  </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <canvas id="asciiCanvas" aria-hidden="true"></canvas>
+  <div class="hero-grid"></div>
+  <div class="hero-veil"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="eyebrow on-dark">A software &amp; AI studio that ships</span></div>
+    <h1 class="hero-h1">
+      <span class="line">We build software,</span>
+      <span class="line">systems that <span class="cycle-word" id="cycleWord">ship</span></span>
+    </h1>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stats-inner">
+      <div class="hstat"><div class="num" data-target="40" data-suffix="+">40+</div><div class="lbl">production systems shipped</div></div>
+      <div class="hstat"><div class="num" data-target="100" data-suffix="%">100%</div><div class="lbl">on-time delivery rate</div></div>
+      <div class="hstat"><div class="num" data-target="7" data-suffix="-day">7-day</div><div class="lbl">continuous delivery loop</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CAPABILITIES ══ -->
+<section class="blk" id="capabilities">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow reveal">Capabilities</span>
+      <h2 class="reveal d1">Everything it takes to<br>build &amp; scale</h2>
+      <p class="reveal d2">From a first line of code to a system running in production — we cover the full stack that actually matters.</p>
+    </div>
+    <div class="feat-grid">
+      <article class="feat reveal">
+        <div class="feat-num">01</div>
+        <div>
+          <h3 class="feat-title">Software &amp; Cloud</h3>
+          <p class="feat-desc">Production-grade web apps and cloud architecture engineered to scale. React, Node, and infrastructure that holds up under real load.</p>
+          <div class="feat-stat"><span class="v">99.9%</span><span class="l">uptime targets</span></div>
+        </div>
+      </article>
+      <article class="feat reveal d1">
+        <div class="feat-num">02</div>
+        <div>
+          <h3 class="feat-title">AI &amp; Automation</h3>
+          <p class="feat-desc">Custom LLM pipelines, intelligent automation, and decision flows — embedded directly into your product, not bolted on the side.</p>
+          <div class="feat-stat"><span class="v">24/7</span><span class="l">autonomous workflows</span></div>
+        </div>
+      </article>
+      <article class="feat reveal">
+        <div class="feat-num">03</div>
+        <div>
+          <h3 class="feat-title">Web3 &amp; Systems</h3>
+          <p class="feat-desc">Distributed and decentralized systems, smart-contract integrations, and the backend plumbing to make them production-ready.</p>
+          <div class="feat-stat"><span class="v">5+</span><span class="l">chains integrated</span></div>
+        </div>
+      </article>
+      <article class="feat reveal d1">
+        <div class="feat-num">04</div>
+        <div>
+          <h3 class="feat-title">Refactor &amp; Grow</h3>
+          <p class="feat-desc">Modernize legacy code, pay down technical debt, and re-architect for the next stage of growth — without halting delivery.</p>
+          <div class="feat-stat"><span class="v">0</span><span class="l">downtime migrations</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROCESS ══ -->
+<section class="blk" id="process">
+  <div class="proc-glow"></div>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow on-dark reveal">Process</span>
+      <h2 class="reveal d1">A 1-week continuous<br>delivery loop</h2>
+      <p class="reveal d2">Lean, async-friendly sprints with weekly touchpoints. Progress is always visible, momentum never stalls.</p>
+    </div>
+    <div class="proc-layout">
+      <div class="proc-steps" id="procSteps">
+        <div class="proc-step active" data-step="0">
+          <div class="proc-step-top"><span class="n">01</span><h3>Define <span class="sub">the scope</span></h3></div>
+          <p>Requirements mapping and architecture. We turn your goal into a clear, scoped plan before a line of code is written.</p>
+        </div>
+        <div class="proc-step" data-step="1">
+          <div class="proc-step-top"><span class="n">02</span><h3>Build <span class="sub">in parallel</span></h3></div>
+          <p>Design, core development, code review, and continuous QA — running in parallel for speed without compromising quality.</p>
+        </div>
+        <div class="proc-step" data-step="2">
+          <div class="proc-step-top"><span class="n">03</span><h3>Ship <span class="sub">&amp; iterate</span></h3></div>
+          <p>Final packaging, client review, deployment, and a retrospective that sharpens the very next cycle.</p>
+        </div>
+      </div>
+      <div class="proc-code">
+        <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="fname mono" id="codeName">define.ts</span></div>
+        <pre id="codeBlock"></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ METRICS ══ -->
+<section class="blk" id="metrics">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:54px;">
+      <span class="eyebrow reveal">Impact</span>
+      <h2 class="reveal d1">Numbers that hold up</h2>
+    </div>
+    <div class="metric-grid">
+      <div class="metric reveal">
+        <div class="big"><span class="count" data-target="40">0</span><span class="suf">+</span></div>
+        <div class="lbl">Systems in production</div>
+        <div class="sub">across 3 continents</div>
+      </div>
+      <div class="metric reveal d1">
+        <div class="big"><span class="count" data-target="99.9" data-decimals="1">0</span><span class="suf">%</span></div>
+        <div class="lbl">Delivery reliability</div>
+        <div class="sub">on-time, on-spec</div>
+      </div>
+      <div class="metric reveal d2">
+        <div class="big"><span class="pre">&lt;</span><span class="count" data-target="7">0</span><span class="suf">d</span></div>
+        <div class="lbl">From idea to shipped</div>
+        <div class="sub">per delivery loop</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ START A PROJECT ══ -->
+<section class="blk" id="start">
+  <div class="wrap">
+    <div class="form-shell">
+      <span class="eyebrow reveal" style="display:inline-flex;">Let's build</span>
+      <h2 class="reveal d1" style="font-family:var(--font-display);font-weight:400;font-size:clamp(34px,5vw,60px);letter-spacing:-1.2px;margin-top:18px;">Start a project</h2>
+      <p class="step-counter reveal d2">STEP <b id="stepNow">1</b> / 3</p>
+
+      <div class="steps-bar reveal d2">
+        <div class="sb-step active" data-step="1"><span class="sb-dot">1</span><span class="sb-line"></span></div>
+        <div class="sb-step" data-step="2"><span class="sb-dot">2</span><span class="sb-line"></span></div>
+        <div class="sb-step" data-step="3"><span class="sb-dot">3</span></div>
+      </div>
+
+      <form class="form-stage reveal d3" id="projForm" onsubmit="return false;">
+        <div class="form-panel active" data-panel="1">
+          <div class="field"><label>Your name</label><input class="input" type="text" placeholder="Jane Smith" /></div>
+          <div class="field"><label>Email address</label><input class="input" type="email" placeholder="jane@company.com" /></div>
+        </div>
+        <div class="form-panel" data-panel="2">
+          <div class="field">
+            <label>What do you need?</label>
+            <div class="pill-group" id="pillGroup">
+              <span class="pill">Software &amp; Cloud</span>
+              <span class="pill">AI &amp; Automation</span>
+              <span class="pill">Web3 &amp; Systems</span>
+              <span class="pill">Not sure yet</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Estimated budget</label>
+            <select class="input">
+              <option value="" disabled selected>Select a range</option>
+              <option>Under $10k</option><option>$10k – $30k</option><option>$30k – $75k</option><option>$75k+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-panel" data-panel="3">
+          <div class="field"><label>Tell us about your project</label><textarea class="input" placeholder="Goals, timeline, anything that helps us scope it..."></textarea></div>
+        </div>
+        <div class="form-nav">
+          <button type="button" class="btn-back" id="btnBack" hidden><i class="ti ti-arrow-left"></i> Back</button>
+          <button type="button" class="btn btn-primary" id="btnNext" style="margin-left:auto;">Next <i class="ti ti-arrow-right"></i></button>
+        </div>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon"><i class="ti ti-check"></i></div>
+        <h3>Request received</h3>
+        <p>Thanks — we'll review your project and respond within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="flogo">Nexio<span>Sol</span></div>
+        <p>An elite technical studio building and scaling the systems that move business forward.</p>
+        <div class="foot-socials">
+          <a href="#" aria-label="GitHub"><i class="ti ti-brand-github"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="#" aria-label="X"><i class="ti ti-brand-x"></i></a>
+        </div>
+      </div>
+      <div class="foot-col"><h4>Studio</h4><ul><li><a href="#">Our Team</a></li><li><a href="#">Careers</a></li><li><a href="#">News</a></li></ul></div>
+      <div class="foot-col"><h4>Solutions</h4><ul><li><a href="#">SaaS Engineering</a></li><li><a href="#">Cloud Migration</a></li><li><a href="#">AI Enablement</a></li></ul></div>
+      <div class="foot-col"><h4>Contact</h4><ul><li><a href="#start">Start a project</a></li><li><a href="#">Schedule a call</a></li><li><a href="mailto:humanresource@nexiosol.com">humanresource@nexiosol.com</a></li></ul></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 NexioSol. All rights reserved.</span><span>Lahore, Pakistan</span></div>
+  </div>
+</footer>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── ASCII 3D torus-knot (red) ── */
+  (function () {
+    const canvas = document.getElementById('asciiCanvas');
+    const hero = document.getElementById('hero');
+    const ctx = canvas.getContext('2d');
+    const CHARS = " .:-=+*#%@";
+    let frame, time = 0, w, h, dpr;
+    const mouse = { x: 0.65, y: 0.5 };
+
+    function resize() {
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      w = hero.clientWidth; h = hero.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize(); addEventListener('resize', resize);
+    addEventListener('mousemove', e => { mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight; });
+
+    // generate torus knot points
+    const pts = [];
+    const P = 2, Q = 3, SEG = 128, TUBE = 16, tubeR = 0.4;
+    for (let i = 0; i < SEG; i++) for (let j = 0; j < TUBE; j++) {
+      const u = (i / SEG) * Math.PI * 2, v = (j / TUBE) * Math.PI * 2;
+      const r = 2 + Math.cos(Q * u);
+      const x = r * Math.cos(P * u), y = r * Math.sin(P * u), z = -Math.sin(Q * u);
+      const nx = Math.cos(P * u) * Math.cos(v), ny = Math.sin(P * u) * Math.cos(v), nz = Math.sin(v);
+      pts.push({ x: x + tubeR * nx, y: y + tubeR * ny, z: z + tubeR * nz });
+    }
+    function rot(p, ax, ay, az) {
+      let { x, y, z } = p;
+      let cy1 = Math.cos(ax), sy1 = Math.sin(ax); let ny = y * cy1 - z * sy1, nz = y * sy1 + z * cy1; y = ny; z = nz;
+      let cx = Math.cos(ay), sx = Math.sin(ay); let nx = x * cx + z * sx; z = -x * sx + z * cx; x = nx;
+      let cz = Math.cos(az), sz = Math.sin(az); return { x: x * cz - y * sz, y: x * sz + y * cz, z };
+    }
+    function render() {
+      const cx = w * 0.66, cy = h * 0.5, scale = Math.min(w, h) * 0.34;
+      ctx.clearRect(0, 0, w, h);
+      const mInfX = (mouse.x - 0.5) * 0.5, mInfY = (mouse.y - 0.5) * 0.5;
+      const ax = time * 0.3 + mInfY, ay = time * 0.5 + mInfX, az = time * 0.2;
+      const proj = pts.map(p => {
+        const r = rot(p, ax, ay, az);
+        const persp = 5, f = persp / (persp + r.z);
+        return { x: cx + r.x * scale * f, y: cy + r.y * scale * f, z: r.z };
+      }).sort((a, b) => a.z - b.z);
+      const cs = Math.max(13, Math.min(w, h) * 0.028);
+      ctx.font = cs + 'px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      proj.forEach(p => {
+        const nz = (p.z + 3) / 6;
+        const ch = CHARS[Math.max(0, Math.min(CHARS.length - 1, Math.floor(nz * (CHARS.length - 1))))];
+        const bright = 0.18 + nz * 0.82;
+        // red palette: deepen channel toward bright red with depth
+        const rr = Math.floor(150 + nz * 95);
+        const gg = Math.floor(18 + nz * 30);
+        const bb = Math.floor(17 + nz * 26);
+        ctx.fillStyle = `rgba(${rr},${gg},${bb},${bright})`;
+        ctx.fillText(ch, p.x, p.y);
+      });
+      // floating particles
+      for (let i = 0; i < 46; i++) {
+        const px = (Math.sin(time * 0.5 + i * 0.5) * 0.32 + 0.66) * w;
+        const py = (Math.cos(time * 0.3 + i * 0.7) * 0.32 + 0.5) * h;
+        const pz = Math.sin(time + i) * 0.5 + 0.5;
+        ctx.fillStyle = `rgba(185,28,26,${pz * 0.28})`;
+        ctx.fillText(CHARS[Math.floor(pz * (CHARS.length - 1))], px, py);
+      }
+      time += 0.008;
+      frame = requestAnimationFrame(render);
+    }
+    if (!reduce) {
+      render();
+      new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting) { cancelAnimationFrame(frame); render(); }
+        else cancelAnimationFrame(frame);
+      }), { threshold: 0 }).observe(hero);
+    }
+  })();
+
+  /* ── Hero cycling blur-in word ── */
+  (function () {
+    const el = document.getElementById('cycleWord');
+    const words = ['ship', 'scale', 'endure', 'perform'];
+    let wi = 0;
+    function setWord(word) {
+      el.innerHTML = '';
+      const letters = word.split('');
+      const STAG = 45, DUR = 500;
+      letters.forEach((ch, i) => {
+        const s = document.createElement('span');
+        s.textContent = ch; s.style.display = 'inline-block';
+        s.style.opacity = '0'; s.style.filter = 'blur(20px)';
+        el.appendChild(s);
+        if (reduce) { s.style.opacity = '1'; s.style.filter = 'none'; return; }
+        setTimeout(() => {
+          const start = performance.now();
+          (function tick(now) {
+            const p = Math.min((now - start) / DUR, 1);
+            const e = 1 - Math.pow(1 - p, 3);
+            s.style.opacity = e; s.style.filter = `blur(${20 * (1 - e)}px)`;
+            if (p < 1) requestAnimationFrame(tick);
+          })(performance.now());
+        }, i * STAG);
+      });
+    }
+    setWord(words[0]);
+    if (!reduce) setInterval(() => { wi = (wi + 1) % words.length; setWord(words[wi]); }, 2600);
+  })();
+
+  /* ── Scroll reveal ── */
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }), { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ── Counters (hero + metrics) ── */
+  function runCount(el) {
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const decimals = +(el.dataset.decimals || 0);
+    const dur = 1800, start = performance.now();
+    (function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 4);
+      const val = target * e;
+      el.textContent = (decimals ? val.toFixed(decimals) : Math.floor(val)) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    })(performance.now());
+  }
+  const heroCountIO = new IntersectionObserver((es, obs) => es.forEach(e => { if (e.isIntersecting) { document.querySelectorAll('.hstat .num').forEach(runCount); obs.disconnect(); } }), { threshold: 0.4 });
+  heroCountIO.observe(document.querySelector('.hero-stats'));
+  const metricIO = new IntersectionObserver((es, obs) => es.forEach(e => { if (e.isIntersecting) { document.querySelectorAll('#metrics .count').forEach(runCount); obs.disconnect(); } }), { threshold: 0.4 });
+  metricIO.observe(document.getElementById('metrics'));
+
+  /* ── Nav scroll + mobile ── */
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 24), { passive: true });
+  const navLinks = document.getElementById('navLinks');
+  document.getElementById('navToggle').addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  /* ── Magnetic CTA ── */
+  document.querySelectorAll('.btn, .nav-cta').forEach(btn => {
+    btn.addEventListener('mousemove', e => { const r = btn.getBoundingClientRect(); btn.style.transform = `translate(${(e.clientX-r.left-r.width/2)*0.2}px,${(e.clientY-r.top-r.height/2)*0.3}px)`; });
+    btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+  });
+
+  /* ── Process auto-cycle + code ── */
+  (function () {
+    const snippets = [
+      { name: 'define.ts', html: `<span class="c">// scope the build</span>\n<span class="k">const</span> project = <span class="k">new</span> <span class="f">Build</span>({\n  goal: <span class="s">'Ship the MVP'</span>,\n  stack: [<span class="s">'react'</span>, <span class="s">'node'</span>, <span class="s">'ai'</span>],\n  timeline: <span class="s">'1 sprint'</span>,\n})` },
+      { name: 'build.ts', html: `<span class="c">// parallel deep work</span>\n<span class="k">await</span> project.<span class="f">execute</span>({\n  tracks: [<span class="s">'design'</span>, <span class="s">'core'</span>, <span class="s">'qa'</span>],\n  review: <span class="k">true</span>,\n  mode: <span class="s">'continuous'</span>,\n})` },
+      { name: 'ship.ts', html: `<span class="c">// deploy + iterate</span>\nproject.<span class="f">ship</span>({\n  deploy: <span class="s">'production'</span>,\n  handoff: <span class="k">true</span>,\n})\n<span class="c">// 100% on-time delivery</span>` },
+    ];
+    const steps = [...document.querySelectorAll('.proc-step')];
+    const codeBlock = document.getElementById('codeBlock');
+    const codeName = document.getElementById('codeName');
+    let active = 0, timer;
+    function set(i) {
+      active = i;
+      steps.forEach((s, k) => s.classList.toggle('active', k === i));
+      codeBlock.innerHTML = snippets[i].html;
+      codeName.textContent = snippets[i].name;
+    }
+    function start() { if (reduce) return; timer = setInterval(() => set((active + 1) % steps.length), 6000); }
+    steps.forEach((s, i) => s.addEventListener('click', () => { clearInterval(timer); set(i); start(); }));
+    set(0); start();
+  })();
+
+  /* ── Pills ── */
+  document.querySelectorAll('#pillGroup .pill').forEach(p => p.addEventListener('click', () => {
+    document.querySelectorAll('#pillGroup .pill').forEach(x => x.classList.remove('selected')); p.classList.add('selected');
+  }));
+
+  /* ── Multi-step form ── */
+  (function () {
+    let step = 1; const total = 3;
+    const panels = document.querySelectorAll('.form-panel');
+    const sbSteps = document.querySelectorAll('.sb-step');
+    const btnNext = document.getElementById('btnNext');
+    const btnBack = document.getElementById('btnBack');
+    const stepNow = document.getElementById('stepNow');
+    function render() {
+      panels.forEach(p => p.classList.toggle('active', +p.dataset.panel === step));
+      sbSteps.forEach(s => { const n = +s.dataset.step; s.classList.toggle('active', n === step); s.classList.toggle('done', n < step); });
+      stepNow.textContent = step;
+      btnBack.hidden = step === 1;
+      btnNext.innerHTML = step === total ? 'Send request <i class="ti ti-send"></i>' : 'Next <i class="ti ti-arrow-right"></i>';
+    }
+    btnNext.addEventListener('click', () => {
+      if (step < total) { step++; render(); }
+      else { document.getElementById('projForm').style.display = 'none'; document.querySelector('.steps-bar').style.opacity = '.4'; document.getElementById('formSuccess').classList.add('show'); }
+    });
+    btnBack.addEventListener('click', () => { if (step > 1) { step--; render(); } });
+    render();
+  })();
+</script>
+</body>
+</html>
