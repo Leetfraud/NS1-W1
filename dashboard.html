@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — NexioSol</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="dash-body">
+
+  <!-- ── LOGIN ── -->
+  <div class="login-wrap" id="loginView">
+    <div class="login-card">
+      <div class="flogo">Nexio<span>Sol</span></div>
+      <div class="sub">Lead Dashboard</div>
+      <div class="field">
+        <label>Password</label>
+        <input class="input" type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <p class="form-err" id="loginErr"></p>
+      <button class="btn btn-primary" id="loginBtn" style="width:100%;justify-content:center;margin-top:8px;">Enter dashboard</button>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARD ── -->
+  <div class="dash-shell" id="dashView" style="display:none;">
+    <div class="dash-top">
+      <div>
+        <div class="flogo">Nexio<span>Sol</span></div>
+      </div>
+      <button class="dash-logout" id="logoutBtn"><i class="ti ti-logout"></i> Log out</button>
+    </div>
+    <div class="dash-sub">Project requests submitted through the site.</div>
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="v" id="statTotal">0</div><div class="l">Total leads</div></div>
+      <div class="stat-card"><div class="v" id="statWeek">0</div><div class="l">This week</div></div>
+      <div class="stat-card"><div class="v" id="statToday">0</div><div class="l">Today</div></div>
+      <div class="stat-card"><div class="v" id="statTop" style="font-size:20px;">—</div><div class="l">Top service</div></div>
+    </div>
+
+    <div class="dash-table-wrap">
+      <div class="dash-table-head">
+        <h3>Requests</h3>
+        <input class="dash-search" id="dashSearch" type="text" placeholder="Search name, email, service…" />
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="lead-table">
+          <thead>
+            <tr>
+              <th>Contact</th>
+              <th>Service</th>
+              <th>Budget</th>
+              <th>Details</th>
+              <th>Received</th>
+            </tr>
+          </thead>
+          <tbody id="leadRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

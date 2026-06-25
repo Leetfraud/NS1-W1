@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — NexioSol</title>
+  <meta name="description" content="Selected work from NexioSol — production-grade software, AI systems, and engineering, filterable by service." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<header id="nav" class="scrolled">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="lg">Nexio<span>Sol</span></span><span class="tm">™</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#capabilities">Capabilities</a></li>
+      <li><a href="index.html#process">Process</a></li>
+      <li><a href="index.html#metrics">Impact</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="index.html#start">Start</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#" class="nav-signin" data-book>Book a call</a>
+      <a href="index.html#start" class="nav-cta">Start a project</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="ti ti-menu-2"></i></button>
+  </div>
+</header>
+
+<!-- ══ PAGE HERO ══ -->
+<section class="page-hero">
+  <div class="proc-glow"></div>
+  <div class="wrap">
+    <span class="eyebrow">Portfolio</span>
+    <h1>Work that ships<br>and holds up</h1>
+    <p>A look at what we've built — products engineered to survive production, not just demos. Filter by what we do.</p>
+  </div>
+</section>
+
+<!-- ══ PORTFOLIO GRID ══ -->
+<section class="blk" id="portfolio" style="padding-top:80px;">
+  <div class="wrap">
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="all">All work</button>
+      <button class="filter-btn" data-filter="software">Software &amp; Cloud</button>
+      <button class="filter-btn" data-filter="ai">AI &amp; Automation</button>
+      <button class="filter-btn" data-filter="systems">Web3 &amp; Systems</button>
+    </div>
+
+    <div class="port-page-grid">
+      <div class="port-card reveal visible" data-cat="software">
+        <span class="port-num">01</span>
+        <div class="port-tag">Web Platform</div>
+        <h3 class="port-title">DevProfile Analyzer</h3>
+        <p class="port-desc">A GitHub portfolio intelligence platform that surfaces contribution patterns, language breakdowns and side-by-side profile comparisons.</p>
+        <div class="port-stack">
+          <span class="port-chip">React</span>
+          <span class="port-chip">Vite</span>
+          <span class="port-chip">Tailwind</span>
+          <span class="port-chip">GitHub API</span>
+        </div>
+      </div>
+
+      <div class="port-card reveal visible" data-cat="ai">
+        <span class="port-num">02</span>
+        <div class="port-tag">AI Desktop Agent</div>
+        <h3 class="port-title">Tabby</h3>
+        <p class="port-desc">An offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control into a single contextual interface.</p>
+        <div class="port-stack">
+          <span class="port-chip">Python</span>
+          <span class="port-chip">Whisper</span>
+          <span class="port-chip">Vision</span>
+        </div>
+      </div>
+
+      <div class="port-card reveal visible" data-cat="systems">
+        <span class="port-num">03</span>
+        <div class="port-tag">Systems Engineering</div>
+        <h3 class="port-title">EV Charging Manager</h3>
+        <p class="port-desc">A full-stack station management system with a high-performance C++17 backend and a reactive dashboard for real-time load and session control.</p>
+        <div class="port-stack">
+          <span class="port-chip">C++17</span>
+          <span class="port-chip">React</span>
+          <span class="port-chip">REST</span>
+        </div>
+      </div>
+
+      <div class="port-card reveal visible" data-cat="software">
+        <span class="port-num">04</span>
+        <div class="port-tag">Studio Web</div>
+        <h3 class="port-title">NexioSol Studio Site</h3>
+        <p class="port-desc">This very site — a dark editorial studio presence with a live ASCII render hero, a multi-step lead funnel, and a lead dashboard wired to a database.</p>
+        <div class="port-stack">
+          <span class="port-chip">HTML</span>
+          <span class="port-chip">Vercel</span>
+          <span class="port-chip">MongoDB</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="mono" style="text-align:center;color:var(--faint);font-size:12.5px;margin-top:40px;">
+      More case studies coming as we ship them.
+    </p>
+  </div>
+</section>
+
+<!-- ══ CTA STRIP ══ -->
+<section class="blk" id="start" style="background:var(--off);border-top:1px solid var(--border);">
+  <div class="wrap" style="text-align:center;">
+    <span class="eyebrow" style="display:inline-flex;">Let's build</span>
+    <h2 style="font-family:var(--font-display);font-weight:400;font-size:clamp(32px,4.5vw,54px);letter-spacing:-1.2px;margin:18px 0 14px;">Have something to ship?</h2>
+    <p style="color:var(--muted);font-weight:300;max-width:480px;margin:0 auto 30px;">Tell us what you're building, or grab a slot and talk it through with us directly.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="index.html#start" class="btn btn-primary">Start a project <i class="ti ti-arrow-right"></i></a>
+      <a href="#" class="btn btn-outline" data-book>Book a call <i class="ti ti-calendar"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="flogo">Nexio<span>Sol</span></div>
+        <p>An elite technical studio building and scaling the systems that move business forward.</p>
+        <div class="foot-socials">
+          <a href="#" aria-label="GitHub"><i class="ti ti-brand-github"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
+          <a href="#" aria-label="X"><i class="ti ti-brand-x"></i></a>
+        </div>
+      </div>
+      <div class="foot-col"><h4>Studio</h4><ul><li><a href="#">Our Team</a></li><li><a href="#">Careers</a></li><li><a href="#">News</a></li></ul></div>
+      <div class="foot-col"><h4>Solutions</h4><ul><li><a href="portfolio.html">Portfolio</a></li><li><a href="index.html#capabilities">Capabilities</a></li><li><a href="index.html#process">Process</a></li></ul></div>
+      <div class="foot-col"><h4>Contact</h4><ul><li><a href="index.html#start">Start a project</a></li><li><a href="#" data-book>Book a call</a></li><li><a href="mailto:humanresource@nexiosol.com">humanresource@nexiosol.com</a></li></ul></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 NexioSol. All rights reserved.</span><span>Lahore, Pakistan</span></div>
+  </div>
+</footer>
+
+<!-- ══ BOOKING MODAL ══ -->
+<div class="modal-overlay" id="bookModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
+    <button class="modal-close" aria-label="Close"><i class="ti ti-x"></i></button>
+    <span class="eyebrow">Book a call</span>
+    <h3 id="bookTitle">Let's talk</h3>
+    <p>Grab a 30-minute slot to walk through your project — scope, timeline, and how we'd build it.</p>
+    <div class="modal-actions">
+      <!-- TODO: replace the href below with your Cal.com / Calendly link -->
+      <a href="https://cal.com/nexiosol" target="_blank" rel="noopener" class="btn btn-primary">Pick a time <i class="ti ti-calendar"></i></a>
+      <a href="mailto:humanresource@nexiosol.com?subject=Project%20inquiry" class="btn btn-outline">Email us instead</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

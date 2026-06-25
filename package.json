@@ -1,0 +1,13 @@
+{
+  "name": "nexiosol-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NexioSol studio website — static frontend + Vercel serverless API + MongoDB lead storage.",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "mongodb": "^6.8.0"
+  }
+}
