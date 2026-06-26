@@ -8,6 +8,7 @@
     "dev": "vercel dev"
   },
   "dependencies": {
-    "mongodb": "^6.8.0"
+    "mongodb": "^6.8.0",
+    "nodemailer": "^9.0.1"
   }
 }

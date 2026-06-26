@@ -211,7 +211,7 @@
       if (step === 1) {
         if (!nameEl.value.trim()) { setErr('Please enter your name.'); return false; }
         const em = emailEl.value.trim();
-        if (!em || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { setErr('Please enter a valid email.'); return false; }
+        if (!em || !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/.test(em)) { setErr('Please enter a valid email address.'); return false; }
       }
       return true;
     }
