@@ -152,24 +152,45 @@
   /* ── Process auto-cycle + code ── */
   (function () {
     const snippets = [
+      { name: 'shape.ts',  html: `<span class="c">// pressure-test the vision</span>\n<span class="k">const</span> idea = <span class="k">await</span> <span class="f">shape</span>({\n  vision: <span class="s">'rough concept'</span>,\n  weeks: 2,\n  output: <span class="s">'buildable spec'</span>,\n})` },
       { name: 'define.ts', html: `<span class="c">// scope the build</span>\n<span class="k">const</span> project = <span class="k">new</span> <span class="f">Build</span>({\n  goal: <span class="s">'Ship the MVP'</span>,\n  stack: [<span class="s">'react'</span>, <span class="s">'node'</span>, <span class="s">'ai'</span>],\n  timeline: <span class="s">'1 sprint'</span>,\n})` },
-      { name: 'build.ts', html: `<span class="c">// parallel deep work</span>\n<span class="k">await</span> project.<span class="f">execute</span>({\n  tracks: [<span class="s">'design'</span>, <span class="s">'core'</span>, <span class="s">'qa'</span>],\n  review: <span class="k">true</span>,\n  mode: <span class="s">'continuous'</span>,\n})` },
-      { name: 'ship.ts', html: `<span class="c">// deploy + iterate</span>\nproject.<span class="f">ship</span>({\n  deploy: <span class="s">'production'</span>,\n  handoff: <span class="k">true</span>,\n})\n<span class="c">// 100% on-time delivery</span>` },
+      { name: 'build.ts',  html: `<span class="c">// parallel deep work</span>\n<span class="k">await</span> project.<span class="f">execute</span>({\n  tracks: [<span class="s">'design'</span>, <span class="s">'core'</span>, <span class="s">'qa'</span>],\n  review: <span class="k">true</span>,\n  mode: <span class="s">'continuous'</span>,\n})` },
+      { name: 'ship.ts',   html: `<span class="c">// deploy + iterate</span>\nproject.<span class="f">ship</span>({\n  deploy: <span class="s">'production'</span>,\n  handoff: <span class="k">true</span>,\n})\n<span class="c">// 100% on-time delivery</span>` },
     ];
     const steps = [...document.querySelectorAll('.proc-step')];
+    const tabs  = [...document.querySelectorAll('.proc-tab')];
     const codeBlock = document.getElementById('codeBlock');
     if (!codeBlock) return;
-    const codeName = document.getElementById('codeName');
     let active = 0, timer;
     function set(i) {
       active = i;
       steps.forEach((s, k) => s.classList.toggle('active', k === i));
+      tabs.forEach((t, k)  => t.classList.toggle('active', k === i));
       codeBlock.innerHTML = snippets[i].html;
-      codeName.textContent = snippets[i].name;
     }
-    function start() { if (reduce) return; timer = setInterval(() => set((active + 1) % steps.length), 6000); }
-    steps.forEach((s, i) => s.addEventListener('click', () => { clearInterval(timer); set(i); start(); }));
+    function start() { if (reduce) return; timer = setInterval(() => set((active + 1) % snippets.length), 6000); }
+    function pick(i) { clearInterval(timer); set(i); start(); }
+    steps.forEach((s, i) => s.addEventListener('click', () => pick(i)));
+    tabs.forEach((t, i)  => t.addEventListener('click', () => pick(+t.dataset.tab)));
     set(0); start();
+  })();
+
+  /* ── Capabilities accordion ── */
+  (function () {
+    const rows = document.querySelectorAll('.cap-row');
+    if (!rows.length) return;
+    function open(i) {
+      rows.forEach((row, k) => {
+        const on = k === i;
+        row.classList.toggle('active', on);
+        row.querySelector('.cap-hd').setAttribute('aria-expanded', on);
+        const icon = row.querySelector('.cap-toggle');
+        icon.classList.toggle('ti-minus', on);
+        icon.classList.toggle('ti-plus', !on);
+      });
+    }
+    rows.forEach((row, i) => row.querySelector('.cap-hd').addEventListener('click', () => open(i)));
+    open(0);
   })();
 
   /* ── Pills ── */
@@ -229,6 +250,9 @@
       btnNext.classList.add('loading');
       btnNext.innerHTML = 'Sending… <i class="ti ti-loader-2"></i>';
       try {
+      
+
+
         const res = await fetch('/api/leads', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -237,8 +261,10 @@
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
           throw new Error(data.error || 'Something went wrong. Please try again.');
-        }
+          }
+
         // success
+        btnNext.classList.remove('loading');
         form.style.display = 'none';
         document.querySelector('.steps-bar').style.opacity = '.4';
         document.getElementById('formSuccess').classList.add('show');
@@ -255,20 +281,6 @@
     });
     btnBack.addEventListener('click', () => { if (step > 1) { setErr(''); step--; render(); } });
     render();
-  })();
-
-  /* ── Booking modal (Book a call) ── */
-  (function () {
-    const overlay = document.getElementById('bookModal');
-    if (!overlay) return;
-    const openers = document.querySelectorAll('[data-book]');
-    const closeBtn = overlay.querySelector('.modal-close');
-    function open(e) { if (e) e.preventDefault(); overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
-    function close() { overlay.classList.remove('open'); document.body.style.overflow = ''; }
-    openers.forEach(a => a.addEventListener('click', open));
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-    addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
   })();
 
   /* ── Portfolio filter (portfolio.html only) ── */

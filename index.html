@@ -22,10 +22,8 @@
       <li><a href="#process">Process</a></li>
       <li><a href="#metrics">Impact</a></li>
       <li><a href="portfolio.html">Portfolio</a></li>
-      <li><a href="#start">Start</a></li>
     </ul>
     <div class="nav-right">
-      <a href="#" class="nav-signin" data-book>Book a call</a>
       <a href="#start" class="nav-cta">Start a project</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="ti ti-menu-2"></i></button>
@@ -55,45 +53,116 @@
 
 <!-- ══ CAPABILITIES ══ -->
 <section class="blk" id="capabilities">
+  <span class="cap-grid-bg" aria-hidden="true"></span>
+  <span class="cap-glow-a" aria-hidden="true"></span>
+  <span class="cap-glow-b" aria-hidden="true"></span>
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow reveal">Capabilities</span>
-      <h2 class="reveal d1">Everything it takes to<br>build &amp; scale</h2>
-      <p class="reveal d2">From a first line of code to a system running in production — we cover the full stack that actually matters.</p>
-    </div>
-    <div class="feat-grid">
-      <article class="feat reveal">
-        <div class="feat-num">01</div>
-        <div>
-          <h3 class="feat-title">Software &amp; Cloud</h3>
-          <p class="feat-desc">Production-grade web apps and cloud architecture engineered to scale. React, Node, and infrastructure that holds up under real load.</p>
-          <div class="feat-stat"><span class="v">99.9%</span><span class="l">uptime targets</span></div>
+    <div class="cap-list">
+
+      <div class="cap-row reveal active" data-cap="0">
+        <button class="cap-hd" aria-expanded="true">
+          <span class="cap-num">01</span>
+          <span class="cap-icon"><i class="ti ti-cloud-cog"></i></span>
+          <span class="cap-title">Software &amp; Cloud</span>
+          <span class="cap-kicker">Build</span>
+          <i class="ti ti-minus cap-toggle"></i>
+        </button>
+        <div class="cap-body">
+          <div class="cap-left">
+            <p class="cap-desc">Production-grade web apps and cloud architecture engineered to scale. React, Node, and infrastructure that holds up under real load.</p>
+            <div class="cap-chips"><span>React</span><span>Node</span><span>AWS</span><span>Postgres</span></div>
+            <div class="cap-stat">
+              <span class="cap-stat-v">99.9%</span>
+              <span class="cap-stat-l">uptime targets</span>
+            </div>
+          </div>
+          <div class="cap-right">
+            <div class="cap-mockup">
+              <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">app.nexiosol.io/dashboard</span></div>
+              <div class="mock-img"><img src="assets/mockups/01.png" alt=""></div>
+            </div>
+          </div>
         </div>
-      </article>
-      <article class="feat reveal d1">
-        <div class="feat-num">02</div>
-        <div>
-          <h3 class="feat-title">AI &amp; Automation</h3>
-          <p class="feat-desc">Custom LLM pipelines, intelligent automation, and decision flows — embedded directly into your product, not bolted on the side.</p>
-          <div class="feat-stat"><span class="v">24/7</span><span class="l">autonomous workflows</span></div>
+      </div>
+
+      <div class="cap-row reveal d1" data-cap="1">
+        <button class="cap-hd" aria-expanded="false">
+          <span class="cap-num">02</span>
+          <span class="cap-icon"><i class="ti ti-sparkles"></i></span>
+          <span class="cap-title">AI &amp; Automation</span>
+          <span class="cap-kicker">Embed</span>
+          <i class="ti ti-plus cap-toggle"></i>
+        </button>
+        <div class="cap-body">
+          <div class="cap-left">
+            <p class="cap-desc">Custom LLM pipelines, intelligent automation, and decision flows — embedded directly into your product, not bolted on the side.</p>
+            <div class="cap-chips"><span>LLM</span><span>RAG</span><span>Pipelines</span><span>Agents</span></div>
+            <div class="cap-stat">
+              <span class="cap-stat-v">24/7</span>
+              <span class="cap-stat-l">autonomous workflows</span>
+            </div>
+          </div>
+          <div class="cap-right">
+            <div class="cap-mockup">
+              <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">app.nexiosol.io/agent</span></div>
+              <div class="mock-img"><img src="assets/mockups/02.png" alt=""></div>
+            </div>
+          </div>
         </div>
-      </article>
-      <article class="feat reveal">
-        <div class="feat-num">03</div>
-        <div>
-          <h3 class="feat-title">Web3 &amp; Systems</h3>
-          <p class="feat-desc">Distributed and decentralized systems, smart-contract integrations, and the backend plumbing to make them production-ready.</p>
-          <div class="feat-stat"><span class="v">5+</span><span class="l">chains integrated</span></div>
+      </div>
+
+      <div class="cap-row reveal d2" data-cap="2">
+        <button class="cap-hd" aria-expanded="false">
+          <span class="cap-num">03</span>
+          <span class="cap-icon"><i class="ti ti-binary-tree-2"></i></span>
+          <span class="cap-title">Web3 &amp; Systems</span>
+          <span class="cap-kicker">Scale</span>
+          <i class="ti ti-plus cap-toggle"></i>
+        </button>
+        <div class="cap-body">
+          <div class="cap-left">
+            <p class="cap-desc">Distributed and decentralized systems, smart-contract integrations, and the backend plumbing to make them production-ready.</p>
+            <div class="cap-chips"><span>Solidity</span><span>EVM</span><span>Rust</span><span>Indexers</span></div>
+            <div class="cap-stat">
+              <span class="cap-stat-v">5+</span>
+              <span class="cap-stat-l">chains integrated</span>
+            </div>
+          </div>
+          <div class="cap-right">
+            <div class="cap-mockup">
+              <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">explorer.nexiosol.io</span></div>
+              <div class="mock-img"><img src="assets/mockups/03.png" alt=""></div>
+            </div>
+          </div>
         </div>
-      </article>
-      <article class="feat reveal d1">
-        <div class="feat-num">04</div>
-        <div>
-          <h3 class="feat-title">Refactor &amp; Grow</h3>
-          <p class="feat-desc">Modernize legacy code, pay down technical debt, and re-architect for the next stage of growth — without halting delivery.</p>
-          <div class="feat-stat"><span class="v">0</span><span class="l">downtime migrations</span></div>
+      </div>
+
+      <div class="cap-row reveal d3" data-cap="3">
+        <button class="cap-hd" aria-expanded="false">
+          <span class="cap-num">04</span>
+          <span class="cap-icon"><i class="ti ti-refresh"></i></span>
+          <span class="cap-title">Refactor &amp; Grow</span>
+          <span class="cap-kicker">Evolve</span>
+          <i class="ti ti-plus cap-toggle"></i>
+        </button>
+        <div class="cap-body">
+          <div class="cap-left">
+            <p class="cap-desc">Modernize legacy code, pay down technical debt, and re-architect for the next stage of growth — without halting delivery.</p>
+            <div class="cap-chips"><span>Audits</span><span>Migrations</span><span>CI/CD</span></div>
+            <div class="cap-stat">
+              <span class="cap-stat-v">0</span>
+              <span class="cap-stat-l">downtime migrations</span>
+            </div>
+          </div>
+          <div class="cap-right">
+            <div class="cap-mockup">
+              <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">app.nexiosol.io/audit</span></div>
+              <div class="mock-img"><img src="assets/mockups/04.png" alt=""></div>
+            </div>
+          </div>
         </div>
-      </article>
+      </div>
+
     </div>
   </div>
 </section>
@@ -102,30 +171,72 @@
 <section class="blk" id="process">
   <div class="proc-glow"></div>
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow on-dark reveal">Process</span>
-      <h2 class="reveal d1">A 1-week continuous<br>delivery loop</h2>
-      <p class="reveal d2">Lean, async-friendly sprints with weekly touchpoints. Progress is always visible, momentum never stalls.</p>
-    </div>
     <div class="proc-layout">
-      <div class="proc-steps" id="procSteps">
-        <div class="proc-step active" data-step="0">
-          <div class="proc-step-top"><span class="n">01</span><h3>Define <span class="sub">the scope</span></h3></div>
-          <p>Requirements mapping and architecture. We turn your goal into a clear, scoped plan before a line of code is written.</p>
-        </div>
-        <div class="proc-step" data-step="1">
-          <div class="proc-step-top"><span class="n">02</span><h3>Build <span class="sub">in parallel</span></h3></div>
-          <p>Design, core development, code review, and continuous QA — running in parallel for speed without compromising quality.</p>
-        </div>
-        <div class="proc-step" data-step="2">
-          <div class="proc-step-top"><span class="n">03</span><h3>Ship <span class="sub">&amp; iterate</span></h3></div>
-          <p>Final packaging, client review, deployment, and a retrospective that sharpens the very next cycle.</p>
+
+      <div class="proc-selector">
+        <span class="eyebrow on-dark reveal">Process</span>
+        <h2 class="reveal d1">From rough idea to<br>shipped system.</h2>
+        <div class="proc-steps reveal d2" id="procSteps">
+
+          <div class="proc-step active" data-step="0">
+            <div class="proc-accent"></div>
+            <div class="proc-step-inner">
+              <div class="proc-step-top">
+                <span class="n">00</span>
+                <h3>Shape <span class="sub">the idea</span></h3>
+                <span class="proc-edge">Studio edge</span>
+              </div>
+              <p>A rough vision walks in. Over one to two weeks we brainstorm and pressure-test it into a practical, scoped concept — before a single requirement is written.</p>
+            </div>
+          </div>
+
+          <div class="proc-step" data-step="1">
+            <div class="proc-accent"></div>
+            <div class="proc-step-inner">
+              <div class="proc-step-top">
+                <span class="n">01</span>
+                <h3>Define <span class="sub">the scope</span></h3>
+              </div>
+              <p>Requirements mapping and architecture. The validated idea becomes a clear, scoped plan.</p>
+            </div>
+          </div>
+
+          <div class="proc-step" data-step="2">
+            <div class="proc-accent"></div>
+            <div class="proc-step-inner">
+              <div class="proc-step-top">
+                <span class="n">02</span>
+                <h3>Build <span class="sub">in parallel</span></h3>
+              </div>
+              <p>Design, core development, code review, and continuous QA — all running together in parallel.</p>
+            </div>
+          </div>
+
+          <div class="proc-step" data-step="3">
+            <div class="proc-accent"></div>
+            <div class="proc-step-inner">
+              <div class="proc-step-top">
+                <span class="n">03</span>
+                <h3>Ship <span class="sub">&amp; iterate</span></h3>
+              </div>
+              <p>Packaging, client review, deployment, and a retrospective that sharpens the very next cycle.</p>
+            </div>
+          </div>
+
         </div>
       </div>
-      <div class="proc-code">
-        <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="fname mono" id="codeName">define.ts</span></div>
+
+      <div class="proc-code reveal d1">
+        <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="proc-tabs" id="procTabs">
+          <button class="proc-tab active" data-tab="0">shape.ts</button>
+          <button class="proc-tab" data-tab="1">define.ts</button>
+          <button class="proc-tab" data-tab="2">build.ts</button>
+          <button class="proc-tab" data-tab="3">ship.ts</button>
+        </div>
         <pre id="codeBlock"></pre>
       </div>
+
     </div>
   </div>
 </section>
@@ -269,32 +380,15 @@
         <p>An elite technical studio building and scaling the systems that move business forward.</p>
         <div class="foot-socials">
           <a href="#" aria-label="GitHub"><i class="ti ti-brand-github"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>
-          <a href="#" aria-label="X"><i class="ti ti-brand-x"></i></a>
-        </div>
+          <a href="#" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>        </div>
       </div>
       <div class="foot-col"><h4>Studio</h4><ul><li><a href="#">Our Team</a></li><li><a href="#">Careers</a></li><li><a href="#">News</a></li></ul></div>
       <div class="foot-col"><h4>Solutions</h4><ul><li><a href="portfolio.html">Portfolio</a></li><li><a href="index.html#capabilities">Capabilities</a></li><li><a href="index.html#process">Process</a></li></ul></div>
-      <div class="foot-col"><h4>Contact</h4><ul><li><a href="#start">Start a project</a></li><li><a href="#" data-book>Book a call</a></li><li><a href="mailto:humanresource@nexiosol.com">humanresource@nexiosol.com</a></li></ul></div>
+      <div class="foot-col"><h4>Contact</h4><ul><li><a href="#start">Start a project</a></li><li><a href="mailto:hr.nexiosol@gmail.com">hr.nexiosol@gmail.com</a></li></ul></div>
     </div>
     <div class="foot-bottom"><span>© 2026 NexioSol. All rights reserved.</span><span>Lahore, Pakistan</span></div>
   </div>
 </footer>
-
-<!-- ══ BOOKING MODAL ══ -->
-<div class="modal-overlay" id="bookModal" aria-hidden="true">
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
-    <button class="modal-close" aria-label="Close"><i class="ti ti-x"></i></button>
-    <span class="eyebrow">Book a call</span>
-    <h3 id="bookTitle">Let's talk</h3>
-    <p>Grab a 30-minute slot to walk through your project — scope, timeline, and how we'd build it.</p>
-    <div class="modal-actions">
-      <!-- TODO: replace the href below with your Cal.com / Calendly link -->
-      <a href="https://cal.com/nexiosol" target="_blank" rel="noopener" class="btn btn-primary">Pick a time <i class="ti ti-calendar"></i></a>
-      <a href="mailto:humanresource@nexiosol.com?subject=Project%20inquiry" class="btn btn-outline">Email us instead</a>
-    </div>
-  </div>
-</div>
 
 <script src="js/main.js"></script>
 </body>
