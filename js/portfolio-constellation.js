@@ -2,7 +2,7 @@
  * NexioSol — Portfolio Constellation
  * Adapted from portfolio-constellation.reference.js (v4)
  * Single source: PROJECTS drives both the constellation and .port-page-grid.
- * Desktop (≥961px, no-touch) shows the map; mobile shows the card grid.
+ * Gate: ≥961px + hover:hover + pointer:fine → map. Coarse-pointer → grid.
  * Deck reuses .modal-overlay / .modal-card — does not fork the booking modal.
  * ========================================================================== */
 (function () {
@@ -34,11 +34,16 @@
     { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'] },
   ];
 
-  /* ── Desktop detection ─────────────────────────────────────────────────── */
-  const isDesktop = () =>
+  /* ── Desktop gate: interaction model, not touch capability ───────────────
+   * hover:hover + pointer:fine = trackpad/mouse device (touchscreen laptops
+   * included). pointer:coarse = phone/tablet → grid fallback.
+   * ────────────────────────────────────────────────────────────────────── */
+  const useConstellation =
     window.matchMedia('(min-width: 961px)').matches &&
-    !('ontouchstart' in window) &&
-    !(navigator.maxTouchPoints > 0);
+    window.matchMedia('(hover: hover)').matches &&
+    window.matchMedia('(pointer: fine)').matches;
+  if (!useConstellation)
+    console.warn('[constellation] skipped — not a wide hover+fine-pointer screen');
 
   /* ── Grid card builder (both surfaces share this) ─────────────────────── */
   function buildGrid() {
@@ -163,18 +168,54 @@
     document.getElementById('deckNext').addEventListener('click', () => _setSlide((_curSlide + 1) % 3));
   }
 
+  /* ── Focus trap ──────────────────────────────────────────────────────────
+   * While the deck is open, Tab cycles only through the deck's own controls
+   * (close, prev, next, dot buttons). Released on close.
+   * ────────────────────────────────────────────────────────────────────── */
+  let _trapHandler = null;
+
+  function getFocusable() {
+    return [...deckCard.querySelectorAll(
+      'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )].filter(el => !el.closest('[hidden]') && el.offsetParent !== null);
+  }
+
+  function attachFocusTrap() {
+    _trapHandler = e => {
+      if (e.key !== 'Tab') return;
+      const els = getFocusable();
+      if (!els.length) { e.preventDefault(); return; }
+      const first = els[0], last = els[els.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener('keydown', _trapHandler);
+  }
+
+  function detachFocusTrap() {
+    if (_trapHandler) {
+      document.removeEventListener('keydown', _trapHandler);
+      _trapHandler = null;
+    }
+  }
+
   function openDeck(i) {
     if (!deckOverlay || !deckCard) return;
     _lastFocus = document.activeElement;
     renderDeckContent(i);
     deckOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    attachFocusTrap();
     const cb = document.getElementById('deckCloseBtn');
     if (cb) cb.focus();
   }
 
   function closeDeck() {
     if (!deckOverlay) return;
+    detachFocusTrap();
     deckOverlay.classList.remove('open');
     document.body.style.overflow = '';
     if (_lastFocus) _lastFocus.focus();
@@ -194,10 +235,10 @@
   /* Expose globally so grid cards (on mobile) can open the same deck */
   window.NexioDeck = { open: openDeck, close: closeDeck };
 
-  /* ── Mobile path: build grid only, done ───────────────────────────────── */
+  /* ── Mobile / coarse-pointer path: build grid only, done ─────────────── */
   buildGrid();
 
-  if (!isDesktop()) return;
+  if (!useConstellation) return;
 
   /* ── Desktop path: show map, hide grid ────────────────────────────────── */
   const mapWrap     = document.getElementById('mapWrap');
