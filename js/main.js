@@ -302,3 +302,122 @@
       });
     });
   })();
+
+  /* ── Portfolio image-style cards ── */
+  (function () {
+    const grid = document.getElementById('portGrid');
+    if (!grid) return;
+
+    const PROJECTS = [
+      { num: '01', tag: 'Web Platform',       title: 'DevProfile Analyzer',  line: 'Turns any GitHub profile into a readable signal.',    chips: ['React','Vite','Tailwind','GitHub API'], treatment: 'heatmap',  delay: ''   },
+      { num: '02', tag: 'AI Desktop Agent',   title: 'Tabby',                line: 'Voice, intent and gesture in one offline interface.', chips: ['Python','Whisper','Vision'],            treatment: 'waveform', delay: 'd1' },
+      { num: '03', tag: 'Systems Engineering', title: 'EV Charging Manager', line: 'Real-time control over every charging session.',      chips: ['C++17','React','REST'],                 treatment: 'gauge',    delay: 'd2' },
+    ];
+
+    const HEATMAP = [
+      [0,0,0,0,0,0,3,0,0,3,2,2,0,0,1,1,3,1,2,3],
+      [3,2,0,0,2,0,2,0,3,0,2,0,0,1,1,0,0,1,0,0],
+      [0,1,0,0,1,0,0,3,0,0,3,0,1,3,3,0,1,2,0,2],
+      [1,0,0,3,0,2,0,1,0,1,2,2,3,1,2,0,1,3,0,2],
+      [0,0,3,1,0,0,2,2,0,0,0,2,0,0,1,1,0,3,1,0],
+      [0,2,1,3,0,0,0,0,0,1,0,3,0,0,0,2,1,3,1,0],
+      [1,2,1,1,3,1,0,2,1,0,2,1,0,0,1,1,1,2,0,2],
+    ];
+    const LEVEL_BG = ['rgba(255,255,255,.06)','rgba(185,28,26,.3)','rgba(185,28,26,.6)','rgba(214,90,60,.95)'];
+
+    function buildHeatmap() {
+      return `<div class="treat-panel">
+        <div class="treat-row">
+          <span class="treat-label">Contributions</span>
+          <span class="treat-year">2025</span>
+        </div>
+        <div class="treat-stat-row">
+          <span class="treat-big">2,847</span>
+          <span class="treat-delta">+18%</span>
+        </div>
+        <div class="treat-heatmap" id="portHeatmap"></div>
+      </div>`;
+    }
+
+    function buildWaveform() {
+      const N = 34;
+      const bars = [];
+      for (let i = 0; i < N; i++) {
+        const t = i / (N - 1);
+        const bell = Math.exp(-Math.pow((t - 0.5) * 3.6, 2));
+        const h = Math.max(8, Math.round(bell * 58 + 8 + (Math.random() - 0.5) * 8));
+        const isRed = i % 3 === 0;
+        const bg = isRed ? 'background:linear-gradient(to top,#861211,#d65a3c)' : 'background:rgba(255,255,255,.32)';
+        const anim = reduce ? '' : `;animation:waveBar ${(0.9 + Math.random() * 0.7).toFixed(2)}s ease-in-out ${Math.round(Math.random() * 800)}ms infinite alternate`;
+        bars.push(`<div class="treat-bar" style="height:${h}px;${bg}${anim}"></div>`);
+      }
+      return `<div class="treat-wave-wrap">
+        <div class="treat-wave-glow"></div>
+        <div class="treat-listening"><span class="treat-dot"></span>Listening</div>
+        <div class="treat-bars">${bars.join('')}</div>
+        <div class="treat-transcript">"open the dashboard"</div>
+      </div>`;
+    }
+
+    function buildGauge() {
+      const r = 42, sw = 8;
+      const circ = +(2 * Math.PI * r).toFixed(2);
+      const offset = +(circ * (1 - 0.78)).toFixed(2);
+      return `<div class="treat-panel">
+        <div class="treat-row">
+          <span class="treat-label">Station load</span>
+          <span class="treat-label"><span class="treat-active-dot">●</span> 12 active</span>
+        </div>
+        <div class="treat-gauge-row">
+          <div class="treat-gauge-inner">
+            <svg class="treat-gauge-svg" width="108" height="108" viewBox="0 0 108 108" fill="none">
+              <circle cx="54" cy="54" r="${r}" stroke="rgba(255,255,255,.1)" stroke-width="${sw}" fill="none"/>
+              <circle cx="54" cy="54" r="${r}" stroke="#d65a3c" stroke-width="${sw}" fill="none"
+                stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+            </svg>
+            <div class="treat-gauge-label">
+              <span class="treat-gauge-pct">78%</span>
+              <span class="treat-gauge-sub">charged</span>
+            </div>
+          </div>
+          <div class="treat-sessions">
+            <div class="treat-session"><span class="treat-session-num">#1</span><div class="treat-track"><div class="treat-fill" style="width:90%"></div></div><span class="treat-kw">7.4kW</span></div>
+            <div class="treat-session"><span class="treat-session-num">#2</span><div class="treat-track"><div class="treat-fill" style="width:62%"></div></div><span class="treat-kw">5.1kW</span></div>
+            <div class="treat-session"><span class="treat-session-num">#3</span><div class="treat-track"><div class="treat-fill" style="width:78%"></div></div><span class="treat-kw">6.4kW</span></div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    const treatments = { heatmap: buildHeatmap, waveform: buildWaveform, gauge: buildGauge };
+
+    PROJECTS.forEach(p => {
+      const chips = p.chips.map(c => `<span class="port-chip">${c}</span>`).join('');
+      const card = document.createElement('div');
+      card.className = `port-card reveal${p.delay ? ' ' + p.delay : ''}`;
+      card.innerHTML = `
+        <div class="port-treatment">${treatments[p.treatment]()}</div>
+        <div class="port-veil"></div>
+        <div class="port-top">
+          <span class="port-num">${p.num}</span>
+          <span class="port-tag">${p.tag}</span>
+        </div>
+        <div class="port-bottom">
+          <div class="port-title">${p.title}</div>
+          <div class="port-line">${p.line}</div>
+          <div class="port-chips">${chips}</div>
+        </div>`;
+      grid.appendChild(card);
+      io.observe(card);
+    });
+
+    const heatmapEl = document.getElementById('portHeatmap');
+    if (heatmapEl) {
+      HEATMAP.flat().forEach(l => {
+        const cell = document.createElement('div');
+        cell.className = 'treat-cell';
+        cell.style.background = LEVEL_BG[l];
+        heatmapEl.appendChild(cell);
+      });
+    }
+  })();
