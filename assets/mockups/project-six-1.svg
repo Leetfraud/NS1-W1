@@ -1,0 +1,20 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#1a1a18"/>
+  <rect width="800" height="44" fill="rgba(255,255,255,0.04)"/>
+  <circle cx="22" cy="22" r="6" fill="#e0514f"/>
+  <circle cx="40" cy="22" r="6" fill="rgba(255,255,255,0.18)"/>
+  <circle cx="58" cy="22" r="6" fill="rgba(255,255,255,0.18)"/>
+  <rect x="40" y="90" width="200" height="18" rx="4" fill="rgba(255,255,255,0.16)"/>
+  <rect x="40" y="118" width="320" height="11" rx="3" fill="rgba(255,255,255,0.08)"/>
+  <rect x="40" y="136" width="260" height="11" rx="3" fill="rgba(255,255,255,0.08)"/>
+  <rect x="40" y="154" width="280" height="11" rx="3" fill="rgba(255,255,255,0.06)"/>
+  <rect x="40" y="196" width="136" height="84" rx="8" fill="#e0514f" opacity="0.85"/>
+  <rect x="192" y="196" width="136" height="84" rx="8" fill="rgba(255,255,255,0.06)"/>
+  <rect x="344" y="196" width="136" height="84" rx="8" fill="rgba(255,255,255,0.06)"/>
+  <rect x="40" y="304" width="680" height="56" rx="8" fill="rgba(255,255,255,0.04)"/>
+  <rect x="40" y="376" width="680" height="1" fill="rgba(255,255,255,0.06)"/>
+  <rect x="40" y="394" width="160" height="11" rx="3" fill="rgba(255,255,255,0.08)"/>
+  <rect x="40" y="412" width="240" height="11" rx="3" fill="rgba(255,255,255,0.06)"/>
+  <rect x="40" y="430" width="200" height="11" rx="3" fill="rgba(255,255,255,0.05)"/>
+  <text x="400" y="576" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="rgba(255,255,255,0.25)">Project Six — mockup 1 / 3 · placeholder</text>
+</svg>
