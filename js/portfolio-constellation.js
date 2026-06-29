@@ -249,7 +249,7 @@
   if (moreNote)  moreNote.style.display  = 'none';
 
   /* ── Geometry (identical to reference v4) ─────────────────────────────── */
-  const W = 680, H = 510;
+  const W = 680, H = 720;
   const CX = W / 2, CY = H / 2 + 16;
   const R  = Math.min(W, H) * 0.33;
 
@@ -357,8 +357,8 @@
       g.setAttribute('aria-label', `${n.title} — ${TYPES[n.cat].label}. Open project deck.`);
 
       const above = n.y < CY;
-      const ly1   = above ? n.y - 26 : n.y + 30;
-      const ly2   = above ? n.y - 12 : n.y + 44;
+      const ly1   = above ? n.y - 32 : n.y + 36;
+      const ly2   = above ? n.y - 19 : n.y + 51;
 
       g.innerHTML =
         `<circle cx="${n.x}" cy="${n.y}" r="15" fill="#0c0c0b" stroke="#e0514f" stroke-width="1.1" class="ring"></circle>` +
@@ -408,8 +408,10 @@
 
   let t = 0;
   function frame() {
-    const w = canvas._w || 680, h = canvas._h || 510;
-    const sx = w / W, sy = h / H;
+    const w = canvas._w || 680, h = canvas._h || 720;
+    const scale = Math.min(w / W, h / H);
+    const ox = (w - W * scale) / 2;
+    const oy = (h - H * scale) / 2;
     ctx2.clearRect(0, 0, w, h);
     ctx2.textAlign    = 'center';
     ctx2.textBaseline = 'middle';
@@ -441,7 +443,7 @@
         const gg = Math.floor(hue[1] + shimmer * 25);
         const bb = hue[2];
         ctx2.fillStyle = `rgba(${r},${gg},${bb},${alpha})`;
-        ctx2.fillText(G[gi], bx * sx, by * sy);
+        ctx2.fillText(G[gi], ox + bx * scale, oy + by * scale);
       }
     });
 
