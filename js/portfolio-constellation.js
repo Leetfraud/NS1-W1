@@ -144,7 +144,7 @@
         `<picture>` +
           `<source srcset="assets/mockups/${slug}-${n + 1}.avif" type="image/avif">` +
           `<source srcset="assets/mockups/${slug}-${n + 1}.webp" type="image/webp">` +
-          `<img src="assets/mockups/${slug}-${n + 1}.svg" loading="lazy"` +
+          `<img src="assets/mockups/${slug}-${n + 1}.jpg" loading="lazy"` +
                ` alt="${p.title} mockup ${n + 1} of 3"` +
                ` style="width:100%;height:100%;object-fit:cover;display:block;">` +
         `</picture>`;
