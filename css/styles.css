@@ -525,13 +525,13 @@
     .deck-slide-viewport {
       position: relative;
       background: #0c0c0b;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 16 / 9;
       max-height: 340px;
       overflow: hidden;
     }
     #deckSlideStage,
     #deckSlideStage picture,
-    #deckSlideStage img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    #deckSlideStage img { width: 100%; height: 100%; display: block; object-fit: contain; }
     .deck-nav-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
       width: 38px; height: 38px; border-radius: 50%; border: none;

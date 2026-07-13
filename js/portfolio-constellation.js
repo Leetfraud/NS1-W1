@@ -146,7 +146,7 @@
           `<source srcset="assets/mockups/${slug}-${n + 1}.webp" type="image/webp">` +
           `<img src="assets/mockups/${slug}-${n + 1}.jpg" loading="lazy"` +
                ` alt="${p.title} mockup ${n + 1} of 3"` +
-               ` style="width:100%;height:100%;object-fit:cover;display:block;">` +
+               ` style="width:100%;height:100%;object-fit:contain;display:block;">` +
         `</picture>`;
       const dots = document.getElementById('deckDots');
       dots.innerHTML = '';
