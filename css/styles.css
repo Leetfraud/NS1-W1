@@ -573,6 +573,34 @@
     }
     .deck-close { z-index: 5; }
 
+    /* Deck slide button — wraps the mockup so it's a keyboard-activatable
+       control that opens the lightbox */
+    .deck-slide-btn {
+      display: block; width: 100%; height: 100%; padding: 0; margin: 0;
+      border: none; background: none; cursor: zoom-in;
+    }
+    .deck-slide-btn:focus-visible { outline: 2px solid var(--red-bright); outline-offset: -2px; }
+
+    /* Lightbox — sits above the deck (z-index 200), deck stays open behind it */
+    .lightbox-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(12,12,11,0.92); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; padding: 24px;
+      opacity: 0; transition: opacity .3s var(--ease);
+    }
+    .lightbox-overlay.open { display: flex; opacity: 1; }
+    .lightbox-stage { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+    .lightbox-img {
+      max-width: 92vw; max-height: 92vh; width: auto; height: auto;
+      object-fit: contain; cursor: zoom-out; display: block;
+    }
+    .lightbox-close { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); color: #fff; }
+    .lightbox-close:hover { background: rgba(255,255,255,0.24); color: #fff; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .lightbox-overlay { transition: none; }
+    }
+
     @media (max-width: 860px) {
       .stat-row { grid-template-columns: 1fr 1fr; }
       .port-page-grid { grid-template-columns: 1fr 1fr; }

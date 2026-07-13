@@ -110,10 +110,14 @@
   let _lastFocus = null;
   let _curSlide  = 0;
   let _setSlide  = null;   // set by renderDeckContent so keydown can call it
+  let _curProject = null; // read by the lightbox, which lives outside this closure
+  let _curSlug     = '';
 
   function renderDeckContent(idx) {
     const p    = PROJECTS[idx];
     const slug = slugify(p.title);
+    _curProject = p;
+    _curSlug    = slug;
 
     const stackChips = p.stack.map(s =>
       `<span class="deck-chip">${s}</span>`).join('');
@@ -141,13 +145,16 @@
       _curSlide = n;
       const s = document.getElementById('deckSlideStage');
       s.innerHTML =
-        `<picture>` +
-          `<source srcset="assets/mockups/${slug}-${n + 1}.avif" type="image/avif">` +
-          `<source srcset="assets/mockups/${slug}-${n + 1}.webp" type="image/webp">` +
-          `<img src="assets/mockups/${slug}-${n + 1}.jpg" loading="lazy"` +
-               ` alt="${p.title} mockup ${n + 1} of 3"` +
-               ` style="width:100%;height:100%;object-fit:contain;display:block;">` +
-        `</picture>`;
+        `<button type="button" class="deck-slide-btn" id="deckSlideBtn"` +
+             ` aria-label="Expand ${p.title} mockup ${n + 1} of 3">` +
+          `<picture>` +
+            `<source srcset="assets/mockups/${slug}-${n + 1}.avif" type="image/avif">` +
+            `<source srcset="assets/mockups/${slug}-${n + 1}.webp" type="image/webp">` +
+            `<img src="assets/mockups/${slug}-${n + 1}.jpg" loading="lazy"` +
+                 ` alt="${p.title} mockup ${n + 1} of 3"` +
+                 ` style="width:100%;height:100%;object-fit:contain;display:block;">` +
+          `</picture>` +
+        `</button>`;
       const dots = document.getElementById('deckDots');
       dots.innerHTML = '';
       for (let i = 0; i < 3; i++) {
@@ -158,6 +165,8 @@
         d.addEventListener('click', () => setSlide(idx2));
         dots.appendChild(d);
       }
+      const slideBtn = document.getElementById('deckSlideBtn');
+      if (slideBtn) slideBtn.addEventListener('click', () => openLightbox(slideBtn));
     }
 
     _setSlide = setSlide;
@@ -221,15 +230,130 @@
     if (_lastFocus) _lastFocus.focus();
   }
 
+  /* ── Lightbox (stacks above the deck at natural size; same slide) ───────
+   * Detaches the deck's focus trap while open and attaches its own, so Tab
+   * cycles only through the lightbox close button. Re-attaches the deck's
+   * trap on close. The deck's own keydown/click-outside handlers below
+   * check _lightboxOpen so a single Escape / outside click only ever
+   * closes the topmost overlay.
+   * ────────────────────────────────────────────────────────────────────── */
+  let _lightboxOverlay    = null;
+  let _lightboxOpen       = false;
+  let _lightboxTrapHandler = null;
+  let _lightboxLastFocus  = null;
+
+  function buildLightbox() {
+    if (_lightboxOverlay) return _lightboxOverlay;
+    const el = document.createElement('div');
+    el.id = 'deckLightbox';
+    el.className = 'lightbox-overlay';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.innerHTML =
+      `<button type="button" class="modal-close lightbox-close" id="lightboxCloseBtn" aria-label="Close expanded image">✕</button>` +
+      `<div id="lightboxStage" class="lightbox-stage"></div>`;
+    el.querySelector('#lightboxCloseBtn').addEventListener('click', e => {
+      e.stopPropagation();
+      closeLightbox();
+    });
+    el.addEventListener('click', () => closeLightbox());
+    document.body.appendChild(el);
+    _lightboxOverlay = el;
+    return el;
+  }
+
+  function renderLightboxSlide(n) {
+    const stage = document.getElementById('lightboxStage');
+    if (!stage || !_curProject) return;
+    stage.innerHTML =
+      `<picture>` +
+        `<source srcset="assets/mockups/${_curSlug}-${n + 1}.avif" type="image/avif">` +
+        `<source srcset="assets/mockups/${_curSlug}-${n + 1}.webp" type="image/webp">` +
+        `<img src="assets/mockups/${_curSlug}-${n + 1}.jpg"` +
+             ` alt="${_curProject.title} mockup ${n + 1} of 3" class="lightbox-img">` +
+      `</picture>`;
+  }
+
+  function getLightboxFocusable() {
+    return [..._lightboxOverlay.querySelectorAll(
+      'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )].filter(el => el.offsetParent !== null);
+  }
+
+  function attachLightboxTrap() {
+    _lightboxTrapHandler = e => {
+      if (e.key !== 'Tab') return;
+      const els = getLightboxFocusable();
+      if (!els.length) { e.preventDefault(); return; }
+      const first = els[0], last = els[els.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener('keydown', _lightboxTrapHandler);
+  }
+
+  function detachLightboxTrap() {
+    if (_lightboxTrapHandler) {
+      document.removeEventListener('keydown', _lightboxTrapHandler);
+      _lightboxTrapHandler = null;
+    }
+  }
+
+  function lightboxKeydown(e) {
+    if (!_lightboxOpen) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeLightbox();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (_setSlide) { _setSlide((_curSlide + 2) % 3); renderLightboxSlide(_curSlide); }
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      if (_setSlide) { _setSlide((_curSlide + 1) % 3); renderLightboxSlide(_curSlide); }
+    }
+  }
+
+  function openLightbox(triggerEl) {
+    buildLightbox();
+    _lightboxLastFocus = triggerEl || document.activeElement;
+    renderLightboxSlide(_curSlide);
+    _lightboxOverlay.classList.add('open');
+    _lightboxOpen = true;
+    detachFocusTrap();
+    attachLightboxTrap();
+    document.addEventListener('keydown', lightboxKeydown);
+    const closeBtn = document.getElementById('lightboxCloseBtn');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeLightbox() {
+    if (!_lightboxOverlay || !_lightboxOpen) return;
+    _lightboxOverlay.classList.remove('open');
+    _lightboxOpen = false;
+    detachLightboxTrap();
+    document.removeEventListener('keydown', lightboxKeydown);
+    attachFocusTrap();
+    const btn = document.getElementById('deckSlideBtn');
+    if (btn) btn.focus();
+    else if (_lightboxLastFocus) _lightboxLastFocus.focus();
+  }
+
   document.addEventListener('keydown', e => {
     if (!deckOverlay || !deckOverlay.classList.contains('open')) return;
+    if (_lightboxOpen) return;
     if (e.key === 'Escape')      { e.preventDefault(); closeDeck(); }
     else if (e.key === 'ArrowLeft')  { e.preventDefault(); if (_setSlide) _setSlide((_curSlide + 2) % 3); }
     else if (e.key === 'ArrowRight') { e.preventDefault(); if (_setSlide) _setSlide((_curSlide + 1) % 3); }
   });
 
   if (deckOverlay) {
-    deckOverlay.addEventListener('click', e => { if (e.target === deckOverlay) closeDeck(); });
+    deckOverlay.addEventListener('click', e => {
+      if (_lightboxOpen) return;
+      if (e.target === deckOverlay) closeDeck();
+    });
   }
 
   /* Expose globally so grid cards (on mobile) can open the same deck */
