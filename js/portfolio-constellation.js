@@ -464,10 +464,10 @@
     const coreG = document.createElementNS(NS, 'g');
     coreG.setAttribute('transform', `translate(${CX},${CY})`);
     coreG.innerHTML =
-      '<circle r="34" fill="rgba(134,18,17,0.12)" stroke="rgba(224,81,79,0.5)" stroke-width="1"></circle>' +
-      '<circle r="22" fill="#0c0c0b" stroke="#861211" stroke-width="1.2"></circle>' +
-      '<text y="-1" text-anchor="middle" font-family="\'DM Serif Display\',serif" font-size="15" fill="#fff">N<tspan fill="#e0514f">S</tspan></text>' +
-      '<text y="12" text-anchor="middle" font-family="\'JetBrains Mono\',monospace" font-size="6.5" fill="rgba(255,255,255,0.4)" letter-spacing="1">CORE</text>';
+      '<circle r="40" fill="rgba(134,18,17,0.12)" stroke="rgba(224,81,79,0.5)" stroke-width="1"></circle>' +
+      '<circle r="26" fill="#0c0c0b" stroke="#861211" stroke-width="1.2"></circle>' +
+      '<text y="-1" text-anchor="middle" font-family="\'DM Serif Display\',serif" font-size="18" fill="#fff">N<tspan fill="#e0514f">S</tspan></text>' +
+      '<text y="12" text-anchor="middle" font-family="\'JetBrains Mono\',monospace" font-size="7.5" fill="rgba(255,255,255,0.4)" letter-spacing="1">CORE</text>';
     nodesG.appendChild(coreG);
 
     /* ── SVG: Nodes ────────────────────────────────────────────────────── */
@@ -481,27 +481,27 @@
       g.setAttribute('aria-label', `${n.title} — ${TYPES[n.cat].label}. Open project deck.`);
 
       const above = n.y < CY;
-      const ly1   = above ? n.y - 32 : n.y + 36;
-      const ly2   = above ? n.y - 19 : n.y + 51;
+      const ly1   = above ? n.y - 38 : n.y + 44;
+      const ly2   = above ? n.y - 22 : n.y + 60;
 
       g.innerHTML =
-        `<circle cx="${n.x}" cy="${n.y}" r="15" fill="#0c0c0b" stroke="#e0514f" stroke-width="1.1" class="ring"></circle>` +
-        `<circle cx="${n.x}" cy="${n.y}" r="4"  fill="#e0514f" class="dot"></circle>` +
-        `<text x="${n.x}" y="${n.y + 3}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="#e0514f" style="pointer-events:none;">${n.num}</text>` +
-        `<text x="${n.x}" y="${ly1}" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="13" fill="#fff" class="lbl" style="pointer-events:none;">${n.title}</text>` +
-        `<text x="${n.x}" y="${ly2}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(255,255,255,0.45)" letter-spacing="0.04em" style="pointer-events:none;">${n.tag}</text>`;
+        `<circle cx="${n.x}" cy="${n.y}" r="20" fill="#0c0c0b" stroke="#e0514f" stroke-width="1.1" class="ring"></circle>` +
+        `<circle cx="${n.x}" cy="${n.y}" r="5"  fill="#e0514f" class="dot"></circle>` +
+        `<text x="${n.x}" y="${n.y + 3}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#e0514f" style="pointer-events:none;">${n.num}</text>` +
+        `<text x="${n.x}" y="${ly1}" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="17" fill="#fff" class="lbl" style="pointer-events:none;">${n.title}</text>` +
+        `<text x="${n.x}" y="${ly2}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="rgba(255,255,255,0.45)" letter-spacing="0.04em" style="pointer-events:none;">${n.tag}</text>`;
 
       const enter = () => {
         hovered = i;
-        g.querySelector('.ring').setAttribute('r', '19');
+        g.querySelector('.ring').setAttribute('r', '24');
         g.querySelector('.ring').setAttribute('fill', 'rgba(134,18,17,0.25)');
-        g.querySelector('.dot').setAttribute('r', '5');
+        g.querySelector('.dot').setAttribute('r', '6');
       };
       const leave = () => {
         hovered = -1;
-        g.querySelector('.ring').setAttribute('r', '15');
+        g.querySelector('.ring').setAttribute('r', '20');
         g.querySelector('.ring').setAttribute('fill', '#0c0c0b');
-        g.querySelector('.dot').setAttribute('r', '4');
+        g.querySelector('.dot').setAttribute('r', '5');
       };
       g.addEventListener('mouseenter', enter);
       g.addEventListener('mouseleave', leave);
