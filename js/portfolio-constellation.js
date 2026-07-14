@@ -373,9 +373,9 @@
   if (moreNote)  moreNote.style.display  = 'none';
 
   /* ── Geometry (identical to reference v4) ─────────────────────────────── */
-  const W = 680, H = 720;
+  const W = 1200, H = 720;
   const CX = W / 2, CY = H / 2 + 16;
-  const R  = Math.min(W, H) * 0.33;
+  const R  = H * 0.38;
 
   function layout() {
     const used = ORDER.filter(t =>
