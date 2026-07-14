@@ -526,7 +526,6 @@
       position: relative;
       background: #0c0c0b;
       aspect-ratio: 16 / 9;
-      max-height: 340px;
       overflow: hidden;
     }
     #deckSlideStage,
