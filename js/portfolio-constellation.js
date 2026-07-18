@@ -28,7 +28,7 @@
     { num: '01', cat: 'software', tag: 'Web Platform',        title: 'DevProfile Analyzer',  desc: 'GitHub portfolio intelligence — contribution patterns, language breakdowns, side-by-side profile comparisons.', stack: ['React', 'Vite', 'Tailwind', 'GitHub API'] },
     { num: '04', cat: 'software', tag: 'Studio Web',          title: 'NexioSol Studio Site', desc: 'Dark editorial studio presence with a live ASCII render hero and a database-wired lead funnel.',              stack: ['HTML', 'Vercel', 'MongoDB'] },
     { num: '02', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'] },
-    { num: '05', cat: 'ai',       tag: 'Data Platform',       title: 'Project Five',         desc: 'Placeholder slot — your fifth AI project drops in here with three mockups and a one-line framing.',           stack: ['TBD', 'TBD'] },
+    { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], exts: ['png', 'png', 'png'] },
     { num: '03', cat: 'systems',  tag: 'Systems Engineering', title: 'EV Charging Manager',  desc: 'Station management with a high-performance C++17 backend and a reactive real-time load dashboard.',            stack: ['C++17', 'React', 'REST'] },
     { num: '06', cat: 'systems',  tag: 'Systems',             title: 'Project Six',          desc: 'Placeholder slot — your sixth systems project drops in here with three mockups and a one-line framing.',      stack: ['TBD', 'TBD'] },
     { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'] },
@@ -143,17 +143,15 @@
 
     function setSlide(n) {
       _curSlide = n;
+      const ext = (p.exts && p.exts[n]) || 'jpg';
       const s = document.getElementById('deckSlideStage');
       s.innerHTML =
+        `<img class="deck-slide-bg" src="assets/mockups/${slug}-${n + 1}.${ext}" alt="" aria-hidden="true">` +
         `<button type="button" class="deck-slide-btn" id="deckSlideBtn"` +
              ` aria-label="Expand ${p.title} mockup ${n + 1} of 3">` +
-          `<picture>` +
-            `<source srcset="assets/mockups/${slug}-${n + 1}.avif" type="image/avif">` +
-            `<source srcset="assets/mockups/${slug}-${n + 1}.webp" type="image/webp">` +
-            `<img src="assets/mockups/${slug}-${n + 1}.jpg" loading="lazy"` +
-                 ` alt="${p.title} mockup ${n + 1} of 3"` +
-                 ` style="width:100%;height:100%;object-fit:contain;display:block;">` +
-          `</picture>` +
+          `<img src="assets/mockups/${slug}-${n + 1}.${ext}" loading="lazy"` +
+               ` alt="${p.title} mockup ${n + 1} of 3"` +
+               ` style="width:100%;height:100%;object-fit:contain;display:block;">` +
         `</button>`;
       const dots = document.getElementById('deckDots');
       dots.innerHTML = '';
@@ -265,13 +263,10 @@
   function renderLightboxSlide(n) {
     const stage = document.getElementById('lightboxStage');
     if (!stage || !_curProject) return;
+    const ext = (_curProject.exts && _curProject.exts[n]) || 'jpg';
     stage.innerHTML =
-      `<picture>` +
-        `<source srcset="assets/mockups/${_curSlug}-${n + 1}.avif" type="image/avif">` +
-        `<source srcset="assets/mockups/${_curSlug}-${n + 1}.webp" type="image/webp">` +
-        `<img src="assets/mockups/${_curSlug}-${n + 1}.jpg"` +
-             ` alt="${_curProject.title} mockup ${n + 1} of 3" class="lightbox-img">` +
-      `</picture>`;
+      `<img src="assets/mockups/${_curSlug}-${n + 1}.${ext}"` +
+           ` alt="${_curProject.title} mockup ${n + 1} of 3" class="lightbox-img">`;
   }
 
   function getLightboxFocusable() {
@@ -396,7 +391,7 @@
         const f   = inType.length === 1 ? 0.5 : k / (inType.length - 1);
         const ang = start + f * (end - start);
         const rr  = inType.length > 1 ? R * (k % 2 === 0 ? 1 : 0.82) : R * 0.92;
-        placed.push({ ...p, ang, x: CX + Math.cos(ang) * rr, y: CY + Math.sin(ang) * rr });
+        placed.push({ ...p, ang, x: CX + Math.cos(ang) * rr, y: CY + Math.sin(ang) * rr, _pIdx: PROJECTS.indexOf(p) });
       });
     });
     return { nodes: placed, sectors: sectorMeta };
@@ -507,9 +502,9 @@
       g.addEventListener('mouseleave', leave);
       g.addEventListener('focus', enter);
       g.addEventListener('blur', leave);
-      g.addEventListener('click', () => openDeck(i));
+      g.addEventListener('click', () => openDeck(n._pIdx));
       g.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDeck(i); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDeck(n._pIdx); }
       });
       nodesG.appendChild(g);
     });
