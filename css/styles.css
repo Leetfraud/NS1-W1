@@ -580,6 +580,47 @@
     }
     .deck-close { z-index: 5; }
 
+    /* Mobile-project deck layout — text left, phone right; portrait stage
+       instead of the 16:9 desktop one; dots sit below the phone instead of
+       overlaid arrows, since arrows read poorly on a narrow column. */
+    .deck-card--mobile {
+      display: grid;
+      grid-template-columns: 1fr 0.8fr;
+      grid-template-areas: "text stage" "text dots";
+      align-items: stretch;
+    }
+    .deck-card--mobile .deck-body {
+      grid-area: text;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .deck-card--mobile .deck-slide-viewport {
+      grid-area: stage;
+      aspect-ratio: 10 / 16;
+      height: 100%;
+      background: #0c0c0b;
+    }
+    .deck-card--mobile .deck-nav-btn { display: none; }
+    .deck-card--mobile .deck-dots {
+      grid-area: dots;
+      position: static; transform: none;
+      display: flex; justify-content: center; align-items: center; gap: 7px;
+      padding: 12px 0 18px; background: #0c0c0b;
+    }
+    @media (max-width: 700px) {
+      .deck-card--mobile {
+        grid-template-columns: 1fr;
+        grid-template-areas: "stage" "dots" "text";
+      }
+      .modal-card.deck-card.deck-card--mobile {
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .deck-card--mobile .deck-slide-viewport {
+        height: auto;
+        max-height: 55vh;
+      }
+    }
+
     /* Deck slide button — wraps the mockup so it's a keyboard-activatable
        control that opens the lightbox */
     .deck-slide-btn {

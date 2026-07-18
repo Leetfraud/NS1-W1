@@ -28,7 +28,7 @@
     { num: '01', cat: 'software', tag: 'Web Platform',        title: 'DevProfile Analyzer',  desc: 'GitHub portfolio intelligence — contribution patterns, language breakdowns, side-by-side profile comparisons.', stack: ['React', 'Vite', 'Tailwind', 'GitHub API'] },
     { num: '04', cat: 'software', tag: 'Studio Web',          title: 'NexioSol Studio Site', desc: 'Dark editorial studio presence with a live ASCII render hero and a database-wired lead funnel.',              stack: ['HTML', 'Vercel', 'MongoDB'] },
     { num: '02', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'] },
-    { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], exts: ['png', 'png', 'png'] },
+    { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], exts: ['png', 'png', 'png'], layout: 'mobile' },
     { num: '03', cat: 'systems',  tag: 'Systems Engineering', title: 'EV Charging Manager',  desc: 'Station management with a high-performance C++17 backend and a reactive real-time load dashboard.',            stack: ['C++17', 'React', 'REST'] },
     { num: '06', cat: 'systems',  tag: 'Systems',             title: 'Project Six',          desc: 'Placeholder slot — your sixth systems project drops in here with three mockups and a one-line framing.',      stack: ['TBD', 'TBD'] },
     { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'] },
@@ -114,22 +114,30 @@
   let _curSlug     = '';
 
   function renderDeckContent(idx) {
-    const p    = PROJECTS[idx];
-    const slug = slugify(p.title);
+    const p        = PROJECTS[idx];
+    const slug     = slugify(p.title);
+    const isMobile = p.layout === 'mobile';
     _curProject = p;
     _curSlug    = slug;
+
+    deckCard.classList.toggle('deck-card--mobile', isMobile);
 
     const stackChips = p.stack.map(s =>
       `<span class="deck-chip">${s}</span>`).join('');
 
-    deckCard.innerHTML =
-      `<button class="modal-close deck-close" id="deckCloseBtn" aria-label="Close project deck">✕</button>` +
-      `<div class="deck-slide-viewport">` +
-        `<div id="deckSlideStage"></div>` +
-        `<button class="deck-nav-btn deck-prev" id="deckPrev" aria-label="Previous mockup">‹</button>` +
-        `<button class="deck-nav-btn deck-next" id="deckNext" aria-label="Next mockup">›</button>` +
-        `<div id="deckDots" class="deck-dots"></div>` +
-      `</div>` +
+    const stageInner =
+      `<div id="deckSlideStage"></div>` +
+      `<button class="deck-nav-btn deck-prev" id="deckPrev" aria-label="Previous mockup">‹</button>` +
+      `<button class="deck-nav-btn deck-next" id="deckNext" aria-label="Next mockup">›</button>`;
+    const dotsHTML = `<div id="deckDots" class="deck-dots"></div>`;
+
+    // Mobile: dots sit below the phone as their own grid cell, not overlaid
+    // on the stage — desktop keeps dots overlaid inside the viewport as before.
+    const stageHTML = isMobile
+      ? `<div class="deck-slide-viewport">${stageInner}</div>`
+      : `<div class="deck-slide-viewport">${stageInner}${dotsHTML}</div>`;
+
+    const bodyHTML =
       `<div class="deck-body">` +
         `<div class="deck-meta">` +
           `<span class="deck-num">${p.num}</span>` +
@@ -140,6 +148,10 @@
         `<p class="deck-desc">${p.desc}</p>` +
         `<div class="deck-chips">${stackChips}</div>` +
       `</div>`;
+
+    deckCard.innerHTML =
+      `<button class="modal-close deck-close" id="deckCloseBtn" aria-label="Close project deck">✕</button>` +
+      (isMobile ? (bodyHTML + stageHTML + dotsHTML) : (stageHTML + bodyHTML));
 
     function setSlide(n) {
       _curSlide = n;
