@@ -30,7 +30,7 @@
     { num: '02', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'] },
     { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], exts: ['png', 'png', 'png'], layout: 'mobile' },
     { num: '03', cat: 'systems',  tag: 'Systems Engineering', title: 'EV Charging Manager',  desc: 'Station management with a high-performance C++17 backend and a reactive real-time load dashboard.',            stack: ['C++17', 'React', 'REST'] },
-    { num: '06', cat: 'systems',  tag: 'Systems',             title: 'Project Six',          desc: 'Placeholder slot — your sixth systems project drops in here with three mockups and a one-line framing.',      stack: ['TBD', 'TBD'] },
+    { num: '06', cat: 'software', tag: 'Outreach Pipeline CRM', title: 'Exodus', desc: 'A role-based CRM for managing email and LinkedIn outreach pipelines, from prospect capture to close.', stack: ['React', 'Tailwind CSS', 'Vite', 'Supabase', 'Vercel', 'Zapier', 'Stripe', 'Inngest', 'Clerk'], exts: ['png', 'png', 'png'] },
     { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'] },
   ];
 
