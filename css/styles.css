@@ -597,14 +597,15 @@
       grid-area: stage;
       aspect-ratio: 10 / 16;
       height: 100%;
-      background: #0c0c0b;
+      background: #0c0c0b url('../assets/grounds/ground-mobile.webp') center / cover no-repeat;
     }
     .deck-card--mobile .deck-nav-btn { display: none; }
     .deck-card--mobile .deck-dots {
       grid-area: dots;
       position: static; transform: none;
       display: flex; justify-content: center; align-items: center; gap: 7px;
-      padding: 12px 0 18px; background: #0c0c0b;
+      padding: 12px 0 18px;
+      background: #0c0c0b url('../assets/grounds/ground-mobile.webp') center bottom / cover no-repeat;
     }
     @media (max-width: 700px) {
       .deck-card--mobile {
