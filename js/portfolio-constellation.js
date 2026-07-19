@@ -30,7 +30,7 @@
     { num: '02', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'] },
     { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], exts: ['png', 'png', 'png'], layout: 'mobile' },
     { num: '03', cat: 'systems',  tag: 'Systems Engineering', title: 'EV Charging Manager',  desc: 'Station management with a high-performance C++17 backend and a reactive real-time load dashboard.',            stack: ['C++17', 'React', 'REST'] },
-    { num: '06', cat: 'software', tag: 'Outreach Pipeline CRM', title: 'Exodus', desc: 'A role-based CRM for managing email and LinkedIn outreach pipelines, from prospect capture to close.', stack: ['React', 'Tailwind CSS', 'Vite', 'Supabase', 'Vercel', 'Zapier', 'Stripe', 'Inngest', 'Clerk'], exts: ['png', 'png', 'png'] },
+    { num: '06', cat: 'software', tag: 'Outreach Pipeline CRM', title: 'Exodus', desc: 'A role-based CRM for managing email and LinkedIn outreach pipelines, from prospect capture to close.', stack: ['React', 'Tailwind CSS', 'Vite', 'Supabase', 'Vercel', 'Zapier', 'Stripe', 'Inngest', 'Clerk'], exts: ['jpg', 'jpg', 'jpg'] },
     { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'] },
   ];
 
@@ -110,15 +110,11 @@
   let _lastFocus = null;
   let _curSlide  = 0;
   let _setSlide  = null;   // set by renderDeckContent so keydown can call it
-  let _curProject = null; // read by the lightbox, which lives outside this closure
-  let _curSlug     = '';
 
   function renderDeckContent(idx) {
     const p        = PROJECTS[idx];
     const slug     = slugify(p.title);
     const isMobile = p.layout === 'mobile';
-    _curProject = p;
-    _curSlug    = slug;
 
     deckCard.classList.toggle('deck-card--mobile', isMobile);
 
@@ -159,12 +155,9 @@
       const s = document.getElementById('deckSlideStage');
       s.innerHTML =
         `<img class="deck-slide-bg" src="assets/mockups/${slug}-${n + 1}.${ext}" alt="" aria-hidden="true">` +
-        `<button type="button" class="deck-slide-btn" id="deckSlideBtn"` +
-             ` aria-label="Expand ${p.title} mockup ${n + 1} of 3">` +
-          `<img src="assets/mockups/${slug}-${n + 1}.${ext}" loading="lazy"` +
-               ` alt="${p.title} mockup ${n + 1} of 3"` +
-               ` style="width:100%;height:100%;object-fit:contain;display:block;">` +
-        `</button>`;
+        `<img class="deck-slide-img" src="assets/mockups/${slug}-${n + 1}.${ext}" loading="lazy"` +
+             ` alt="${p.title} mockup ${n + 1} of 3"` +
+             ` style="position:relative;z-index:1;width:100%;height:100%;object-fit:contain;display:block;">`;
       const dots = document.getElementById('deckDots');
       dots.innerHTML = '';
       for (let i = 0; i < 3; i++) {
@@ -175,8 +168,6 @@
         d.addEventListener('click', () => setSlide(idx2));
         dots.appendChild(d);
       }
-      const slideBtn = document.getElementById('deckSlideBtn');
-      if (slideBtn) slideBtn.addEventListener('click', () => openLightbox(slideBtn));
     }
 
     _setSlide = setSlide;
@@ -240,117 +231,8 @@
     if (_lastFocus) _lastFocus.focus();
   }
 
-  /* ── Lightbox (stacks above the deck at natural size; same slide) ───────
-   * Detaches the deck's focus trap while open and attaches its own, so Tab
-   * cycles only through the lightbox close button. Re-attaches the deck's
-   * trap on close. The deck's own keydown/click-outside handlers below
-   * check _lightboxOpen so a single Escape / outside click only ever
-   * closes the topmost overlay.
-   * ────────────────────────────────────────────────────────────────────── */
-  let _lightboxOverlay    = null;
-  let _lightboxOpen       = false;
-  let _lightboxTrapHandler = null;
-  let _lightboxLastFocus  = null;
-
-  function buildLightbox() {
-    if (_lightboxOverlay) return _lightboxOverlay;
-    const el = document.createElement('div');
-    el.id = 'deckLightbox';
-    el.className = 'lightbox-overlay';
-    el.setAttribute('role', 'dialog');
-    el.setAttribute('aria-modal', 'true');
-    el.innerHTML =
-      `<button type="button" class="modal-close lightbox-close" id="lightboxCloseBtn" aria-label="Close expanded image">✕</button>` +
-      `<div id="lightboxStage" class="lightbox-stage"></div>`;
-    el.querySelector('#lightboxCloseBtn').addEventListener('click', e => {
-      e.stopPropagation();
-      closeLightbox();
-    });
-    el.addEventListener('click', () => closeLightbox());
-    document.body.appendChild(el);
-    _lightboxOverlay = el;
-    return el;
-  }
-
-  function renderLightboxSlide(n) {
-    const stage = document.getElementById('lightboxStage');
-    if (!stage || !_curProject) return;
-    const ext = (_curProject.exts && _curProject.exts[n]) || 'jpg';
-    stage.innerHTML =
-      `<img src="assets/mockups/${_curSlug}-${n + 1}.${ext}"` +
-           ` alt="${_curProject.title} mockup ${n + 1} of 3" class="lightbox-img">`;
-  }
-
-  function getLightboxFocusable() {
-    return [..._lightboxOverlay.querySelectorAll(
-      'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    )].filter(el => el.offsetParent !== null);
-  }
-
-  function attachLightboxTrap() {
-    _lightboxTrapHandler = e => {
-      if (e.key !== 'Tab') return;
-      const els = getLightboxFocusable();
-      if (!els.length) { e.preventDefault(); return; }
-      const first = els[0], last = els[els.length - 1];
-      if (e.shiftKey) {
-        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
-      } else {
-        if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
-      }
-    };
-    document.addEventListener('keydown', _lightboxTrapHandler);
-  }
-
-  function detachLightboxTrap() {
-    if (_lightboxTrapHandler) {
-      document.removeEventListener('keydown', _lightboxTrapHandler);
-      _lightboxTrapHandler = null;
-    }
-  }
-
-  function lightboxKeydown(e) {
-    if (!_lightboxOpen) return;
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closeLightbox();
-    } else if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      if (_setSlide) { _setSlide((_curSlide + 2) % 3); renderLightboxSlide(_curSlide); }
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      if (_setSlide) { _setSlide((_curSlide + 1) % 3); renderLightboxSlide(_curSlide); }
-    }
-  }
-
-  function openLightbox(triggerEl) {
-    buildLightbox();
-    _lightboxLastFocus = triggerEl || document.activeElement;
-    renderLightboxSlide(_curSlide);
-    _lightboxOverlay.classList.add('open');
-    _lightboxOpen = true;
-    detachFocusTrap();
-    attachLightboxTrap();
-    document.addEventListener('keydown', lightboxKeydown);
-    const closeBtn = document.getElementById('lightboxCloseBtn');
-    if (closeBtn) closeBtn.focus();
-  }
-
-  function closeLightbox() {
-    if (!_lightboxOverlay || !_lightboxOpen) return;
-    _lightboxOverlay.classList.remove('open');
-    _lightboxOpen = false;
-    detachLightboxTrap();
-    document.removeEventListener('keydown', lightboxKeydown);
-    attachFocusTrap();
-    const btn = document.getElementById('deckSlideBtn');
-    if (btn) btn.focus();
-    else if (_lightboxLastFocus) _lightboxLastFocus.focus();
-  }
-
   document.addEventListener('keydown', e => {
     if (!deckOverlay || !deckOverlay.classList.contains('open')) return;
-    if (_lightboxOpen) return;
     if (e.key === 'Escape')      { e.preventDefault(); closeDeck(); }
     else if (e.key === 'ArrowLeft')  { e.preventDefault(); if (_setSlide) _setSlide((_curSlide + 2) % 3); }
     else if (e.key === 'ArrowRight') { e.preventDefault(); if (_setSlide) _setSlide((_curSlide + 1) % 3); }
@@ -358,7 +240,6 @@
 
   if (deckOverlay) {
     deckOverlay.addEventListener('click', e => {
-      if (_lightboxOpen) return;
       if (e.target === deckOverlay) closeDeck();
     });
   }
