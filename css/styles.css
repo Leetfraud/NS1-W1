@@ -597,8 +597,13 @@
       grid-area: stage;
       aspect-ratio: 10 / 16;
       height: 100%;
+      padding: 28px;
       background: #0c0c0b url('../assets/grounds/ground-mobile.webp') center / cover no-repeat;
     }
+    /* The blurred fill-the-gap layer (desktop) is opaque against the mobile
+       mockups' grey margins, so it masks the ground instead of letting it
+       show through — the ground itself is the mobile fill, so drop it here. */
+    .deck-card--mobile .deck-slide-bg { display: none; }
     .deck-card--mobile .deck-nav-btn { display: none; }
     .deck-card--mobile .deck-dots {
       grid-area: dots;
