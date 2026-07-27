@@ -25,13 +25,13 @@
 
   /* ── Single source of project data ────────────────────────────────────── */
   const PROJECTS = [
-    { num: '01', cat: 'software', tag: 'Web Platform',        title: 'DevProfile Analyzer',  desc: 'GitHub portfolio intelligence — contribution patterns, language breakdowns, side-by-side profile comparisons.', stack: ['React', 'Vite', 'Tailwind', 'GitHub API'] },
-    { num: '04', cat: 'software', tag: 'Studio Web',          title: 'NexioSol Studio Site', desc: 'Dark editorial studio presence with a live ASCII render hero and a database-wired lead funnel.',              stack: ['HTML', 'Vercel', 'MongoDB'] },
-    { num: '02', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'] },
-    { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], exts: ['png', 'png', 'png'], layout: 'mobile' },
-    { num: '03', cat: 'systems',  tag: 'Systems Engineering', title: 'EV Charging Manager',  desc: 'Station management with a high-performance C++17 backend and a reactive real-time load dashboard.',            stack: ['C++17', 'React', 'REST'] },
-    { num: '06', cat: 'software', tag: 'Outreach Pipeline CRM', title: 'Exodus', desc: 'A role-based CRM for managing email and LinkedIn outreach pipelines, from prospect capture to close.', stack: ['React', 'Tailwind CSS', 'Vite', 'Supabase', 'Vercel', 'Zapier', 'Stripe', 'Inngest', 'Clerk'], exts: ['jpg', 'jpg', 'jpg'] },
-    { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'] },
+    { num: '01', cat: 'software', tag: 'Web Platform',        title: 'DevProfile Analyzer',  desc: 'GitHub portfolio intelligence — contribution patterns, language breakdowns, side-by-side profile comparisons.', stack: ['React', 'Vite', 'Tailwind', 'GitHub API'], problem: 'Developer portfolios are scattered across commits and repos, with no fast way to read real contribution patterns or compare profiles.', solution: 'A single dashboard that aggregates GitHub activity into language breakdowns, contribution trends and side-by-side comparisons.' },
+    { num: '04', cat: 'software', tag: 'Studio Web',          title: 'NexioSol Studio Site', desc: 'Dark editorial studio presence with a live ASCII render hero and a database-wired lead funnel.',              stack: ['HTML', 'Vercel', 'MongoDB'], problem: 'The studio needed a presence that felt technical and alive without giving up a working lead pipeline.', solution: 'A dark editorial build with a live ASCII hero and a database-wired funnel that captures qualified leads.' },
+    { num: '02', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'], problem: 'Cloud voice assistants leak data and stop working the moment they go offline.', solution: 'An offline-first desktop agent combining local Whisper transcription, intent classification and gesture control.' },
+    { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], exts: ['png', 'png', 'png'], layout: 'mobile', screens: 3, problem: 'Owners, managers and vendors work from disconnected tools with no shared source of truth.', solution: 'Role-aware dashboards backed by an embedded AI assistant that answers through interactive widgets.' },
+    { num: '03', cat: 'systems',  tag: 'Systems Engineering', title: 'EV Charging Manager',  desc: 'Station management with a high-performance C++17 backend and a reactive real-time load dashboard.',            stack: ['C++17', 'React', 'REST'], problem: 'Charging networks need real-time load visibility that typical web stacks cannot deliver under pressure.', solution: 'A high-performance C++17 backend feeding a reactive dashboard for live station and load management.' },
+    { num: '06', cat: 'software', tag: 'Outreach Pipeline CRM', title: 'Exodus', desc: 'A role-based CRM for managing email and LinkedIn outreach pipelines, from prospect capture to close.', stack: ['React', 'Tailwind CSS', 'Vite', 'Supabase', 'Vercel', 'Zapier', 'Stripe', 'Inngest', 'Clerk'], exts: ['jpg', 'jpg', 'jpg'], problem: 'Outreach across email and LinkedIn sprawls into spreadsheets with no pipeline visibility.', solution: 'A role-based CRM that tracks every prospect from first touch to close in one pipeline.' },
+    { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'], problem: 'An aging system was buckling under real production load and blocking new growth.', solution: 'A staged refactor that modernised the core while keeping it running and scaling under load.' },
   ];
 
   /* ── Desktop gate: interaction model, not touch capability ───────────────
@@ -294,6 +294,167 @@
   const NS = 'http://www.w3.org/2000/svg';
   let hovered = -1;
 
+  /* ── Project panel (constellation path only) ──────────────────────────── */
+  const stageEl   = document.getElementById('portStage');
+  const panelEl   = document.getElementById('projPanel');
+  const scrimEl   = document.getElementById('panelScrim');
+  const beaconEl  = document.getElementById('beacon');
+  const beaconNum = document.getElementById('beaconNum');
+  const pnlStage  = document.getElementById('pnlStage');
+  const pnlDots   = document.getElementById('pnlDots');
+  const pnlTech   = document.getElementById('pnlTech');
+  const pnlBody   = document.getElementById('pnlBody');
+
+  let _pCur = 0, _pLastFocus = null, _pNode = null, _pTrap = null;
+  const PANEL_SLIDES = 3;      // carousel length for desktop-layout projects
+  let _pSlides = PANEL_SLIDES; // actual count for the open project (1 if grouped)
+
+  function placeBeacon(n) {
+    const svg  = document.getElementById('overSvg');
+    const rect = svg.getBoundingClientRect();
+    beaconEl.style.left = (n.x * (rect.width  / W)) + 'px';
+    beaconEl.style.top  = (n.y * (rect.height / H)) + 'px';
+    beaconNum.textContent = n.num;
+  }
+
+  function renderPanel(idx) {
+    const p = PROJECTS[idx];
+    const slug = slugify(p.title);
+    const isGroup = p.layout === 'mobile';   // one slide, phones side by side
+
+    pnlStage.classList.toggle('is-group', isGroup);
+    pnlStage.innerHTML = '';
+    _pSlides = isGroup ? 1 : PANEL_SLIDES;
+
+    if (isGroup) {
+      // Single static frame — all phones visible at once, no carousel.
+      // Mobile screenshots are standardized as PNG; count comes from `screens`.
+      const n = p.screens || 3;
+      const group = document.createElement('div');
+      group.className = 'phone-group';
+      for (let i = 0; i < n; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'phone';
+        const img = document.createElement('img');
+        img.src = `assets/mockups/${slug}-${i + 1}.png`;
+        img.alt = `${p.title} — screen ${i + 1} of ${n}`;
+        if (i > 0) img.loading = 'lazy';
+        cell.appendChild(img);
+        group.appendChild(cell);
+      }
+      pnlStage.appendChild(group);
+    } else {
+      for (let i = 0; i < PANEL_SLIDES; i++) {
+        const ext = (p.exts && p.exts[i]) || 'jpg';
+        const img = document.createElement('img');
+        img.className = 'pnl-slide' + (i === 0 ? ' active' : '');
+        img.src = `assets/mockups/${slug}-${i + 1}.${ext}`;
+        img.alt = `${p.title} mockup ${i + 1} of ${PANEL_SLIDES}`;
+        if (i > 0) img.loading = 'lazy';
+        pnlStage.appendChild(img);
+      }
+    }
+
+    pnlDots.innerHTML = '';
+    pnlDots.classList.toggle('is-hidden', _pSlides < 2);
+    if (_pSlides > 1) {
+      for (let i = 0; i < _pSlides; i++) {
+        const d = document.createElement('button');
+        d.className = 'pnl-dot' + (i === 0 ? ' active' : '');
+        d.setAttribute('aria-label', `View mockup ${i + 1}`);
+        d.addEventListener('click', () => setPanelSlide(i));
+        pnlDots.appendChild(d);
+      }
+    }
+    _pCur = 0;
+
+    // Right column: tech stack pills sit under the hooked image.
+    pnlTech.innerHTML =
+      `<div class="pnl-tech-label">Stack</div>` +
+      `<div class="pnl-chips">${p.stack.map(s => `<span class="pnl-chip">${s}</span>`).join('')}</div>`;
+
+    // Left column: description, then Problem / Solution (omitted if absent).
+    pnlBody.innerHTML =
+      `<div class="pnl-meta">` +
+        `<span class="pnl-num">${p.num}</span>` +
+        `<span class="pnl-badge">${TYPES[p.cat].label}</span>` +
+        `<span class="pnl-tag">${p.tag}</span>` +
+      `</div>` +
+      `<h3 class="pnl-title" id="pnlTitle">${p.title}</h3>` +
+      `<p class="pnl-desc">${p.desc}</p>` +
+      (p.problem ? `<div class="pnl-section"><div class="pnl-label">Problem</div><p class="pnl-sec-text">${p.problem}</p></div>` : '') +
+      (p.solution ? `<div class="pnl-section"><div class="pnl-label">Solution</div><p class="pnl-sec-text">${p.solution}</p></div>` : '');
+  }
+
+  function setPanelSlide(n) {
+    if (_pSlides < 2) return;                 // grouped mobile slide: nothing to page
+    _pCur = (n + _pSlides) % _pSlides;
+    [...pnlStage.children].forEach((el, i) => el.classList.toggle('active', i === _pCur));
+    [...pnlDots.children].forEach((el, i) => el.classList.toggle('active', i === _pCur));
+  }
+
+  function openPanel(idx, node) {
+    _pLastFocus = document.activeElement;
+    _pNode = node;
+    renderPanel(idx);
+    placeBeacon(node);
+    stageEl.classList.add('panel-open');
+    panelEl.setAttribute('aria-hidden', 'false');
+    panelEl.scrollTop = 0;
+    attachPanelTrap();
+    document.getElementById('pnlClose').focus();
+  }
+
+  function closePanel() {
+    stageEl.classList.remove('panel-open');
+    panelEl.setAttribute('aria-hidden', 'true');
+    detachPanelTrap();
+    // Restore focus, but don't leave the orb stuck in its hover-grown state:
+    // the node's `focus` listener calls enter(), which grows ring/dot.
+    if (_pLastFocus && _pLastFocus.focus) {
+      const el = _pLastFocus;
+      el.focus({ preventScroll: true });
+      if (el.classList && el.classList.contains('nodeG')) {
+        const ring = el.querySelector('.ring'), dot = el.querySelector('.dot');
+        if (ring) { ring.setAttribute('r', '20'); ring.setAttribute('fill', '#0c0c0b'); }
+        if (dot)  { dot.setAttribute('r', '5'); }
+        hovered = -1;
+      }
+    }
+    _pNode = null;
+  }
+
+  function attachPanelTrap() {
+    _pTrap = e => {
+      if (e.key !== 'Tab') return;
+      const els = [...panelEl.querySelectorAll('button:not([disabled]),[href],[tabindex]:not([tabindex="-1"])')]
+        .filter(el => el.offsetParent !== null);
+      if (!els.length) { e.preventDefault(); return; }
+      const first = els[0], last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', _pTrap);
+  }
+  function detachPanelTrap() {
+    if (_pTrap) { document.removeEventListener('keydown', _pTrap); _pTrap = null; }
+  }
+
+  document.getElementById('pnlClose').addEventListener('click', closePanel);
+  scrimEl.addEventListener('click', closePanel);
+
+  document.addEventListener('keydown', e => {
+    if (!stageEl.classList.contains('panel-open')) return;
+    if (e.key === 'Escape')          { e.preventDefault(); closePanel(); }
+    else if (e.key === 'ArrowLeft')  { e.preventDefault(); setPanelSlide(_pCur - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); setPanelSlide(_pCur + 1); }
+  });
+
+  // Beacon is positioned from measured SVG geometry — reposition on resize.
+  window.addEventListener('resize', () => {
+    if (_pNode && stageEl.classList.contains('panel-open')) placeBeacon(_pNode);
+  });
+
   /* ── SVG: Wedges ─────────────────────────────────────────────────────── */
   const sectorsG = document.getElementById('sectors');
   if (sectorsG) {
@@ -395,9 +556,9 @@
       g.addEventListener('mouseleave', leave);
       g.addEventListener('focus', enter);
       g.addEventListener('blur', leave);
-      g.addEventListener('click', () => openDeck(n._pIdx));
+      g.addEventListener('click', () => openPanel(n._pIdx, n));
       g.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDeck(n._pIdx); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(n._pIdx, n); }
       });
       nodesG.appendChild(g);
     });

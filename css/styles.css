@@ -518,6 +518,167 @@
        ring/dot grow on focus (same as hover) is already the focus indicator. */
     .nodeG { outline: none; }
 
+    /* ── Project panel — slides in from the right of the map section ─────────── */
+    #portStage { position: relative; overflow: hidden; }
+
+    /* Dim-only, locked: the map does NOT transform or blur — it stays fixed and
+       is simply darkened by #panelScrim on top. Nothing on the map moves. */
+    #portStage.panel-open #mapWrap {
+      pointer-events: none;
+    }
+
+    /* Active node beacon — rides above the scrim so panel and node stay linked */
+    #beacon {
+      position: absolute; z-index: 5; pointer-events: none;
+      opacity: 0; transform: translate(-50%, -50%);
+      transition: opacity .35s var(--ease);
+    }
+    #portStage.panel-open #beacon { opacity: 1; }
+    .bcn-ring {
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 1px solid #e0514f;
+      background: rgba(134,18,17,0.30);
+      box-shadow: 0 0 24px rgba(224,81,79,.55);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 11px; color: #fff;
+      animation: bcnPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes bcnPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+    #panelScrim {
+      position: absolute; inset: 0; z-index: 8;
+      background: rgba(12,12,11,0.55);
+      opacity: 0; pointer-events: none;
+      transition: opacity .5s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    #portStage.panel-open #panelScrim { opacity: 1; pointer-events: auto; }
+
+    #projPanel {
+      position: absolute; top: 0; right: 0; height: 100%;
+      width: 87vw; z-index: 10;
+      background: #0c0c0b;
+      border-left: 1px solid rgba(194,154,84,0.18);
+      box-shadow: -40px 0 80px -20px rgba(0,0,0,0.7);
+      transform: translateX(100%);
+      transition: transform .5s cubic-bezier(0.65, 0, 0.35, 1);
+      will-change: transform;
+      display: flex; flex-direction: column;
+      overflow-y: auto; overflow-x: hidden;
+    }
+    #portStage.panel-open #projPanel { transform: translateX(0); }
+    #projPanel::-webkit-scrollbar { width: 6px; }
+    #projPanel::-webkit-scrollbar-thumb { background: rgba(194,154,84,0.25); border-radius: 3px; }
+
+    .pnl-close {
+      position: absolute; top: 18px; right: 18px; z-index: 3;
+      background: rgba(12,12,11,0.7); border: 1px solid rgba(255,255,255,0.14);
+      color: var(--faint); width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer; font-size: 14px; line-height: 1;
+      transition: all .3s var(--ease);
+    }
+    .pnl-close:hover { color: #fff; border-color: var(--red-bright); background: rgba(134,18,17,0.4); }
+
+    /* Two-column body: text flows on the left; the image "hooks" into the
+       top-right corner with the tech stack pills directly beneath it. */
+    .pnl-scroll {
+      padding: 34px 34px 44px;
+      display: grid; grid-template-columns: 1fr 2fr; gap: 34px; align-items: start;
+    }
+    .pnl-body { grid-column: 1; }   /* text: title, desc, problem, solution */
+    .pnl-side { grid-column: 2; }   /* image on top, stack pills beneath */
+
+    .pnl-stage {
+      position: relative; width: 100%; aspect-ratio: 16/9;
+      background: #0c0c0b; overflow: hidden;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);
+    }
+    .pnl-slide {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: contain; opacity: 0;
+      transition: opacity .35s var(--ease);
+    }
+    .pnl-slide.active { opacity: 1; }
+
+    /* ── Mobile projects: one grouped slide, 3 phones staggered ──────────────
+       Same 16:9 stage as desktop — no portrait variant. Phones are height-
+       constrained, so 3-up renders each at ~138px wide, the same as 2-up would;
+       the third phone is effectively free. Radial oxblood glow echoes #coreGlow
+       on the map rather than introducing a new surface. */
+    .pnl-stage.is-group::before {
+      content: ''; position: absolute; left: 50%; top: 52%;
+      width: 78%; aspect-ratio: 1; transform: translate(-50%, -50%);
+      background: radial-gradient(circle,
+        rgba(134,18,17,0.42) 0%, rgba(134,18,17,0.13) 45%, transparent 70%);
+      filter: blur(28px); pointer-events: none;
+    }
+    .phone-group {
+      position: absolute; inset: 0; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; padding: 16px 16px 0;
+    }
+    .phone-group .phone {
+      position: relative; height: 100%; flex: 0 1 auto;
+      display: flex; align-items: flex-end;
+    }
+    .phone-group .phone img {
+      height: 100%; width: auto; display: block;
+      object-fit: contain; object-position: bottom;
+      border-radius: 6px;
+      box-shadow: 0 18px 40px -12px rgba(0,0,0,0.75),
+                  0 0 0 1px rgba(255,255,255,0.05);
+    }
+    /* Staggered — centre phone lifted */
+    .phone-group .phone:nth-child(2) { margin-bottom: 22px; }
+
+    /* Single-slide projects have no carousel */
+    .pnl-dots.is-hidden { display: none; }
+
+    .pnl-dots { display: flex; gap: 8px; justify-content: center; padding: 16px 0 4px; }
+    .pnl-dot {
+      width: 6px; height: 6px; border-radius: 50%; border: none; padding: 0;
+      cursor: pointer; background: rgba(255,255,255,0.22);
+      transition: all .3s var(--ease);
+    }
+    .pnl-dot.active { background: var(--red-bright); width: 20px; border-radius: 3px; }
+
+    .pnl-meta  { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+    .pnl-num   { font-family: var(--font-mono); font-size: 11px; color: var(--red-bright); letter-spacing: .1em; }
+    .pnl-badge {
+      font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .06em;
+      text-transform: uppercase; color: #C29A54;
+      border: 1px solid rgba(194,154,84,0.3); padding: 4px 10px; border-radius: 100px;
+    }
+    .pnl-tag   { font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
+    .pnl-title { font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 1.15; margin: 0 0 14px; color: #fff; }
+    .pnl-desc  { font-size: 14.5px; line-height: 1.68; color: rgba(255,255,255,0.72); margin-bottom: 20px; }
+
+    /* Problem / Solution sections (left column) */
+    .pnl-section { margin-bottom: 18px; }
+    .pnl-label {
+      font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--red-bright); margin-bottom: 6px;
+    }
+    .pnl-sec-text { font-size: 14px; line-height: 1.62; color: rgba(255,255,255,0.68); }
+
+    /* Tech stack — sits under the hooked image, in the right column */
+    .pnl-tech { margin-top: 16px; }
+    .pnl-tech-label {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--faint); margin-bottom: 9px;
+    }
+    .pnl-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pnl-chip  {
+      font-family: var(--font-mono); font-size: 10.5px; color: var(--faint);
+      border: 1px solid rgba(255,255,255,0.12); padding: 5px 11px; border-radius: 100px;
+    }
+
+    /* Keyboard-only focus affordances */
+    .nodeG:focus-visible .ring { stroke: #C29A54; stroke-width: 2; }
+    .pnl-close:focus { outline: none; }
+    .pnl-close:focus-visible { outline: 1px solid #C29A54; outline-offset: 2px; }
+    .pnl-dot:focus { outline: none; }
+    .pnl-dot:focus-visible { outline: 1px solid #C29A54; outline-offset: 3px; }
+
     /* Deck card — wider variant that rides inside .modal-overlay */
     .modal-card.deck-card {
       max-width: 820px;
