@@ -336,6 +336,7 @@
         const cell = document.createElement('div');
         cell.className = 'phone';
         const img = document.createElement('img');
+        img.decoding = 'async';   // keep decode off the transition's frames
         img.src = `assets/mockups/${slug}-${i + 1}.png`;
         img.alt = `${p.title} — screen ${i + 1} of ${n}`;
         if (i > 0) img.loading = 'lazy';
@@ -348,6 +349,7 @@
         const ext = (p.exts && p.exts[i]) || 'jpg';
         const img = document.createElement('img');
         img.className = 'pnl-slide' + (i === 0 ? ' active' : '');
+        img.decoding = 'async';   // keep decode off the transition's frames
         img.src = `assets/mockups/${slug}-${i + 1}.${ext}`;
         img.alt = `${p.title} mockup ${i + 1} of ${PANEL_SLIDES}`;
         if (i > 0) img.loading = 'lazy';
@@ -398,11 +400,21 @@
     _pNode = node;
     renderPanel(idx);
     placeBeacon(node);
-    stageEl.classList.add('panel-open');
     panelEl.setAttribute('aria-hidden', 'false');
     panelEl.scrollTop = 0;
     attachPanelTrap();
-    document.getElementById('pnlClose').focus();
+
+    // preventScroll is load-bearing here. #portStage is a scroll container
+    // (overflow:hidden still scrolls programmatically) and the panel is parked
+    // off-stage at translateX(100%) at this point. A plain focus() makes the
+    // browser scroll #portStage right to reveal it — dragging the map along —
+    // then snap scrollLeft back to 0 once the panel lands inside the box.
+    document.getElementById('pnlClose').focus({ preventScroll: true });
+    stageEl.scrollLeft = 0;
+
+    // Let the freshly-injected mockups lay out and start decoding for one frame
+    // before the transform begins, so the decode doesn't land mid-transition.
+    requestAnimationFrame(() => stageEl.classList.add('panel-open'));
   }
 
   function closePanel() {

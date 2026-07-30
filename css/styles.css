@@ -565,7 +565,13 @@
       display: flex; flex-direction: column;
       overflow-y: auto; overflow-x: hidden;
     }
-    #portStage.panel-open #projPanel { transform: translateX(0); }
+    /* Entry decelerates instead of easing in and out — the symmetric curve's
+       slow start reads as hesitation on a panel that's already in motion.
+       Close keeps the base curve above. */
+    #portStage.panel-open #projPanel {
+      transform: translateX(0);
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
     #projPanel::-webkit-scrollbar { width: 6px; }
     #projPanel::-webkit-scrollbar-thumb { background: rgba(194,154,84,0.25); border-radius: 3px; }
 
