@@ -5,10 +5,14 @@
   "description": "NexioSol studio website — static frontend + Vercel serverless API + MongoDB lead storage.",
   "type": "module",
   "scripts": {
-    "dev": "vercel dev"
+    "dev": "vercel dev",
+    "images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "mongodb": "^6.8.0",
     "nodemailer": "^9.0.1"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.3"
   }
 }

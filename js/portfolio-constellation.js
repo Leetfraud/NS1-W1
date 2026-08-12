@@ -23,14 +23,26 @@
 
   const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
+  /* How many mockups a project ships. `screens` wins, then the length of
+     `exts`, then the 3-slide default — so a project with 2 or 4 screenshots
+     needs no code change, just the right number of files on disk. */
+  const DEFAULT_SLIDES = 3;
+  const slideCount = p => p.screens || (p.exts && p.exts.length) || DEFAULT_SLIDES;
+  const mockupSrc = (p, i) => p.mockups
+    ? `assets/mockups/${p.mockups[i]}`
+    : `assets/mockups/${slugify(p.title)}-${i + 1}.${(p.exts && p.exts[i]) || 'webp'}`;
+
   /* ── Single source of project data ────────────────────────────────────── */
   const PROJECTS = [
     { num: '01', cat: 'software', tag: 'Web Platform',        title: 'DevProfile Analyzer',  desc: 'GitHub portfolio intelligence — contribution patterns, language breakdowns, side-by-side profile comparisons.', stack: ['React', 'Vite', 'Tailwind', 'GitHub API'], problem: 'Developer portfolios are scattered across commits and repos, with no fast way to read real contribution patterns or compare profiles.', solution: 'A single dashboard that aggregates GitHub activity into language breakdowns, contribution trends and side-by-side comparisons.' },
     { num: '04', cat: 'software', tag: 'Studio Web',          title: 'NexioSol Studio Site', desc: 'Dark editorial studio presence with a live ASCII render hero and a database-wired lead funnel.',              stack: ['HTML', 'Vercel', 'MongoDB'], problem: 'The studio needed a presence that felt technical and alive without giving up a working lead pipeline.', solution: 'A dark editorial build with a live ASCII hero and a database-wired funnel that captures qualified leads.' },
     { num: '02', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'], problem: 'Cloud voice assistants leak data and stop working the moment they go offline.', solution: 'An offline-first desktop agent combining local Whisper transcription, intent classification and gesture control.' },
-    { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], exts: ['png', 'png', 'png'], layout: 'mobile', screens: 3, problem: 'Owners, managers and vendors work from disconnected tools with no shared source of truth.', solution: 'Role-aware dashboards backed by an embedded AI assistant that answers through interactive widgets.' },
+    { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], layout: 'mobile', screens: 3, problem: 'Owners, managers and vendors work from disconnected tools with no shared source of truth.', solution: 'Role-aware dashboards backed by an embedded AI assistant that answers through interactive widgets.' },
     { num: '03', cat: 'systems',  tag: 'Systems Engineering', title: 'EV Charging Manager',  desc: 'Station management with a high-performance C++17 backend and a reactive real-time load dashboard.',            stack: ['C++17', 'React', 'REST'], problem: 'Charging networks need real-time load visibility that typical web stacks cannot deliver under pressure.', solution: 'A high-performance C++17 backend feeding a reactive dashboard for live station and load management.' },
     { num: '06', cat: 'software', tag: 'Outreach Pipeline CRM', title: 'Exodus', desc: 'A role-based CRM for managing email and LinkedIn outreach pipelines, from prospect capture to close.', stack: ['React', 'Tailwind CSS', 'Vite', 'Supabase', 'Vercel', 'Zapier', 'Stripe', 'Inngest', 'Clerk'], exts: ['jpg', 'jpg', 'jpg'], problem: 'Outreach across email and LinkedIn sprawls into spreadsheets with no pipeline visibility.', solution: 'A role-based CRM that tracks every prospect from first touch to close in one pipeline.' },
+    { num: '10', cat: 'software', tag: 'Real Estate CRM', title: 'Meridian', desc: 'A sales and recovery platform for Meridian Heights, covering apartment inventory, customer records, bookings, payments and installment tracking.', stack: ['React', 'Tailwind CSS', 'Vite'], mockups: ['Meridian-1.jpg', 'Meridian-2.jpg', 'Meridian-3.jpg'], problem: 'Real-estate sales teams need a clear operating layer for units, buyers, bookings and payment recovery without bouncing between spreadsheets.', solution: 'A centralized dashboard brings inventory, customer data, transactions, installments, reports and audit history into one role-ready workspace.' },
+    { num: '08', cat: 'ai',       tag: 'Mobile · Fitness / AI', title: 'Fittish', desc: 'A fitness app built around a coach that knows you — activity rings, workouts and meal logs feed an assistant that answers in the context of your own numbers.', stack: ['React Native', 'Expo', 'NestJS', 'PostgreSQL', 'Claude API', 'HealthKit', 'Google Fit'], layout: 'mobile', screens: 3, problem: 'Fitness apps log everything and explain nothing — rings close, numbers pile up, and the user is still left to work out what to do next.', solution: 'Activity, training and meal data feed an in-app coach that answers in the context of their own numbers, with progress, records and streaks closing the loop.' },
+    { num: '09', cat: 'ai',       tag: 'Mobile · Enterprise AI', title: 'PowerRay', desc: 'An enterprise AI knowledge platform for secure document search, workflow automation, role-aware access and real-time operational insight.', stack: ['Next.js', 'TypeScript', 'NestJS', 'PostgreSQL', 'OpenAI API', 'LangChain', 'Pinecone', 'AWS'], layout: 'mobile', mockups: ['PowerRay-2.png', 'PowerRay-3.png', 'PowerRay-4.png'], problem: 'Enterprise knowledge is scattered across tools, documents and teams, making it slow to find trusted answers or coordinate internal workflows.', solution: 'A unified AI workspace centralizes company resources, adds natural-language search and summaries, and pairs role-based access with analytics and integrations.' },
     { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'], problem: 'An aging system was buckling under real production load and blocking new growth.', solution: 'A staged refactor that modernised the core while keeping it running and scaling under load.' },
   ];
 
@@ -113,7 +125,6 @@
 
   function renderDeckContent(idx) {
     const p        = PROJECTS[idx];
-    const slug     = slugify(p.title);
     const isMobile = p.layout === 'mobile';
 
     deckCard.classList.toggle('deck-card--mobile', isMobile);
@@ -149,23 +160,26 @@
       `<button class="modal-close deck-close" id="deckCloseBtn" aria-label="Close project deck">✕</button>` +
       (isMobile ? (bodyHTML + stageHTML + dotsHTML) : (stageHTML + bodyHTML));
 
+    const count = slideCount(p);
+
+    // Wraps internally, so callers pass a raw ±1 and never need the count.
     function setSlide(n) {
-      _curSlide = n;
-      const ext = (p.exts && p.exts[n]) || 'jpg';
+      const cur = ((n % count) + count) % count;
+      _curSlide = cur;
+      const src = mockupSrc(p, cur);
       const s = document.getElementById('deckSlideStage');
       s.innerHTML =
-        `<img class="deck-slide-bg" src="assets/mockups/${slug}-${n + 1}.${ext}" alt="" aria-hidden="true">` +
-        `<img class="deck-slide-img" src="assets/mockups/${slug}-${n + 1}.${ext}" loading="lazy"` +
-             ` alt="${p.title} mockup ${n + 1} of 3"` +
-             ` style="position:relative;z-index:1;width:100%;height:100%;object-fit:contain;display:block;">`;
+        `<img class="deck-slide-bg" src="${src}" alt="" aria-hidden="true">` +
+        `<img class="deck-slide-img" src="${src}" decoding="async"` +
+             ` alt="${p.title} mockup ${cur + 1} of ${count}">`;
       const dots = document.getElementById('deckDots');
       dots.innerHTML = '';
-      for (let i = 0; i < 3; i++) {
+      dots.classList.toggle('is-hidden', count < 2);
+      for (let i = 0; i < count; i++) {
         const d = document.createElement('button');
-        d.className = 'deck-dot' + (i === n ? ' active' : '');
+        d.className = 'deck-dot' + (i === cur ? ' active' : '');
         d.setAttribute('aria-label', `View mockup ${i + 1}`);
-        const idx2 = i;
-        d.addEventListener('click', () => setSlide(idx2));
+        d.addEventListener('click', () => setSlide(i));
         dots.appendChild(d);
       }
     }
@@ -174,8 +188,8 @@
     setSlide(0);
 
     document.getElementById('deckCloseBtn').addEventListener('click', closeDeck);
-    document.getElementById('deckPrev').addEventListener('click', () => _setSlide((_curSlide + 2) % 3));
-    document.getElementById('deckNext').addEventListener('click', () => _setSlide((_curSlide + 1) % 3));
+    document.getElementById('deckPrev').addEventListener('click', () => _setSlide(_curSlide - 1));
+    document.getElementById('deckNext').addEventListener('click', () => _setSlide(_curSlide + 1));
   }
 
   /* ── Focus trap ──────────────────────────────────────────────────────────
@@ -234,8 +248,8 @@
   document.addEventListener('keydown', e => {
     if (!deckOverlay || !deckOverlay.classList.contains('open')) return;
     if (e.key === 'Escape')      { e.preventDefault(); closeDeck(); }
-    else if (e.key === 'ArrowLeft')  { e.preventDefault(); if (_setSlide) _setSlide((_curSlide + 2) % 3); }
-    else if (e.key === 'ArrowRight') { e.preventDefault(); if (_setSlide) _setSlide((_curSlide + 1) % 3); }
+    else if (e.key === 'ArrowLeft')  { e.preventDefault(); if (_setSlide) _setSlide(_curSlide - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); if (_setSlide) _setSlide(_curSlide + 1); }
   });
 
   if (deckOverlay) {
@@ -306,8 +320,7 @@
   const pnlBody   = document.getElementById('pnlBody');
 
   let _pCur = 0, _pLastFocus = null, _pNode = null, _pTrap = null;
-  const PANEL_SLIDES = 3;      // carousel length for desktop-layout projects
-  let _pSlides = PANEL_SLIDES; // actual count for the open project (1 if grouped)
+  let _pSlides = DEFAULT_SLIDES;  // slide count for the open project (1 if grouped)
 
   function placeBeacon(n) {
     const svg  = document.getElementById('overSvg');
@@ -319,17 +332,15 @@
 
   function renderPanel(idx) {
     const p = PROJECTS[idx];
-    const slug = slugify(p.title);
     const isGroup = p.layout === 'mobile';   // one slide, phones side by side
 
     pnlStage.classList.toggle('is-group', isGroup);
     pnlStage.innerHTML = '';
-    _pSlides = isGroup ? 1 : PANEL_SLIDES;
+    _pSlides = isGroup ? 1 : slideCount(p);
 
     if (isGroup) {
       // Single static frame — all phones visible at once, no carousel.
-      // Mobile screenshots are standardized as PNG; count comes from `screens`.
-      const n = p.screens || 3;
+      const n = slideCount(p);
       const group = document.createElement('div');
       group.className = 'phone-group';
       for (let i = 0; i < n; i++) {
@@ -337,21 +348,22 @@
         cell.className = 'phone';
         const img = document.createElement('img');
         img.decoding = 'async';   // keep decode off the transition's frames
-        img.src = `assets/mockups/${slug}-${i + 1}.png`;
+        img.src = mockupSrc(p, i);
         img.alt = `${p.title} — screen ${i + 1} of ${n}`;
-        if (i > 0) img.loading = 'lazy';
+        // No loading="lazy" here: all n phones are on screen at once, and the
+        // panel is still parked off-stage when they're built — deferring them
+        // just means they pop in after the slide finishes.
         cell.appendChild(img);
         group.appendChild(cell);
       }
       pnlStage.appendChild(group);
     } else {
-      for (let i = 0; i < PANEL_SLIDES; i++) {
-        const ext = (p.exts && p.exts[i]) || 'jpg';
+      for (let i = 0; i < _pSlides; i++) {
         const img = document.createElement('img');
         img.className = 'pnl-slide' + (i === 0 ? ' active' : '');
         img.decoding = 'async';   // keep decode off the transition's frames
-        img.src = `assets/mockups/${slug}-${i + 1}.${ext}`;
-        img.alt = `${p.title} mockup ${i + 1} of ${PANEL_SLIDES}`;
+        img.src = mockupSrc(p, i);
+        img.alt = `${p.title} mockup ${i + 1} of ${_pSlides}`;
         if (i > 0) img.loading = 'lazy';
         pnlStage.appendChild(img);
       }

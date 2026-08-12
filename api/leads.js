@@ -94,7 +94,7 @@ export default async function handler(req, res) {
       if (!name)                     return res.status(400).json({ error: 'Name is required.' });
       if (!EMAIL_RE.test(email))     return res.status(400).json({ error: 'Please enter a valid email address.' });
       if (name.length > 200 || email.length > 200 || details.length > 5000)
-                                     return res.status(400).json({ error: 'Input too long.' });
+                              return res.status(400).json({ error: 'Input too long.' });
 
       const db   = await getDb();
       const lead = { name, email, service, budget, details, createdAt: new Date(), userAgent: String(req.headers['user-agent'] || '').slice(0, 300) };
