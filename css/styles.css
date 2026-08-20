@@ -71,10 +71,6 @@
     #nav.scrolled .nav-links a:hover { color: var(--text); }
     .nav-links a:hover::after { width: 100%; }
     .nav-right { display: flex; align-items: center; gap: 22px; }
-    .nav-signin { font-family: var(--font-mono); font-size: 13px; color: rgba(255,255,255,0.65); transition: color .3s; }
-    #nav.scrolled .nav-signin { color: var(--muted); }
-    .nav-signin:hover { color: #fff; }
-    #nav.scrolled .nav-signin:hover { color: var(--text); }
     .nav-cta {
       background: #fff; color: var(--ink); padding: 10px 22px; border-radius: 100px;
       font-size: 13.5px; font-weight: 500; transition: all .4s var(--ease); will-change: transform;
@@ -314,7 +310,10 @@
       transition: transform .45s var(--ease), border-color .45s var(--ease);
     }
     .port-card:hover { transform: translateY(-5px); border-color: rgba(185,28,26,.55); }
-    .port-treatment { position: absolute; inset: 0; opacity: .62; transition: opacity .5s var(--ease), transform .6s var(--ease); }
+    .port-treatment { position: absolute; inset: 0; opacity: .88; transition: opacity .5s var(--ease), transform .6s var(--ease); }
+    .port-treatment img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+    /* Opt-in nudge for mockups whose phone bezel would otherwise show at the edges. */
+    .port-treatment.is-zoomed img { transform: scale(1.08); }
     .port-card:hover .port-treatment { opacity: 1; transform: scale(1.03); }
     .port-veil { position: absolute; inset: 0; pointer-events: none; z-index: 2; background: linear-gradient(to top, #0c0c0b 16%, rgba(12,12,11,.74) 48%, rgba(12,12,11,.28) 100%); }
     .port-top { position: absolute; top: 0; left: 0; right: 0; padding: 20px 22px; display: flex; justify-content: space-between; align-items: center; z-index: 3; }
@@ -326,64 +325,6 @@
     .port-chips { display: flex; flex-wrap: wrap; gap: 7px; }
     .port-chip { font-family: var(--font-mono); font-size: 10.5px; color: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.16); border-radius: 100px; padding: 4px 11px; }
 
-    /* treatment panel shell (01, 03) */
-    .treat-panel {
-      position: absolute; left: 22px; right: 22px; top: 22px; padding: 16px 18px;
-      background: rgba(20,19,18,.66); border: 1px solid rgba(255,255,255,.09); border-radius: 12px;
-      backdrop-filter: blur(2px); box-shadow: 0 20px 40px -28px rgba(0,0,0,.8);
-      mask-image: linear-gradient(to top, transparent 2%, #000 42%);
-      -webkit-mask-image: linear-gradient(to top, transparent 2%, #000 42%);
-    }
-    .treat-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .treat-label { font-family: var(--font-mono); font-size: 10.5px; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .06em; }
-    .treat-year { font-family: var(--font-mono); font-size: 10.5px; color: rgba(255,255,255,.3); }
-
-    /* 01 — heatmap */
-    .treat-stat-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
-    .treat-big { font-family: var(--font-mono); font-size: 30px; color: #f5f3ee; line-height: 1; letter-spacing: -1px; }
-    .treat-delta { font-family: var(--font-mono); font-size: 12px; color: #d65a3c; }
-    .treat-heatmap { display: grid; grid-template-columns: repeat(20,1fr); gap: 4px; }
-    .treat-cell { aspect-ratio: 1; border-radius: 2.5px; }
-
-    /* 02 — waveform */
-    .treat-wave-wrap {
-      position: absolute; left: 22px; right: 22px; top: 26px;
-      display: flex; flex-direction: column; align-items: center; gap: 18px;
-      mask-image: linear-gradient(to top, transparent 2%, #000 42%);
-      -webkit-mask-image: linear-gradient(to top, transparent 2%, #000 42%);
-    }
-    .treat-wave-glow {
-      position: absolute; width: 260px; height: 260px; border-radius: 50%; top: 20px;
-      background: radial-gradient(circle, rgba(214,90,60,.4), transparent 65%);
-      filter: blur(20px); pointer-events: none;
-    }
-    .treat-listening {
-      display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
-      border: 1px solid rgba(255,255,255,.14); border-radius: 100px;
-      background: rgba(20,19,18,.6); font-family: var(--font-mono); font-size: 10.5px;
-      color: rgba(255,255,255,.75); text-transform: uppercase; letter-spacing: .06em;
-      position: relative; z-index: 1;
-    }
-    .treat-dot { width: 7px; height: 7px; border-radius: 50%; background: #d65a3c; flex-shrink: 0; }
-    .treat-bars { display: flex; align-items: center; gap: 4px; height: 80px; position: relative; z-index: 1; }
-    .treat-bar { width: 3px; border-radius: 3px; flex-shrink: 0; transform-origin: bottom; }
-    .treat-transcript { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,.4); letter-spacing: .02em; position: relative; z-index: 1; }
-    @keyframes waveBar { 0% { transform: scaleY(1); } 100% { transform: scaleY(.5); } }
-
-    /* 03 — gauge */
-    .treat-active-dot { color: #d65a3c; margin-right: 2px; }
-    .treat-gauge-row { display: flex; align-items: center; gap: 18px; }
-    .treat-gauge-inner { position: relative; width: 108px; height: 108px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .treat-gauge-svg { position: absolute; inset: 0; transform: rotate(-90deg); }
-    .treat-gauge-label { position: relative; z-index: 1; text-align: center; }
-    .treat-gauge-pct { font-family: var(--font-mono); font-size: 24px; color: #f5f3ee; line-height: 1; display: block; letter-spacing: -1px; }
-    .treat-gauge-sub { font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .06em; display: block; margin-top: 4px; }
-    .treat-sessions { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-    .treat-session { display: flex; align-items: center; gap: 8px; }
-    .treat-session-num { font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,.35); flex-shrink: 0; width: 14px; }
-    .treat-track { flex: 1; height: 5px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; }
-    .treat-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg,#861211,#d65a3c); }
-    .treat-kw { font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,.5); flex-shrink: 0; text-align: right; width: 32px; }
 
     @media (max-width: 900px) {
       .port-grid { grid-template-columns: 1fr; }
@@ -408,7 +349,7 @@
       #codeBlock { min-height: 200px; }
     }
     @media (max-width: 640px) {
-      .nav-links, .nav-signin { display: none; }
+      .nav-links { display: none; }
       .nav-toggle { display: block; }
       .nav-links.open { display: flex; position: fixed; inset: 76px 16px auto 16px; flex-direction: column; gap: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 16px; padding: 8px 18px; }
       .nav-links.open a { color: var(--text); padding: 14px 0; border-bottom: 1px solid var(--border); }
@@ -451,10 +392,6 @@
     .modal-card .eyebrow { display: inline-flex; margin-bottom: 14px; }
     .modal-card h3 { font-family: var(--font-display); font-weight: 400; font-size: 32px; letter-spacing: -.6px; margin-bottom: 12px; }
     .modal-card p { color: var(--muted); font-weight: 300; font-size: 15px; margin-bottom: 26px; line-height: 1.6; }
-    .modal-actions { display: flex; flex-direction: column; gap: 12px; }
-    .modal-actions .btn { justify-content: center; width: 100%; }
-    .btn-outline { background: var(--white); border: 1px solid var(--border-strong); color: var(--text); }
-    .btn-outline:hover { border-color: var(--red); color: var(--red); }
 
     /* ── Form error / loading states ── */
     @keyframes spin { to { transform: rotate(360deg); } }
