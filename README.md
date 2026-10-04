@@ -1,97 +1,137 @@
-# NexioSol — Site + Lead Backend
+# NexioSol Website
 
-Static frontend, Vercel serverless API, and MongoDB Atlas lead storage. Everything
-lives in one repo and deploys as one Vercel project (no second host).
+Production website for NexioSol: a static studio site with an interactive portfolio, a multi-step project request form, a Vercel serverless lead API, MongoDB storage, optional lead notifications, and a password-gated leads dashboard.
 
-```
+## Current Site
+
+- `index.html` - home page with animated ASCII hero, capabilities accordion, process/code interaction, metrics counters, selected work, and the project request form.
+- `portfolio.html` - full portfolio page with service filters, a desktop constellation view, project panels/decks, and a card-grid fallback for mobile/coarse-pointer devices.
+- `dashboard.html` - private leads dashboard that reads from `/api/leads` after password authentication.
+- `css/styles.css` - shared styling for the public site, portfolio, modals, and dashboard.
+- `js/main.js` - home-page animation, counters, navigation, accordion, project form, and selected-work cards.
+- `js/portfolio-constellation.js` - single source of portfolio project data plus the constellation, filters, project panel, and deck modal.
+- `js/dashboard.js` - dashboard login, stats, search, and lead table rendering.
+- `api/leads.js` - `POST` saves leads, `GET` lists leads with password auth, and notification hooks run after submissions.
+- `api/_db.js` - cached MongoDB connection for serverless functions.
+- `scripts/optimize-images.mjs` - converts mockup source images to optimized WebP assets.
+
+## Features
+
+- Static HTML/CSS/JS front end deployable on Vercel.
+- Responsive navigation with mobile menu support.
+- Motion-aware hero canvas and portfolio animations that respect `prefers-reduced-motion`.
+- Three-step "Start a project" form with client-side validation.
+- Lead capture via `/api/leads`, stored in MongoDB.
+- Server-side dashboard protection using `DASHBOARD_PASSWORD`.
+- Dashboard stats for total leads, recent leads, today's leads, and top requested service.
+- Searchable leads table with contact, service, budget, details, and received date.
+- Optional notifications through Gmail/Nodemailer, Twilio WhatsApp, and Slack.
+- Portfolio mockups served from `assets/mockups`.
+
+## Project Structure
+
+```text
 .
-├── index.html          # Home page
-├── portfolio.html      # Portfolio, filterable by service
-├── dashboard.html      # Password-gated leads dashboard
-├── css/styles.css      # All styles (split out of the HTML)
-├── js/
-│   ├── main.js         # Site interactions + form submit + booking modal
-│   └── dashboard.js    # Dashboard login + table
-├── api/
-│   ├── leads.js        # POST = save lead · GET = list leads (auth)
-│   └── _db.js          # Cached MongoDB connection
-├── package.json
-├── vercel.json
-└── .env.example        # Copy to .env.local for local dev
+|-- index.html
+|-- portfolio.html
+|-- dashboard.html
+|-- css/
+|   `-- styles.css
+|-- js/
+|   |-- main.js
+|   |-- portfolio-constellation.js
+|   `-- dashboard.js
+|-- api/
+|   |-- leads.js
+|   `-- _db.js
+|-- assets/
+|   |-- grounds/
+|   `-- mockups/
+|-- scripts/
+|   `-- optimize-images.mjs
+|-- package.json
+|-- package-lock.json
+`-- vercel.json
 ```
 
----
+## Environment Variables
 
-## What got wired up
+Required for lead storage and dashboard access:
 
-- **CSS and JS are now separate files** (they were inline in one HTML file).
-- **The contact form actually submits** now — it POSTs to `/api/leads`, which stores
-  the lead in MongoDB. Before, it just showed the success screen without saving anything.
-- **Dashboard at `/dashboard`** — enter your password to see every submission in a table,
-  with search and basic stats. Protected server-side.
-- **"Book a call"** buttons (nav + footer + portfolio CTA) open a modal that links to your
-  Cal.com / Calendly page. **You need to paste your real booking link** — see step 5.
-- **Portfolio page** with a service filter (All / Software / AI / Systems). One page, as
-  discussed — split into per-service pages later when each has enough projects to fill it.
+| Name | Purpose |
+| --- | --- |
+| `MONGODB_URI` | MongoDB Atlas connection string. |
+| `MONGODB_DB` | Database name. Defaults to `nexiosol` if omitted. |
+| `DASHBOARD_PASSWORD` | Password used to access `dashboard.html`. |
 
----
+Optional notification variables:
 
-## Setup (one time, ~15 min)
+| Name | Purpose |
+| --- | --- |
+| `GMAIL_USER` | Gmail address used by Nodemailer. |
+| `GMAIL_APP_PASSWORD` | Gmail app password for sending notification email. |
+| `NOTIFY_EMAIL` | Email recipient for new project requests. |
+| `TWILIO_ACCOUNT_SID` | Twilio account SID for WhatsApp notifications. |
+| `TWILIO_AUTH_TOKEN` | Twilio auth token. |
+| `TWILIO_WHATSAPP_FROM` | Twilio WhatsApp sender number. |
+| `NOTIFY_WHATSAPP` | WhatsApp recipient number. |
+| `SLACK_BOT_TOKEN` | Slack bot token for lead notifications. |
+| `SLACK_CHANNEL_ID` | Slack channel ID to receive lead notifications. |
 
-### 1. MongoDB Atlas (free tier)
-1. Create an account at https://www.mongodb.com/cloud/atlas and make a free **M0** cluster.
-2. **Database Access** → add a database user (username + password). Save the password.
-3. **Network Access** → add IP `0.0.0.0/0` (allow from anywhere — Vercel's IPs are dynamic).
-4. **Connect → Drivers** → copy the connection string. It looks like:
-   `mongodb+srv://USER:PASSWORD@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority`
-   Put your real username and password into it.
+Notification delivery is best-effort. A failed email, WhatsApp, or Slack notification is logged, but it does not block saving the lead or returning success to the user.
 
-### 2. Set environment variables on Vercel
-In your Vercel project → **Settings → Environment Variables**, add three:
+## Local Development
 
-| Name                 | Value                                                |
-|----------------------|------------------------------------------------------|
-| `MONGODB_URI`        | the connection string from step 1                    |
-| `MONGODB_DB`         | `nexiosol`                                            |
-| `DASHBOARD_PASSWORD` | a long random password (this is your dashboard login)|
+Install dependencies:
 
-Add them for **Production** (and Preview if you want). Redeploy after adding.
-
-### 3. Deploy
-Push this folder to your existing repo. Vercel auto-detects the `/api` functions and
-`mongodb` dependency from `package.json` — no build config needed. The static pages serve
-as-is.
-
-### 4. Test it
-- Submit the form on the home page → you should see "Request received."
-- Go to `yourdomain.com/dashboard`, enter `DASHBOARD_PASSWORD` → the lead appears.
-
-### 5. Set your booking link  ⚠️ required
-Open `index.html`, `portfolio.html` and find this line (it's marked with a TODO):
-```html
-<a href="https://cal.com/nexiosol" ...>Pick a time</a>
-```
-Replace `https://cal.com/nexiosol` with your real **Cal.com** or **Calendly** URL.
-(Recommendation from our chat: use Cal.com — free, open source — rather than building a scheduler.)
-
----
-
-## Local development (optional)
 ```bash
 npm install
-cp .env.example .env.local   # fill in your real values
-npx vercel dev               # runs frontend + /api together at localhost:3000
 ```
 
----
+Create `.env.local` with the variables above, then run the Vercel dev server:
 
-## Notes & next steps
-- **Security:** the dashboard password is checked on the server; the frontend never holds DB
-  credentials. Good enough for a single-admin studio dashboard. If you later add multiple team
-  members, move to real auth (e.g. Auth.js) — flag me when you're there.
-- **Email notifications:** right now leads only land in the DB/dashboard. If you want an email
-  every time someone submits, that's a small addition (Resend or a Vercel email integration) —
-  say the word.
-- **Per-service pages:** hold until each service has 3+ real projects, then we split
-  `portfolio.html` into dedicated pages. The filter already gives you per-service browsing in
-  the meantime.
+```bash
+npm run dev
+```
+
+Vercel serves the static pages and the `/api` functions together, usually at `http://localhost:3000`.
+
+## Image Workflow
+
+Portfolio screenshots live in `assets/mockups`. The portfolio script expects predictable filenames such as:
+
+```text
+auri-1.webp
+auri-2.webp
+auri-3.webp
+```
+
+To convert PNG/JPG mockups to WebP:
+
+```bash
+npm run images
+npm run images auri
+npm run images -- --force
+```
+
+Source images are kept on disk; the script writes optimized `.webp` siblings.
+
+## Deployment
+
+This repo is set up for Vercel:
+
+1. Push the repository to GitHub/GitLab/Bitbucket.
+2. Import it as a Vercel project.
+3. Add the required environment variables in Vercel project settings.
+4. Redeploy after environment variable changes.
+
+No build command is required for the static pages. Vercel detects `api/*.js` as serverless functions.
+
+## Testing Checklist
+
+- Open the home page and confirm hero animation, navigation, capabilities, process tabs, counters, and selected-work cards render.
+- Submit the project form and confirm "Request received" appears.
+- Confirm the submitted lead is stored in MongoDB.
+- Visit `/dashboard.html`, enter `DASHBOARD_PASSWORD`, and confirm the lead appears.
+- Open `/portfolio.html` on desktop and mobile-sized viewports to check both constellation and grid behavior.
+- Check notification logs if Gmail, Twilio, or Slack credentials are configured.

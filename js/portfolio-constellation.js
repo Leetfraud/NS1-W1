@@ -594,19 +594,33 @@
   const canvas = document.getElementById('asciiBranches');
   if (!canvas) return;
   const ctx2 = canvas.getContext('2d');
-  const dpr  = Math.min(window.devicePixelRatio || 1, 2);
+  const cores = Math.max(1, navigator.hardwareConcurrency || 4);
+  const mem = navigator.deviceMemory || 4;
+  const lowPower = cores <= 4 || mem <= 4;
+  let dpr = 1;
+  let raf = null;
+  let visible = true;
+  let lastTick = 0;
+  let fpsInterval = 1000 / (lowPower ? 20 : 24);
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
+    dpr = lowPower || rect.width < 900 ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width  = rect.width  * dpr;
     canvas.height = rect.height * dpr;
     ctx2.setTransform(dpr, 0, 0, dpr, 0, 0);
     canvas._w = rect.width;
     canvas._h = rect.height;
+    fpsInterval = 1000 / (lowPower || rect.width < 900 ? 20 : 24);
   }
 
   let t = 0;
-  function frame() {
+  function frame(now = 0) {
+    if (!visible || document.hidden) return;
+    raf = requestAnimationFrame(frame);
+    if (now - lastTick < fpsInterval) return;
+    lastTick = now;
+
     const w = canvas._w || 680, h = canvas._h || 720;
     const scale = Math.min(w / W, h / H);
     const ox = (w - W * scale) / 2;
@@ -619,7 +633,7 @@
       const dimByFilter = !(activeFilter === 'all' || n.cat === activeFilter);
       const active = (hovered === -1 || hovered === i) && !dimByFilter;
       const G = TYPES[n.cat].glyphs, hue = TYPES[n.cat].hue;
-      const steps = 23;
+      const steps = lowPower ? 13 : 17;
       const mx = (CX + n.x) / 2, my = (CY + n.y) / 2;
       const dx = n.x - CX, dy = n.y - CY;
       const px = -dy, py = dx, plen = Math.hypot(px, py) || 1;
@@ -646,12 +660,30 @@
       }
     });
 
-    t += 0.016;
-    if (!REDUCE) requestAnimationFrame(frame);
+    t += fpsInterval / 1000;
+  }
+
+  function start() {
+    if (raf || REDUCE) return;
+    lastTick = 0;
+    raf = requestAnimationFrame(frame);
+  }
+
+  function stop() {
+    cancelAnimationFrame(raf);
+    raf = null;
   }
 
   resize();
   window.addEventListener('resize', resize);
-  frame();
+  new IntersectionObserver(entries => entries.forEach(entry => {
+    visible = entry.isIntersecting;
+    if (visible && !document.hidden) start();
+    else stop();
+  }), { threshold: 0 }).observe(canvas);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else if (visible) start();
+  });
 
 })();

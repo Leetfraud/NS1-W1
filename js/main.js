@@ -7,22 +7,36 @@
     if (!canvas || !hero) return;
     const ctx = canvas.getContext('2d');
     const CHARS = " .:-=+*#%@";
-    let frame, time = 0, w, h, dpr;
+    let frame, time = 0, w, h, dpr, fpsInterval, lastTick = 0;
+    let isVisible = true;
+    const pointer = { x: 0.65, y: 0.5 };
     const mouse = { x: 0.65, y: 0.5 };
+    const cores = Math.max(1, navigator.hardwareConcurrency || 4);
+    const mem = navigator.deviceMemory || 4;
+    const lowPower = cores <= 4 || mem <= 4;
 
     function resize() {
-      dpr = Math.min(devicePixelRatio || 1, 2);
       w = hero.clientWidth; h = hero.clientHeight;
+      const compact = w < 760;
+      dpr = compact || lowPower ? 1 : Math.min(devicePixelRatio || 1, 1.5);
+      fpsInterval = 1000 / (compact || lowPower ? 24 : 30);
       canvas.width = w * dpr; canvas.height = h * dpr;
       canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resize(); addEventListener('resize', resize);
-    addEventListener('mousemove', e => { mouse.x = e.clientX / innerWidth; mouse.y = e.clientY / innerHeight; });
+    addEventListener('pointermove', e => {
+      if (e.pointerType === 'touch') return;
+      pointer.x = e.clientX / innerWidth;
+      pointer.y = e.clientY / innerHeight;
+    }, { passive: true });
 
     // generate torus knot points
     const pts = [];
-    const P = 2, Q = 3, SEG = 128, TUBE = 16, tubeR = 0.4;
+    const P = 2, Q = 3;
+    const SEG = lowPower || innerWidth < 760 ? 72 : 96;
+    const TUBE = lowPower || innerWidth < 760 ? 9 : 12;
+    const tubeR = 0.4;
     for (let i = 0; i < SEG; i++) for (let j = 0; j < TUBE; j++) {
       const u = (i / SEG) * Math.PI * 2, v = (j / TUBE) * Math.PI * 2;
       const r = 2 + Math.cos(Q * u);
@@ -36,9 +50,16 @@
       let cx = Math.cos(ay), sx = Math.sin(ay); let nx = x * cx + z * sx; z = -x * sx + z * cx; x = nx;
       let cz = Math.cos(az), sz = Math.sin(az); return { x: x * cz - y * sz, y: x * sz + y * cz, z };
     }
-    function render() {
+    function render(now = 0) {
+      if (!isVisible || document.hidden) return;
+      frame = requestAnimationFrame(render);
+      if (now - lastTick < fpsInterval) return;
+      lastTick = now;
+
       const cx = w * 0.66, cy = h * 0.5, scale = Math.min(w, h) * 0.34;
       ctx.clearRect(0, 0, w, h);
+      mouse.x += (pointer.x - mouse.x) * 0.08;
+      mouse.y += (pointer.y - mouse.y) * 0.08;
       const mInfX = (mouse.x - 0.5) * 0.5, mInfY = (mouse.y - 0.5) * 0.5;
       const ax = time * 0.3 + mInfY, ay = time * 0.5 + mInfX, az = time * 0.2;
       const proj = pts.map(p => {
@@ -61,22 +82,35 @@
         ctx.fillText(ch, p.x, p.y);
       });
       // floating particles
-      for (let i = 0; i < 46; i++) {
+      const particleCount = lowPower || w < 760 ? 18 : 30;
+      for (let i = 0; i < particleCount; i++) {
         const px = (Math.sin(time * 0.5 + i * 0.5) * 0.32 + 0.66) * w;
         const py = (Math.cos(time * 0.3 + i * 0.7) * 0.32 + 0.5) * h;
         const pz = Math.sin(time + i) * 0.5 + 0.5;
         ctx.fillStyle = `rgba(185,28,26,${pz * 0.28})`;
         ctx.fillText(CHARS[Math.floor(pz * (CHARS.length - 1))], px, py);
       }
-      time += 0.008;
+      time += fpsInterval / 2000;
+    }
+    function start() {
+      if (frame || reduce) return;
+      lastTick = 0;
       frame = requestAnimationFrame(render);
     }
+    function stop() {
+      cancelAnimationFrame(frame);
+      frame = null;
+    }
     if (!reduce) {
-      render();
       new IntersectionObserver(es => es.forEach(e => {
-        if (e.isIntersecting) { cancelAnimationFrame(frame); render(); }
-        else cancelAnimationFrame(frame);
+        isVisible = e.isIntersecting;
+        if (isVisible && !document.hidden) start();
+        else stop();
       }), { threshold: 0 }).observe(hero);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stop();
+        else if (isVisible) start();
+      });
     }
   })();
 
