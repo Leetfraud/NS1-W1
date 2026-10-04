@@ -34,18 +34,15 @@
 
   /* ── Single source of project data ────────────────────────────────────── */
   const PROJECTS = [
-    { num: '01', cat: 'software', tag: 'Web Platform',        title: 'DevProfile Analyzer',  desc: 'GitHub portfolio intelligence — contribution patterns, language breakdowns, side-by-side profile comparisons.', stack: ['React', 'Vite', 'Tailwind', 'GitHub API'], problem: 'Developer portfolios are scattered across commits and repos, with no fast way to read real contribution patterns or compare profiles.', solution: 'A single dashboard that aggregates GitHub activity into language breakdowns, contribution trends and side-by-side comparisons.' },
-    { num: '02', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'], problem: 'Cloud voice assistants leak data and stop working the moment they go offline.', solution: 'An offline-first desktop agent combining local Whisper transcription, intent classification and gesture control.' },
-    { num: '05', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], layout: 'mobile', screens: 3, problem: 'Owners, managers and vendors work from disconnected tools with no shared source of truth.', solution: 'Role-aware dashboards backed by an embedded AI assistant that answers through interactive widgets.' },
-    { num: '03', cat: 'systems',  tag: 'Systems Engineering', title: 'EV Charging Manager',  desc: 'Station management with a high-performance C++17 backend and a reactive real-time load dashboard.',            stack: ['C++17', 'React', 'REST'], problem: 'Charging networks need real-time load visibility that typical web stacks cannot deliver under pressure.', solution: 'A high-performance C++17 backend feeding a reactive dashboard for live station and load management.' },
-    { num: '04', cat: 'systems',  tag: 'Tokenized RWA · Concept', title: 'Anchorpoint', desc: 'A tokenization platform that turns real estate, private credit and commodities into fractional on-chain shares investors can buy, trade and earn distributions from.', stack: ['Polygon', 'ERC-3643', 'Solidity', 'Smart Contracts', 'KYC / AML', 'Fiat On-Ramp'], problem: 'Real-world assets lock capital into whole units, so smaller investors cannot take a position and owners cannot release value without a full sale.', solution: 'Each asset is wrapped in an SPV and issued as a compliance-aware token, with transfer restrictions, KYC gating and smart-contract distributions governing who can hold it and how income is paid out.' },
-    { num: '06', cat: 'software', tag: 'Outreach Pipeline CRM', title: 'Exodus', desc: 'A role-based CRM for managing email and LinkedIn outreach pipelines, from prospect capture to close.', stack: ['React', 'Tailwind CSS', 'Vite', 'Supabase', 'Vercel', 'Zapier', 'Stripe', 'Inngest', 'Clerk'], exts: ['jpg', 'jpg', 'jpg'], problem: 'Outreach across email and LinkedIn sprawls into spreadsheets with no pipeline visibility.', solution: 'A role-based CRM that tracks every prospect from first touch to close in one pipeline.' },
-    { num: '10', cat: 'software', tag: 'Real Estate CRM', title: 'Meridian', desc: 'A sales and recovery platform for Meridian Heights, covering apartment inventory, customer records, bookings, payments and installment tracking.', stack: ['React', 'Tailwind CSS', 'Vite'], mockups: ['Meridian-1.jpg', 'Meridian-2.jpg', 'Meridian-3.jpg'], problem: 'Real-estate sales teams need a clear operating layer for units, buyers, bookings and payment recovery without bouncing between spreadsheets.', solution: 'A centralized dashboard brings inventory, customer data, transactions, installments, reports and audit history into one role-ready workspace.' },
-    { num: '08', cat: 'ai',       tag: 'Mobile · Fitness / AI', title: 'Fittish', desc: 'A fitness app built around a coach that knows you — activity rings, workouts and meal logs feed an assistant that answers in the context of your own numbers.', stack: ['React Native', 'Expo', 'NestJS', 'PostgreSQL', 'Claude API', 'HealthKit', 'Google Fit'], layout: 'mobile', screens: 3, problem: 'Fitness apps log everything and explain nothing — rings close, numbers pile up, and the user is still left to work out what to do next.', solution: 'Activity, training and meal data feed an in-app coach that answers in the context of their own numbers, with progress, records and streaks closing the loop.' },
-    { num: '09', cat: 'ai',       tag: 'Mobile · Enterprise AI', title: 'PowerRay', desc: 'An enterprise AI knowledge platform for secure document search, workflow automation, role-aware access and real-time operational insight.', stack: ['Next.js', 'TypeScript', 'NestJS', 'PostgreSQL', 'OpenAI API', 'LangChain', 'Pinecone', 'AWS'], layout: 'mobile', mockups: ['PowerRay-2.webp', 'PowerRay-3.webp', 'PowerRay-4.webp'], problem: 'Enterprise knowledge is scattered across tools, documents and teams, making it slow to find trusted answers or coordinate internal workflows.', solution: 'A unified AI workspace centralizes company resources, adds natural-language search and summaries, and pairs role-based access with analytics and integrations.' },
-    { num: '11', cat: 'ai',       tag: 'Mobile · Wellness / AI', title: 'Traino', desc: 'An AI fitness platform where the agent is the interface. Users talk to a coach instead of navigating menus, while plans, tracking and analytics run underneath.', stack: ['React Native', 'Expo', 'TypeScript', 'Node.js', 'PostgreSQL', 'Prisma', 'FastAPI', 'AWS'], layout: 'mobile', screens: 3, problem: 'Fitness apps bury the user in tabs, charts and settings, so operating the app competes with the training it is meant to support.', solution: 'The AI agent becomes the entire interface. Users state a goal or log a session in plain language while the backend handles plan generation, progress tracking and analytics out of sight.' },
-    { num: '12', cat: 'software', tag: 'Fundraising Platform', title: 'Founders & Funders', desc: 'A fundraising workspace connecting founders with investors, funding opportunities and the documents that move a raise forward.', stack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'PostgreSQL', 'Prisma', 'Redis', 'AWS'], problem: 'Founders chase investors across scattered inboxes and spreadsheets, with no single view of where a raise actually stands.', solution: 'Structured venture profiles, investor matching and pitch-deck management run the whole raise from one dashboard, with role-based access for both sides.' },
-    { num: '07', cat: 'refactor', tag: 'Modernization',       title: 'Legacy Rebuild',       desc: 'A refactor / scale engagement — modernising an existing system and growing it under real load.',              stack: ['TBD'], problem: 'An aging system was buckling under real production load and blocking new growth.', solution: 'A staged refactor that modernised the core while keeping it running and scaling under load.' },
+    { num: '01', cat: 'ai',       tag: 'AI Desktop Agent',    title: 'Tabby',                desc: 'Offline-first desktop assistant pairing Whisper transcription, intent classification and gesture control.',      stack: ['Python', 'Whisper', 'Vision'], problem: 'Cloud voice assistants leak data and stop working the moment they go offline.', solution: 'An offline-first desktop agent combining local Whisper transcription, intent classification and gesture control.' },
+    { num: '03', cat: 'software', tag: 'Mobile · PropTech / AI', title: 'Auri', desc: 'A concierge for your entire property portfolio — role-aware dashboards for Owner, Manager and Vendor, with an embedded AI assistant answering through interactive widgets.', stack: ['React Native', 'NestJS', 'PostgreSQL', 'Stripe Connect'], layout: 'mobile', screens: 3, problem: 'Owners, managers and vendors work from disconnected tools with no shared source of truth.', solution: 'Role-aware dashboards backed by an embedded AI assistant that answers through interactive widgets.' },
+    { num: '02', cat: 'systems',  tag: 'Tokenized RWA · Concept', title: 'Anchorpoint', desc: 'A tokenization platform that turns real estate, private credit and commodities into fractional on-chain shares investors can buy, trade and earn distributions from.', stack: ['Polygon', 'ERC-3643', 'Solidity', 'Smart Contracts', 'KYC / AML', 'Fiat On-Ramp'], problem: 'Real-world assets lock capital into whole units, so smaller investors cannot take a position and owners cannot release value without a full sale.', solution: 'Each asset is wrapped in an SPV and issued as a compliance-aware token, with transfer restrictions, KYC gating and smart-contract distributions governing who can hold it and how income is paid out.' },
+    { num: '04', cat: 'refactor', tag: 'Refactor · Outreach CRM', title: 'Exodus', desc: 'A role-based CRM for email and LinkedIn outreach, refactored around the team’s actual workflow, from prospect capture to close.', stack: ['React', 'Tailwind CSS', 'Vite', 'Supabase', 'Vercel', 'Zapier', 'Stripe', 'Inngest', 'Clerk'], problem: 'The existing outreach tooling did not match how the team actually worked, so email and LinkedIn pipelines sprawled into spreadsheets with no visibility.', solution: 'We refactored the CRM to follow that workflow end to end, tracking every prospect from first touch to close in one role-based pipeline.' },
+    { num: '07', cat: 'software', tag: 'Real Estate CRM', title: 'Meridian', desc: 'A sales and recovery platform for Meridian Heights, covering apartment inventory, customer records, bookings, payments and installment tracking.', stack: ['React', 'Tailwind CSS', 'Vite'], mockups: ['Meridian-1.webp', 'Meridian-2.webp', 'Meridian-3.webp'], problem: 'Real-estate sales teams need a clear operating layer for units, buyers, bookings and payment recovery without bouncing between spreadsheets.', solution: 'A centralized dashboard brings inventory, customer data, transactions, installments, reports and audit history into one role-ready workspace.' },
+    { num: '05', cat: 'ai',       tag: 'Mobile · Fitness / AI', title: 'Fittish', desc: 'A fitness app built around a coach that knows you — activity rings, workouts and meal logs feed an assistant that answers in the context of your own numbers.', stack: ['React Native', 'Expo', 'NestJS', 'PostgreSQL', 'Claude API', 'HealthKit', 'Google Fit'], layout: 'mobile', screens: 3, problem: 'Fitness apps log everything and explain nothing — rings close, numbers pile up, and the user is still left to work out what to do next.', solution: 'Activity, training and meal data feed an in-app coach that answers in the context of their own numbers, with progress, records and streaks closing the loop.' },
+    { num: '06', cat: 'ai',       tag: 'Mobile · Enterprise AI', title: 'PowerRay', desc: 'An enterprise AI knowledge platform for secure document search, workflow automation, role-aware access and real-time operational insight.', stack: ['Next.js', 'TypeScript', 'NestJS', 'PostgreSQL', 'OpenAI API', 'LangChain', 'Pinecone', 'AWS'], layout: 'mobile', mockups: ['PowerRay-2.webp', 'PowerRay-3.webp', 'PowerRay-4.webp'], problem: 'Enterprise knowledge is scattered across tools, documents and teams, making it slow to find trusted answers or coordinate internal workflows.', solution: 'A unified AI workspace centralizes company resources, adds natural-language search and summaries, and pairs role-based access with analytics and integrations.' },
+    { num: '08', cat: 'ai',       tag: 'Mobile · Wellness / AI', title: 'Traino', desc: 'An AI fitness platform where the agent is the interface. Users talk to a coach instead of navigating menus, while plans, tracking and analytics run underneath.', stack: ['React Native', 'Expo', 'TypeScript', 'Node.js', 'PostgreSQL', 'Prisma', 'FastAPI', 'AWS'], layout: 'mobile', screens: 3, problem: 'Fitness apps bury the user in tabs, charts and settings, so operating the app competes with the training it is meant to support.', solution: 'The AI agent becomes the entire interface. Users state a goal or log a session in plain language while the backend handles plan generation, progress tracking and analytics out of sight.' },
+    { num: '09', cat: 'software', tag: 'Fundraising Platform', title: 'Founders & Funders', desc: 'A fundraising workspace connecting founders with investors, funding opportunities and the documents that move a raise forward.', stack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'PostgreSQL', 'Prisma', 'Redis', 'AWS'], problem: 'Founders chase investors across scattered inboxes and spreadsheets, with no single view of where a raise actually stands.', solution: 'Structured venture profiles, investor matching and pitch-deck management run the whole raise from one dashboard, with role-based access for both sides.' },
   ];
 
   /* ── Desktop gate: interaction model, not touch capability ───────────────
@@ -332,13 +329,57 @@
     beaconNum.textContent = n.num;
   }
 
+  /* ── Mockup preloading ──────────────────────────────────────────────────
+     Panel images used to be requested on click, so they landed after the
+     slide-in had finished. Warm the cache ahead of the click instead: the
+     project's first frame on hover/focus, and every project's first frame
+     once the page goes idle. A mobile project shows all its phones at once,
+     so its whole set is the "first frame". */
+  const _preloaded = new Set();
+  const firstFrameCount = p => p.layout === 'mobile' ? slideCount(p) : 1;
+
+  function preloadMockups(p) {
+    for (let i = 0; i < firstFrameCount(p); i++) {
+      const src = mockupSrc(p, i);
+      if (_preloaded.has(src)) continue;
+      _preloaded.add(src);
+      new Image().src = src;
+    }
+  }
+
+  // Skip the idle sweep on Data Saver; hover still preloads the one project.
+  if (!(navigator.connection && navigator.connection.saveData)) {
+    const idle = window.requestIdleCallback || (cb => setTimeout(cb, 300));
+    const sweep = () => idle(() => PROJECTS.forEach(preloadMockups));
+    if (document.readyState === 'complete') sweep();
+    else window.addEventListener('load', sweep, { once: true });
+  }
+
+  /* Fade each image in once it has arrived (.is-loaded), and hold the stage's
+     shimmer until the first frame is in. `_pRender` drops callbacks from a
+     project the user already closed or switched away from. */
+  let _pRender = 0;
+  function trackLoad(img, onSettle) {
+    const done = ok => { if (ok) img.classList.add('is-loaded'); if (onSettle) onSettle(); };
+    if (img.complete) { done(img.naturalWidth > 0); return; }
+    img.addEventListener('load',  () => done(true),  { once: true });
+    img.addEventListener('error', () => done(false), { once: true });
+  }
+
   function renderPanel(idx) {
     const p = PROJECTS[idx];
     const isGroup = p.layout === 'mobile';   // one slide, phones side by side
+    const token = ++_pRender;
 
     pnlStage.classList.toggle('is-group', isGroup);
+    pnlStage.classList.add('is-loading');
     pnlStage.innerHTML = '';
     _pSlides = isGroup ? 1 : slideCount(p);
+
+    let pending = firstFrameCount(p);
+    const firstFrameSettled = () => {
+      if (token === _pRender && --pending === 0) pnlStage.classList.remove('is-loading');
+    };
 
     if (isGroup) {
       // Single static frame — all phones visible at once, no carousel.
@@ -355,6 +396,7 @@
         // No loading="lazy" here: all n phones are on screen at once, and the
         // panel is still parked off-stage when they're built — deferring them
         // just means they pop in after the slide finishes.
+        trackLoad(img, firstFrameSettled);
         cell.appendChild(img);
         group.appendChild(cell);
       }
@@ -367,6 +409,7 @@
         img.src = mockupSrc(p, i);
         img.alt = `${p.title} mockup ${i + 1} of ${_pSlides}`;
         if (i > 0) img.loading = 'lazy';
+        trackLoad(img, i === 0 ? firstFrameSettled : null);
         pnlStage.appendChild(img);
       }
     }
@@ -568,6 +611,7 @@
 
       const enter = () => {
         hovered = i;
+        preloadMockups(PROJECTS[n._pIdx]);   // hover usually leads the click by 200ms+
         g.querySelector('.ring').setAttribute('r', '24');
         g.querySelector('.ring').setAttribute('fill', 'rgba(134,18,17,0.25)');
         g.querySelector('.dot').setAttribute('r', '6');

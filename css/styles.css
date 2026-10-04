@@ -540,7 +540,20 @@
       object-fit: cover; object-position: top center; opacity: 0;
       transition: opacity .35s var(--ease);
     }
-    .pnl-slide.active { opacity: 1; }
+    /* A slide shows only once its image has arrived, so a slow fetch fades in
+       over the shimmer below instead of painting top-to-bottom. */
+    .pnl-slide.active.is-loaded { opacity: 1; }
+
+    /* Placeholder while the open project's first frame is still downloading.
+       Mockups are preloaded on hover and at idle, so this is the cold-cache
+       fallback; the global reduced-motion rule freezes the sweep. */
+    .pnl-stage.is-loading {
+      background: #0c0c0b linear-gradient(100deg,
+        transparent 30%, rgba(255,255,255,0.045) 50%, transparent 70%);
+      background-size: 200% 100%;
+      animation: pnlShimmer 1.4s linear infinite;
+    }
+    @keyframes pnlShimmer { from { background-position: 150% 0; } to { background-position: -50% 0; } }
 
     /* ── Mobile projects: one grouped slide, 3 phones staggered ──────────────
        Same 16:9 stage as desktop — no portrait variant. Phones are height-
@@ -574,7 +587,9 @@
       height: 100%; width: auto; display: block;
       object-fit: contain; object-position: bottom;
       filter: drop-shadow(0 12px 18px rgba(0,0,0,0.7));
+      opacity: 0; transition: opacity .35s var(--ease);
     }
+    .phone-group .phone img.is-loaded { opacity: 1; }
     /* Staggered — centre phone lifted */
     .phone-group .phone:nth-child(2) { margin-bottom: 22px; }
 
@@ -650,7 +665,10 @@
       object-fit: cover; filter: blur(28px) brightness(0.5); transform: scale(1.15);
       z-index: 0;
     }
-    #deckSlideStage { position: relative; }
+    /* The blurred fill is positioned, so it paints above an in-flow sibling
+       and washed the real screenshot out. Lift the sharp image over it. */
+    #deckSlideStage img.deck-slide-img { position: relative; z-index: 1; }
+    #deckSlideStage { position: relative; isolation: isolate; }   /* keeps the z-index above local, so the dots stay on top */
     /* Arrows dropped in favor of dots-only navigation (kept in the DOM,
        just hidden — arrow keys still drive _setSlide via the deck's own
        keydown handler, so keyboard nav isn't affected). */
@@ -710,13 +728,15 @@
     /* The blurred fill-the-gap layer (desktop) is opaque against the mobile
        mockups' grey margins, so it masks the ground instead of letting it
        show through — the ground itself is the mobile fill, so drop it here. */
-    .deck-card--mobile .deck-slide-bg { display: none; }
+    .deck-card--mobile #deckSlideStage img.deck-slide-bg { display: none; }
     /* The mockup's own baked-in shadow touches the image's top/bottom edge
        exactly (object-fit:contain matches height against the 10:16 stage),
        so it hits the ground with a hard, mismatched seam. Fade the image's
        own top/bottom edge to transparent so it blends into the ground
        instead of cutting off — no re-export needed. */
-    .deck-card--mobile .deck-slide-img {
+    /* Scoped through #deckSlideStage so it outranks the base
+       `#deckSlideStage img` rule (cover + top), which otherwise crops the phone. */
+    .deck-card--mobile #deckSlideStage img.deck-slide-img {
       mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 93%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 93%, transparent 100%);
       object-fit: contain;
@@ -738,7 +758,10 @@
         max-height: 90vh;
         overflow-y: auto;
       }
+      /* Explicit width: with only aspect-ratio + max-height, the stage
+         shrank its width to match and left a white strip beside it. */
       .deck-card--mobile .deck-slide-viewport {
+        width: 100%;
         height: auto;
         max-height: 55vh;
       }

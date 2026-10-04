@@ -9,8 +9,6 @@
     const CHARS = " .:-=+*#%@";
     let frame, time = 0, w, h, dpr, fpsInterval, lastTick = 0;
     let isVisible = true;
-    const pointer = { x: 0.65, y: 0.5 };
-    const mouse = { x: 0.65, y: 0.5 };
     const cores = Math.max(1, navigator.hardwareConcurrency || 4);
     const mem = navigator.deviceMemory || 4;
     const lowPower = cores <= 4 || mem <= 4;
@@ -19,23 +17,18 @@
       w = hero.clientWidth; h = hero.clientHeight;
       const compact = w < 760;
       dpr = compact || lowPower ? 1 : Math.min(devicePixelRatio || 1, 1.5);
-      fpsInterval = 1000 / (compact || lowPower ? 24 : 30);
+      // Cap at 60fps; the 1ms slack keeps 60Hz screens from dropping frames to vsync jitter.
+      fpsInterval = 1000 / 60 - 1;
       canvas.width = w * dpr; canvas.height = h * dpr;
       canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resize(); addEventListener('resize', resize);
-    addEventListener('pointermove', e => {
-      if (e.pointerType === 'touch') return;
-      pointer.x = e.clientX / innerWidth;
-      pointer.y = e.clientY / innerHeight;
-    }, { passive: true });
 
     // generate torus knot points
     const pts = [];
     const P = 2, Q = 3;
-    const SEG = lowPower || innerWidth < 760 ? 72 : 96;
-    const TUBE = lowPower || innerWidth < 760 ? 9 : 12;
+    const SEG = 128, TUBE = 16;
     const tubeR = 0.4;
     for (let i = 0; i < SEG; i++) for (let j = 0; j < TUBE; j++) {
       const u = (i / SEG) * Math.PI * 2, v = (j / TUBE) * Math.PI * 2;
@@ -58,10 +51,7 @@
 
       const cx = w * 0.66, cy = h * 0.5, scale = Math.min(w, h) * 0.34;
       ctx.clearRect(0, 0, w, h);
-      mouse.x += (pointer.x - mouse.x) * 0.08;
-      mouse.y += (pointer.y - mouse.y) * 0.08;
-      const mInfX = (mouse.x - 0.5) * 0.5, mInfY = (mouse.y - 0.5) * 0.5;
-      const ax = time * 0.3 + mInfY, ay = time * 0.5 + mInfX, az = time * 0.2;
+      const ax = time * 0.3, ay = time * 0.5, az = time * 0.2;
       const proj = pts.map(p => {
         const r = rot(p, ax, ay, az);
         const persp = 5, f = persp / (persp + r.z);
@@ -82,15 +72,14 @@
         ctx.fillText(ch, p.x, p.y);
       });
       // floating particles
-      const particleCount = lowPower || w < 760 ? 18 : 30;
-      for (let i = 0; i < particleCount; i++) {
+      for (let i = 0; i < 46; i++) {
         const px = (Math.sin(time * 0.5 + i * 0.5) * 0.32 + 0.66) * w;
         const py = (Math.cos(time * 0.3 + i * 0.7) * 0.32 + 0.5) * h;
         const pz = Math.sin(time + i) * 0.5 + 0.5;
         ctx.fillStyle = `rgba(185,28,26,${pz * 0.28})`;
         ctx.fillText(CHARS[Math.floor(pz * (CHARS.length - 1))], px, py);
       }
-      time += fpsInterval / 2000;
+      time += 0.008;
     }
     function start() {
       if (frame || reduce) return;
