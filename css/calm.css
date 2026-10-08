@@ -112,3 +112,16 @@ html[data-lt="dusk"] #packages::before,     html[data-lt="dusk"] #metrics::befor
 html[data-lt="wine"] #capabilities::before, html[data-lt="wine"] #start::before   { background: linear-gradient(180deg, rgba(48,10,10,0.82), rgba(30,8,8,0.82)); }
 html[data-lt="wine"] #packages::before,     html[data-lt="wine"] #metrics::before { background: linear-gradient(180deg, rgba(34,9,9,0.74), rgba(22,7,7,0.74)); }
 
+
+/* separate Capabilities from the Packages section directly below it */
+html[data-lt="stone"] #capabilities { --white:#cfd4d8; --subtle:#c1c7cc; }
+html[data-lt="stone"] #capabilities::before { background: #cfd4d8; }
+html[data-lt="stone"] #packages { --off:#eceef0; --white:#f7f8f9; --subtle:#e1e4e7; }
+html[data-lt="stone"] #packages::before { background: #eceef0; }
+
+/* dusk/wine: packages drops the tint and goes neutral near-black, cards lift off it */
+html[data-lt="dusk"] #packages::before { background: rgba(8,8,8,0.62); }
+html[data-lt="wine"] #packages::before { background: rgba(9,9,9,0.66); }
+html[data-lt="dusk"] #packages .pkg-card, html[data-lt="wine"] #packages .pkg-card { background: rgba(255,255,255,0.05); }
+html[data-lt="wine"] #packages { border-top: 1px solid rgba(217,67,63,0.28); }
+html[data-lt="dusk"] #packages { border-top: 1px solid rgba(255,255,255,0.14); }
