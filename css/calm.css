@@ -1,0 +1,114 @@
+/* ════ CALM VARIANT (index-calm.html only) ════
+   Loaded after styles.css. The ASCII knot moves from the hero to one fixed
+   canvas behind the whole page; sections become slightly see-through so it
+   reads all the way down. Blur filters on the decorative glows are dropped
+   (the radial gradients are already soft) to keep compositing cheap. */
+
+body { background: var(--ink); }
+
+#bgCanvas {
+  position: fixed; inset: 0; z-index: 0;
+  width: 100vw; height: 100vh; display: block; pointer-events: none;
+}
+
+#hero, section.blk, footer { position: relative; z-index: 1; }
+
+/* hero: let the backdrop show through, keep the left-side legibility fade */
+#hero { background: transparent; }
+
+/* light sections: solid flat colour behind the content column, with the
+   knot showing only in the right-hand margin.
+   The ::before layer inverts whatever is behind it (ink -> white, red glyphs
+   -> soft red), then paints its own background on top: opaque over the
+   content column (.wrap = max 1280px, 6% side padding, so its right edge is
+   at 44% + 640px), fading to a light wash in the margin. The compositor does
+   the inversion, so section edges never lag behind the scroll. Below 1440px
+   there's no real margin, so those sections are plain flat colour. */
+#capabilities, #packages, #metrics, #start { background: transparent; }
+#capabilities::before, #packages::before, #metrics::before, #start::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--white);
+}
+#packages::before, #metrics::before { background: var(--off); }
+
+@media (min-width: 1440px) {
+  @supports (backdrop-filter: invert(1)) or (-webkit-backdrop-filter: invert(1)) {
+    #capabilities::before, #packages::before, #metrics::before, #start::before {
+      -webkit-backdrop-filter: invert(1) hue-rotate(180deg) brightness(1.05);
+      backdrop-filter: invert(1) hue-rotate(180deg) brightness(1.05);
+      background: linear-gradient(90deg,
+        #fff 0, #fff calc(44% + 680px),
+        rgba(255,255,255,0.3) calc(44% + 780px), rgba(255,255,255,0.3) 100%);
+    }
+    #packages::before, #metrics::before {
+      /* off-white sections: a touch less brightness so the margin matches #f9f8f6 */
+      -webkit-backdrop-filter: invert(1) hue-rotate(180deg) brightness(1.025);
+      backdrop-filter: invert(1) hue-rotate(180deg) brightness(1.025);
+      background: linear-gradient(90deg,
+        #f9f8f6 0, #f9f8f6 calc(44% + 680px),
+        rgba(249,248,246,0.35) calc(44% + 780px), rgba(249,248,246,0.35) 100%);
+    }
+  }
+}
+
+/* flat white: drop the grid texture and red glows from capabilities */
+#capabilities .cap-grid-bg,
+#capabilities .cap-glow-a,
+#capabilities .cap-glow-b { display: none; }
+
+/* dark sections: the knot is clearly visible behind these */
+#process   { background: rgba(12,12,11,0.42); }
+#portfolio { background: rgba(12,12,11,0.38); }
+footer     { background: rgba(12,12,11,0.55); }
+
+/* no live blur filters */
+.port-glow { filter: none; }
+.proc-glow {
+  filter: none;
+  background: radial-gradient(circle, rgba(134,18,17,0.22) 0%, rgba(134,18,17,0.06) 45%, transparent 70%);
+}
+
+/* hero cycling word: simple fade/rise (replaces per-letter blur tween) */
+.cycle-word { transition: opacity .28s var(--ease), transform .28s var(--ease); }
+.cycle-word.is-out { opacity: 0; transform: translateY(8px); }
+
+/* portfolio cards: lift only, no image rescale on hover */
+.port-card:hover .port-treatment { transform: none; }
+
+/* ════ LIGHT-SECTION THEME EXPERIMENTS ════
+   Chosen per page via <html data-lt="stone|dusk|wine">
+   (index-calm-stone/dusk/wine.html). No attribute = the original white. Each theme only
+   re-points the palette variables inside the four sections, so no markup
+   changes are needed. */
+html[data-lt] #capabilities::before, html[data-lt] #packages::before,
+html[data-lt] #metrics::before,      html[data-lt] #start::before {
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+html[data-lt] #capabilities, html[data-lt] #packages,
+html[data-lt] #metrics,      html[data-lt] #start { border-color: var(--border); }
+
+/* stone: cool grey-blue mid tone, calmer than white next to the ink sections */
+html[data-lt="stone"] #capabilities, html[data-lt="stone"] #packages,
+html[data-lt="stone"] #metrics,      html[data-lt="stone"] #start { --white:#dfe2e4; --off:#d3d7da; --subtle:#c8cdd1; --border: rgba(10,25,35,0.14); --muted:#515b62; --faint:#79848b; }
+html[data-lt="stone"] #packages, html[data-lt="stone"] #metrics { --white:#e9ebed; }
+html[data-lt="stone"] #capabilities::before, html[data-lt="stone"] #start::before { background: #dfe2e4; }
+html[data-lt="stone"] #packages::before,     html[data-lt="stone"] #metrics::before { background: #d3d7da; }
+
+/* dusk: dark glass, same family as process/portfolio; knot shows through */
+html[data-lt="dusk"] #capabilities, html[data-lt="dusk"] #packages,
+html[data-lt="dusk"] #metrics,      html[data-lt="dusk"] #start,
+html[data-lt="wine"] #capabilities, html[data-lt="wine"] #packages,
+html[data-lt="wine"] #metrics,      html[data-lt="wine"] #start {
+  --text:#f2f0ea; --muted:#a9a8a2; --faint:#7f7e79;
+  --white: rgba(255,255,255,0.045); --off: rgba(255,255,255,0.03); --subtle: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.09); --border-strong: rgba(255,255,255,0.16);
+  --red: #d9433f; --red-tint: rgba(217,67,63,0.12); --red-light: rgba(217,67,63,0.12);
+  color: var(--text);
+}
+html[data-lt="dusk"] #capabilities::before, html[data-lt="dusk"] #start::before   { background: rgba(14,14,13,0.52); }
+html[data-lt="dusk"] #packages::before,     html[data-lt="dusk"] #metrics::before { background: rgba(14,14,13,0.40); }
+
+/* wine: brand-red tinted dark, gives the page a rhythm instead of black/white */
+html[data-lt="wine"] #capabilities::before, html[data-lt="wine"] #start::before   { background: linear-gradient(180deg, rgba(48,10,10,0.82), rgba(30,8,8,0.82)); }
+html[data-lt="wine"] #packages::before,     html[data-lt="wine"] #metrics::before { background: linear-gradient(180deg, rgba(34,9,9,0.74), rgba(22,7,7,0.74)); }
+

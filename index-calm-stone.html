@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" data-lt="stone">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexioSol - Technology &amp; Business Development Partner</title>
+  <meta name="description" content="NexioSol helps startups and agencies improve operational efficiency and support business growth through custom software, CRM solutions, AI automation and business development services." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/calm.css" />
+</head>
+<body>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<!-- ══ NAV ══ -->
+<header id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo"><span class="lg">Nexio<span>Sol</span></span><span class="tm">™</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#metrics">Impact</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#start" class="nav-cta">Book a discovery call</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="ti ti-menu-2"></i></button>
+  </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-veil"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="eyebrow on-dark">Technology &amp; Business Development</span></div>
+    <h1 class="hero-h1">
+      <span class="line">Systems and pipelines</span>
+      <span class="line">built to help you <span class="cycle-word" id="cycleWordCalm">scale</span></span>
+    </h1>
+    <p class="hero-sub">Custom software, CRM, AI automation and outreach for startups and agencies that want to reduce manual work and depend less on the founder.</p>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stats-inner">
+      <div class="hstat"><div class="num" data-target="100" data-suffix="%">100%</div><div class="lbl">on-time delivery rate</div></div>
+      <div class="hstat"><div class="num" data-target="7" data-suffix="-day">7-day</div><div class="lbl">continuous delivery loop</div></div>
+      <div class="hstat"><div class="num" data-target="24" data-suffix="h">24h</div><div class="lbl">response to every enquiry</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CAPABILITIES ══ -->
+<section class="blk" id="capabilities">
+  <span class="cap-grid-bg" aria-hidden="true"></span>
+  <span class="cap-glow-a" aria-hidden="true"></span>
+  <span class="cap-glow-b" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="sec-head cap-head">
+      <span class="eyebrow reveal">Capabilities</span>
+      <h2 class="reveal d1">Four services, one partner</h2>
+      <p class="reveal d2">For startups and agencies where the founder still runs sales and day-to-day operations. We connect software, CRM, automation and outreach so your team depends less on manual work and on the founder.</p>
+    </div>
+    <div class="cap-list">
+
+      <div class="cap-row reveal active" data-cap="0" id="svc-software">
+        <button class="cap-hd" aria-expanded="true">
+          <span class="cap-num">01</span>
+          <span class="cap-icon"><i class="ti ti-code"></i></span>
+          <span class="cap-title">Software Development</span>
+          <span class="cap-kicker">Build</span>
+          <i class="ti ti-minus cap-toggle"></i>
+        </button>
+        <div class="cap-body">
+          <div class="cap-left">
+            <p class="cap-desc">Custom software, web and mobile applications, legacy rebuilds and Web3 systems built around your business requirements. Mobile apps run on iOS and Android from a single codebase, and ongoing maintenance and support is available as a separate plan after launch.</p>
+            <div class="cap-chips"><span>Custom software</span><span>Web applications</span><span>iOS &amp; Android apps</span><span>Legacy rebuilds</span><span>Web3 systems</span><span>Maintenance &amp; support</span></div>
+            <div class="cap-stats">
+              <div class="cap-stat"><span class="cap-stat-v">99.9%</span><span class="cap-stat-l">uptime targets</span></div>
+              <div class="cap-stat"><span class="cap-stat-v">0</span><span class="cap-stat-l">downtime migrations</span></div>
+              <div class="cap-stat"><span class="cap-stat-v">5+</span><span class="cap-stat-l">chains integrated</span></div>
+            </div>
+            <a href="#start" class="cap-cta" data-service="Software Development">Book a discovery call <i class="ti ti-arrow-right"></i></a>
+          </div>
+          <div class="cap-right">
+            <div class="cap-mockup">
+              <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">Founders &amp; Funders · fundraising platform</span></div>
+              <div class="mock-img"><img src="assets/mockups/founders-funders-1.webp" alt="Founders &amp; Funders fundraising dashboard" loading="lazy" decoding="async"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cap-row reveal d1" data-cap="1" id="svc-crm">
+        <button class="cap-hd" aria-expanded="false">
+          <span class="cap-num">02</span>
+          <span class="cap-icon"><i class="ti ti-address-book"></i></span>
+          <span class="cap-title">CRM Solutions</span>
+          <span class="cap-kicker">Organise</span>
+          <i class="ti ti-plus cap-toggle"></i>
+        </button>
+        <div class="cap-body">
+          <div class="cap-left">
+            <p class="cap-desc">CRM deployment, migration and optimisation to organise customer data, manage opportunities and improve follow-ups. We configure established platforms or build a custom CRM around your sales process.</p>
+            <div class="cap-chips"><span>Deployment</span><span>Migration</span><span>Optimisation</span><span>Custom CRM</span></div>
+            <div class="cap-platforms">
+              <span class="cap-stat-l">Platforms</span>
+              <p>HubSpot · Salesforce · Pipedrive · Zoho · Custom-built</p>
+            </div>
+            <a href="#start" class="cap-cta" data-service="CRM Solutions">Book a discovery call <i class="ti ti-arrow-right"></i></a>
+          </div>
+          <div class="cap-right">
+            <div class="cap-mockup">
+              <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">Meridian · custom real estate CRM</span></div>
+              <div class="mock-img"><img src="assets/mockups/Meridian-1.webp" alt="Meridian real estate CRM dashboard" loading="lazy" decoding="async"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cap-row reveal d2" data-cap="2" id="svc-ai">
+        <button class="cap-hd" aria-expanded="false">
+          <span class="cap-num">03</span>
+          <span class="cap-icon"><i class="ti ti-sparkles"></i></span>
+          <span class="cap-title">AI &amp; Automation</span>
+          <span class="cap-kicker">Automate</span>
+          <i class="ti ti-plus cap-toggle"></i>
+        </button>
+        <div class="cap-body">
+          <div class="cap-left">
+            <p class="cap-desc">AI assistants, chatbots and connected workflows that reduce repetitive work and simplify operations. Assistants can answer questions and carry out tasks, and document workflows keep a person in the loop to review the output.</p>
+            <div class="cap-chips"><span>Assistants &amp; chatbots</span><span>Document workflows</span><span>Business automation</span><span>Integrations</span></div>
+            <div class="cap-stats">
+              <div class="cap-stat"><span class="cap-stat-v">24/7</span><span class="cap-stat-l">automated workflows</span></div>
+            </div>
+            <a href="#start" class="cap-cta" data-service="AI &amp; Automation">Book a discovery call <i class="ti ti-arrow-right"></i></a>
+          </div>
+          <div class="cap-right">
+            <div class="cap-mockup">
+              <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">Traino · AI fitness coach</span></div>
+              <div class="mock-img is-phone"><img src="assets/mockups/traino-1.webp" alt="Traino AI coach home screen with voice prompt" loading="lazy" decoding="async"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cap-row reveal d3" data-cap="3" id="svc-bd">
+        <button class="cap-hd" aria-expanded="false">
+          <span class="cap-num">04</span>
+          <span class="cap-icon"><i class="ti ti-target-arrow"></i></span>
+          <span class="cap-title">Business Development</span>
+          <span class="cap-kicker">Engage</span>
+          <i class="ti ti-plus cap-toggle"></i>
+        </button>
+        <div class="cap-body">
+          <div class="cap-left">
+            <p class="cap-desc">Lead generation, prospecting and structured outreach across email, LinkedIn and calls. We research the right accounts, run the outreach and follow-ups, and book meetings with interested prospects for your team.</p>
+            <div class="cap-chips"><span>Ideal client research</span><span>Prospecting</span><span>Email</span><span>LinkedIn</span><span>Calls</span><span>Meeting booking</span></div>
+            <a href="#start" class="cap-cta" data-service="Business Development">Book a discovery call <i class="ti ti-arrow-right"></i></a>
+          </div>
+          <div class="cap-right">
+            <div class="cap-mockup">
+              <div class="mock-bar"><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-dot"></span><span class="mock-url">Outreach pipeline · illustrative</span></div>
+              <div class="mock-img bd-illus" role="img" aria-label="Illustration of an outreach pipeline: researched, contacted, replied, meeting booked">
+                <div class="bd-col"><span class="bd-h">Researched</span><span class="bd-card"><i class="ti ti-search"></i><b></b></span><span class="bd-card"><i class="ti ti-search"></i><b></b></span><span class="bd-card"><i class="ti ti-search"></i><b></b></span></div>
+                <div class="bd-col"><span class="bd-h">Contacted</span><span class="bd-card"><i class="ti ti-mail"></i><b></b></span><span class="bd-card"><i class="ti ti-brand-linkedin"></i><b></b></span><span class="bd-card"><i class="ti ti-phone"></i><b></b></span></div>
+                <div class="bd-col"><span class="bd-h">Replied</span><span class="bd-card"><i class="ti ti-message"></i><b></b></span><span class="bd-card"><i class="ti ti-message"></i><b></b></span></div>
+                <div class="bd-col"><span class="bd-h">Booked</span><span class="bd-card is-on"><i class="ti ti-calendar-check"></i><b></b></span></div>
+                <span class="bd-note">Illustrative</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ PACKAGES ══ -->
+<section class="blk" id="packages">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow reveal">Packages</span>
+      <h2 class="reveal d1">Connected solutions</h2>
+      <p class="reveal d2">Two packages that combine our services into one engagement. Each service is also available on its own.</p>
+    </div>
+    <div class="pkg-grid">
+      <article class="pkg-card reveal">
+        <span class="pkg-combo">CRM Solutions + AI &amp; Automation</span>
+        <h3>Automated CRM</h3>
+        <p>A CRM that handles routine enquiry work, so your team spends its time on qualified opportunities.</p>
+        <ul>
+          <li>CRM set up or optimised around your sales stages</li>
+          <li>Enquiries captured and routed into the CRM</li>
+          <li>AI qualification and a summary for each new enquiry</li>
+          <li>Drafted replies and follow-up reminders for your team to review</li>
+        </ul>
+        <a href="#start" class="cap-cta" data-service="Automated CRM">Book a discovery call <i class="ti ti-arrow-right"></i></a>
+      </article>
+      <article class="pkg-card reveal d1">
+        <span class="pkg-combo">Software Development + AI &amp; Automation</span>
+        <h3>AI-Enabled Applications</h3>
+        <p>Custom applications with AI built in, designed around how your team and your customers work.</p>
+        <ul>
+          <li>A custom web or mobile application</li>
+          <li>Assistants that answer questions and carry out tasks</li>
+          <li>Document extraction, categorisation and summaries</li>
+          <li>Integrations with the business tools you already use</li>
+        </ul>
+        <a href="#start" class="cap-cta" data-service="AI-Enabled Applications">Book a discovery call <i class="ti ti-arrow-right"></i></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROCESS ══ -->
+<section class="blk" id="process">
+  <div class="proc-glow"></div>
+  <div class="wrap">
+    <div class="proc-layout">
+
+      <div class="proc-selector">
+        <span class="eyebrow on-dark reveal">Process</span>
+        <h2 class="reveal d1">From rough idea to<br>shipped system.</h2>
+        <div class="proc-steps reveal d2" id="procSteps">
+
+          <div class="proc-step active" data-step="0">
+            <div class="proc-accent"></div>
+            <div class="proc-step-inner">
+              <div class="proc-step-top">
+                <span class="n">00</span>
+                <h3>Shape <span class="sub">the idea</span></h3>
+                <span class="proc-edge">Studio edge</span>
+              </div>
+              <p>A rough vision walks in. Over one to two weeks we brainstorm and pressure-test it into a practical, scoped concept — before a single requirement is written.</p>
+            </div>
+          </div>
+
+          <div class="proc-step" data-step="1">
+            <div class="proc-accent"></div>
+            <div class="proc-step-inner">
+              <div class="proc-step-top">
+                <span class="n">01</span>
+                <h3>Define <span class="sub">the scope</span></h3>
+              </div>
+              <p>Requirements mapping and architecture. The validated idea becomes a clear, scoped plan.</p>
+            </div>
+          </div>
+
+          <div class="proc-step" data-step="2">
+            <div class="proc-accent"></div>
+            <div class="proc-step-inner">
+              <div class="proc-step-top">
+                <span class="n">02</span>
+                <h3>Build <span class="sub">in parallel</span></h3>
+              </div>
+              <p>Design, core development, code review, and continuous QA — all running together in parallel.</p>
+            </div>
+          </div>
+
+          <div class="proc-step" data-step="3">
+            <div class="proc-accent"></div>
+            <div class="proc-step-inner">
+              <div class="proc-step-top">
+                <span class="n">03</span>
+                <h3>Ship <span class="sub">&amp; iterate</span></h3>
+              </div>
+              <p>Packaging, client review, deployment, and a retrospective that sharpens the very next cycle.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="proc-code reveal d1">
+        <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="proc-tabs" id="procTabs">
+          <button class="proc-tab active" data-tab="0">shape.ts</button>
+          <button class="proc-tab" data-tab="1">define.ts</button>
+          <button class="proc-tab" data-tab="2">build.ts</button>
+          <button class="proc-tab" data-tab="3">ship.ts</button>
+        </div>
+        <pre id="codeBlock"></pre>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ METRICS ══ -->
+<section class="blk" id="metrics">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:54px;">
+      <span class="eyebrow reveal">Impact</span>
+      <h2 class="reveal d1">Our commitments</h2>
+    </div>
+    <div class="metric-grid">
+      <div class="metric reveal">
+        <div class="big"><span class="count" data-target="100">0</span><span class="suf">%</span></div>
+        <div class="lbl">Delivery reliability</div>
+        <div class="sub">on-time delivery</div>
+      </div>
+      <div class="metric reveal d1">
+        <div class="big"><span class="count" data-target="7">0</span><span class="suf">d</span></div>
+        <div class="lbl">Delivery loop</div>
+        <div class="sub">continuous weekly cadence</div>
+      </div>
+      <div class="metric reveal d2">
+        <div class="big"><span class="count" data-target="24">0</span><span class="suf">h</span></div>
+        <div class="lbl">Enquiry response</div>
+        <div class="sub">to arrange your discovery call</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PORTFOLIO ══ -->
+<section class="blk" id="portfolio">
+  <span class="port-glow" aria-hidden="true"></span>
+  <div class="wrap">
+    <span class="eyebrow on-dark reveal">Portfolio</span>
+    <div class="port-header-row reveal d1">
+      <h2 class="port-h2">Selected work</h2>
+      <p class="port-intro">A selection of systems we've designed and built.</p>
+    </div>
+    <div class="port-grid" id="portGrid"></div>
+  </div>
+</section>
+
+<!-- ══ BOOK A DISCOVERY CALL ══ -->
+<section class="blk" id="start">
+  <div class="wrap">
+    <div class="form-shell">
+      <span class="eyebrow reveal" style="display:inline-flex;">Let's talk</span>
+      <h2 class="reveal d1" style="font-family:var(--font-display);font-weight:400;font-size:clamp(34px,5vw,60px);letter-spacing:-1.2px;margin-top:18px;">Book a discovery call</h2>
+      <p class="form-intro reveal d1">A free call to understand what you need. Afterwards, you receive a written outline of your requirements and the options available to you.</p>
+      <p class="step-counter reveal d2">STEP <b id="stepNow">1</b> / 3</p>
+
+      <div class="steps-bar reveal d2">
+        <div class="sb-step active" data-step="1"><span class="sb-dot">1</span><span class="sb-line"></span></div>
+        <div class="sb-step" data-step="2"><span class="sb-dot">2</span><span class="sb-line"></span></div>
+        <div class="sb-step" data-step="3"><span class="sb-dot">3</span></div>
+      </div>
+
+      <form class="form-stage reveal d3" id="projForm" onsubmit="return false;">
+        <div class="form-panel active" data-panel="1">
+          <div class="field"><label>Your name</label><input id="f-name" class="input" type="text" placeholder="Jane Smith" /></div>
+          <div class="field"><label>Email address</label><input id="f-email" class="input" type="email" placeholder="jane@company.com" /></div>
+        </div>
+        <div class="form-panel" data-panel="2">
+          <div class="field">
+            <label>What do you need help with? <span class="label-note">Select all that apply</span></label>
+            <div class="pill-group" id="pillGroup">
+              <span class="pill">Software Development</span>
+              <span class="pill">CRM Solutions</span>
+              <span class="pill">AI &amp; Automation</span>
+              <span class="pill">Business Development</span>
+              <span class="pill">Automated CRM</span>
+              <span class="pill">AI-Enabled Applications</span>
+              <span class="pill" data-exclusive>Not sure yet</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Estimated budget <span class="label-note">Optional</span></label>
+            <select id="f-budget" class="input">
+              <option value="" selected>Select a range</option>
+              <option>Not decided yet</option><option>Under $10k</option><option>$10k – $30k</option><option>$30k – $75k</option><option>$75k+</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-panel" data-panel="3">
+          <div class="field"><label>Tell us about your business and what you need</label><textarea id="f-details" class="input" placeholder="The problem you want solved, the tools you use today, your timeline..."></textarea></div>
+        </div>
+        <p class="form-err" id="formErr"></p>
+        <div class="form-nav">
+          <button type="button" class="btn-back" id="btnBack" hidden><i class="ti ti-arrow-left"></i> Back</button>
+          <button type="button" class="btn btn-primary" id="btnNext" style="margin-left:auto;">Next <i class="ti ti-arrow-right"></i></button>
+        </div>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon"><i class="ti ti-check"></i></div>
+        <h3>Request received</h3>
+        <p>Thanks. We'll respond within 24 hours to arrange your discovery call.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="flogo">Nexio<span>Sol</span></div>
+        <p>NexioSol helps startups and agencies improve operational efficiency and support business growth through custom software, CRM solutions, AI automation and business development services.</p>
+        <div class="foot-socials">
+          <a href="#" aria-label="GitHub"><i class="ti ti-brand-github"></i></a>
+          <a href="https://www.linkedin.com/company/nexiosol/about/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>        </div>
+      </div>
+      <div class="foot-col"><h4>Studio</h4><ul><li><a href="#">Our Team</a></li><li><a href="#">Careers</a></li><li><a href="#">News</a></li><li><a href="portfolio.html">Portfolio</a></li></ul></div>
+      <div class="foot-col"><h4>Services</h4><ul><li><a href="index.html#svc-software">Software Development</a></li><li><a href="index.html#svc-crm">CRM Solutions</a></li><li><a href="index.html#svc-ai">AI &amp; Automation</a></li><li><a href="index.html#svc-bd">Business Development</a></li><li><a href="index.html#packages">Packages</a></li></ul></div>
+      <div class="foot-col"><h4>Contact</h4><ul><li><a href="index.html#start">Book a discovery call</a></li><li><a href="mailto:hr.nexiosol@gmail.com">hr.nexiosol@gmail.com</a></li></ul></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 NexioSol. All rights reserved.</span><span>Lahore, Pakistan</span></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/calm-bg.js"></script>
+</body>
+</html>
