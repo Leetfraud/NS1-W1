@@ -83,7 +83,10 @@
     const today = allLeads.filter(l => now - new Date(l.createdAt).getTime() < day).length;
 
     const counts = {};
-    allLeads.forEach(l => { if (l.service) counts[l.service] = (counts[l.service] || 0) + 1; });
+    allLeads.forEach(l => {
+      const list = Array.isArray(l.services) ? l.services : (l.service ? [l.service] : []);
+      list.forEach(s => { counts[s] = (counts[s] || 0) + 1; });
+    });
     let top = '—';
     let max = 0;
     for (const k in counts) { if (counts[k] > max) { max = counts[k]; top = k; } }

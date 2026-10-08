@@ -15,9 +15,9 @@ async function notifyEmail(lead) {
   await mailer.sendMail({
     from: `"NexioSol" <${process.env.GMAIL_USER}>`,
     to: process.env.NOTIFY_EMAIL,
-    subject: `New project request — ${lead.name}`,
+    subject: `New discovery call request — ${lead.name}`,
     html: `<div style="font-family:sans-serif;max-width:520px;color:#111;">
-      <h2 style="color:#861211;">New Project Request</h2>
+      <h2 style="color:#861211;">New Discovery Call Request</h2>
       <p style="color:#777;font-size:13px;">${new Date().toLocaleString()}</p>
       <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:16px;">
         <tr><td style="padding:10px 0;border-bottom:1px solid #eee;color:#777;width:120px;">Name</td><td style="padding:10px 0;border-bottom:1px solid #eee;font-weight:500;">${lead.name}</td></tr>
@@ -48,9 +48,9 @@ async function notifySlack(lead) {
     headers: { 'Authorization': `Bearer ${process.env.SLACK_BOT_TOKEN}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       channel: process.env.SLACK_CHANNEL_ID,
-      text: `New project request from *${lead.name}*`,
+      text: `New discovery call request from *${lead.name}*`,
       blocks: [
-        { type: 'header', text: { type: 'plain_text', text: '📬 New Project Request' } },
+        { type: 'header', text: { type: 'plain_text', text: '📬 New Discovery Call Request' } },
         { type: 'section', fields: [
           { type: 'mrkdwn', text: `*Name*\n${lead.name}` },
           { type: 'mrkdwn', text: `*Email*\n${lead.email}` },
@@ -87,7 +87,11 @@ export default async function handler(req, res) {
       const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
       const name    = String(body.name    || '').trim();
       const email   = String(body.email   || '').trim();
-      const service = String(body.service || '').trim();
+      // `services` is the multi-select list; `service` stays as a joined string
+      // so notifications, dashboard search and older single-service leads keep working.
+      const services = (Array.isArray(body.services) ? body.services : (body.service ? [body.service] : []))
+        .map(s => String(s).trim().slice(0, 80)).filter(Boolean).slice(0, 10);
+      const service = services.join(', ');
       const budget  = String(body.budget  || '').trim();
       const details = String(body.details || '').trim();
 
@@ -97,7 +101,7 @@ export default async function handler(req, res) {
                               return res.status(400).json({ error: 'Input too long.' });
 
       const db   = await getDb();
-      const lead = { name, email, service, budget, details, createdAt: new Date(), userAgent: String(req.headers['user-agent'] || '').slice(0, 300) };
+      const lead = { name, email, service, services, budget, details, createdAt: new Date(), userAgent: String(req.headers['user-agent'] || '').slice(0, 300) };
       const result = await db.collection('leads').insertOne(lead);
 
       // Fire notifications — don't block the response

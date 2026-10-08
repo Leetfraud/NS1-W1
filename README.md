@@ -1,10 +1,10 @@
 # NexioSol Website
 
-Production website for NexioSol: a static studio site with an interactive portfolio, a multi-step project request form, a Vercel serverless lead API, MongoDB storage, optional lead notifications, and a password-gated leads dashboard.
+Production website for NexioSol, a technology and business development partner: a static site with an interactive portfolio, a multi-step discovery call request form, a Vercel serverless lead API, MongoDB storage, optional lead notifications, and a password-gated leads dashboard.
 
 ## Current Site
 
-- `index.html` - home page with animated ASCII hero, capabilities accordion, process/code interaction, metrics counters, selected work, and the project request form.
+- `index.html` - home page with animated ASCII hero, the four service groups (Software Development, CRM Solutions, AI & Automation, Business Development) in the capabilities accordion, packages, process/code interaction, metrics counters, selected work, and the discovery call request form.
 - `portfolio.html` - full portfolio page with service filters, a desktop constellation view, project panels/decks, and a card-grid fallback for mobile/coarse-pointer devices.
 - `dashboard.html` - private leads dashboard that reads from `/api/leads` after password authentication.
 - `css/styles.css` - shared styling for the public site, portfolio, modals, and dashboard.
@@ -20,8 +20,8 @@ Production website for NexioSol: a static studio site with an interactive portfo
 - Static HTML/CSS/JS front end deployable on Vercel.
 - Responsive navigation with mobile menu support.
 - Motion-aware hero canvas and portfolio animations that respect `prefers-reduced-motion`.
-- Three-step "Start a project" form with client-side validation.
-- Lead capture via `/api/leads`, stored in MongoDB.
+- Three-step "Book a discovery call" form with client-side validation; visitors can select several services, budget is optional.
+- Lead capture via `/api/leads`, stored in MongoDB. Each lead keeps a `services` array plus a comma-joined `service` string.
 - Server-side dashboard protection using `DASHBOARD_PASSWORD`.
 - Dashboard stats for total leads, recent leads, today's leads, and top requested service.
 - Searchable leads table with contact, service, budget, details, and received date.
@@ -130,7 +130,7 @@ No build command is required for the static pages. Vercel detects `api/*.js` as 
 ## Testing Checklist
 
 - Open the home page and confirm hero animation, navigation, capabilities, process tabs, counters, and selected-work cards render.
-- Submit the project form and confirm "Request received" appears.
+- Submit the discovery call form and confirm "Request received" appears.
 - Confirm the submitted lead is stored in MongoDB.
 - Visit `/dashboard.html`, enter `DASHBOARD_PASSWORD`, and confirm the lead appears.
 - Open `/portfolio.html` on desktop and mobile-sized viewports to check both constellation and grid behavior.

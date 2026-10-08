@@ -107,7 +107,7 @@
   (function () {
     const el = document.getElementById('cycleWord');
     if (!el) return;
-    const words = ['ship', 'scale', 'endure', 'perform'];
+    const words = ['scale', 'sell', 'deliver', 'grow'];
     let wi = 0;
     function setWord(word) {
       el.innerHTML = '';
@@ -161,7 +161,9 @@
 
   /* ── Nav scroll + mobile ── */
   const nav = document.getElementById('nav');
-  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 24), { passive: true });
+  let navScrolled = null;
+  const syncNav = () => { const on = scrollY > 24; if (on !== navScrolled) { navScrolled = on; nav.classList.toggle('scrolled', on); } };
+  addEventListener('scroll', syncNav, { passive: true }); syncNav();
   const navLinks = document.getElementById('navLinks');
   document.getElementById('navToggle').addEventListener('click', () => navLinks.classList.toggle('open'));
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
@@ -212,13 +214,28 @@
         icon.classList.toggle('ti-plus', !on);
       });
     }
-    rows.forEach((row, i) => row.querySelector('.cap-hd').addEventListener('click', () => open(i)));
-    open(0);
+    // clicking the open row (the "-") collapses it
+    rows.forEach((row, i) => row.querySelector('.cap-hd').addEventListener('click', () => open(row.classList.contains('active') ? -1 : i)));
+    // footer links point at #svc-* — open that row instead of the default
+    const fromHash = () => [...rows].findIndex(r => '#' + r.id === location.hash);
+    addEventListener('hashchange', () => { const k = fromHash(); if (k >= 0) open(k); });
+    open(Math.max(0, fromHash()));
   })();
 
-  /* ── Pills ── */
-  document.querySelectorAll('#pillGroup .pill').forEach(p => p.addEventListener('click', () => {
-    document.querySelectorAll('#pillGroup .pill').forEach(x => x.classList.remove('selected')); p.classList.add('selected');
+  /* ── Pills (multi-select; "Not sure yet" is exclusive) ── */
+  const pills = [...document.querySelectorAll('#pillGroup .pill')];
+  pills.forEach(p => p.addEventListener('click', () => {
+    const on = !p.classList.contains('selected');
+    if (on) pills.forEach(x => { if (x !== p && (p.hasAttribute('data-exclusive') || x.hasAttribute('data-exclusive'))) x.classList.remove('selected'); });
+    p.classList.toggle('selected', on);
+  }));
+
+  /* ── Service CTAs preselect their pill ── */
+  document.querySelectorAll('.cap-cta[data-service]').forEach(a => a.addEventListener('click', () => {
+    const pill = pills.find(x => x.textContent.trim() === a.dataset.service);
+    if (!pill) return;
+    pills.forEach(x => { if (x.hasAttribute('data-exclusive')) x.classList.remove('selected'); });
+    pill.classList.add('selected');
   }));
 
   /* ── Multi-step form ── */
@@ -261,11 +278,11 @@
     }
 
     async function submitLead() {
-      const selectedPill = document.querySelector('#pillGroup .pill.selected');
+      const services = pills.filter(p => p.classList.contains('selected')).map(p => p.textContent.trim());
       const payload = {
         name: nameEl.value.trim(),
         email: emailEl.value.trim(),
-        service: selectedPill ? selectedPill.textContent.trim() : '',
+        services,
         budget: budgetEl.value || '',
         details: detailsEl.value.trim(),
       };
@@ -332,9 +349,9 @@
     if (!grid) return;
 
     const PROJECTS = [
-      { num: '01', tag: 'PropTech / AI', title: 'Auri',     line: 'A concierge for your entire property portfolio.',          chips: ['React Native','NestJS','PostgreSQL'], img: 'auri-1.webp',     alt: 'Auri property management app owner dashboard',           delay: '',   zoom: true },
-      { num: '02', tag: 'Fitness / AI',  title: 'Fittish',  line: 'A coach that answers in the context of your own numbers.', chips: ['React Native','Expo','Claude API'],   img: 'fittish-1.webp',  alt: 'Fittish app showing activity rings and daily training',  delay: 'd1' },
-      { num: '03', tag: 'Enterprise AI', title: 'PowerRay', line: 'Secure document search across the whole organisation.',    chips: ['Next.js','NestJS','LangChain'],       img: 'PowerRay-2.webp', alt: 'PowerRay enterprise AI knowledge search interface',      delay: 'd2' },
+      { num: '01', tag: 'Custom CRM',      title: 'Meridian',           line: 'Sales, bookings and installment recovery for a real-estate developer.', chips: ['React','Tailwind CSS','Vite'],         img: 'Meridian-1.webp',          alt: 'Meridian real estate CRM dashboard',              delay: '' },
+      { num: '02', tag: 'Software',        title: 'Founders & Funders', line: 'One dashboard for running a raise, from investor match to close.',     chips: ['Next.js','PostgreSQL','AWS'],          img: 'founders-funders-1.webp',  alt: 'Founders & Funders fundraising dashboard',        delay: 'd1' },
+      { num: '03', tag: 'Web3 · Concept',  title: 'Anchorpoint',        line: 'Fractional, compliance-aware tokens for real-world assets.',            chips: ['Polygon','ERC-3643','Solidity'],       img: 'anchorpoint-1.webp',       alt: 'Anchorpoint real-world asset tokenization platform', delay: 'd2' },
     ];
 
     PROJECTS.forEach(p => {
