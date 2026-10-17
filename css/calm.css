@@ -1,4 +1,4 @@
-/* ════ CALM VARIANT (index-calm.html only) ════
+/* ════ CALM / DUSK INTERFACE (index.html) ════
    Loaded after styles.css. The ASCII knot moves from the hero to one fixed
    canvas behind the whole page; sections become slightly see-through so it
    reads all the way down. Blur filters on the decorative glows are dropped
@@ -75,11 +75,11 @@ footer     { background: rgba(12,12,11,0.55); }
 /* portfolio cards: lift only, no image rescale on hover */
 .port-card:hover .port-treatment { transform: none; }
 
-/* ════ LIGHT-SECTION THEME EXPERIMENTS ════
-   Chosen per page via <html data-lt="stone|dusk|wine">
-   (index-calm-stone/dusk/wine.html). No attribute = the original white. Each theme only
-   re-points the palette variables inside the four sections, so no markup
-   changes are needed. */
+/* ════ LIGHT-SECTION THEME: DUSK ════
+   Set via <html data-lt="dusk"> on index.html. The four light sections become
+   dark glass, same family as process/portfolio, with the knot showing through.
+   Only the palette variables inside those sections are re-pointed, so no
+   markup changes are needed. */
 html[data-lt] #capabilities::before, html[data-lt] #packages::before,
 html[data-lt] #metrics::before,      html[data-lt] #start::before {
   -webkit-backdrop-filter: none; backdrop-filter: none;
@@ -87,18 +87,8 @@ html[data-lt] #metrics::before,      html[data-lt] #start::before {
 html[data-lt] #capabilities, html[data-lt] #packages,
 html[data-lt] #metrics,      html[data-lt] #start { border-color: var(--border); }
 
-/* stone: cool grey-blue mid tone, calmer than white next to the ink sections */
-html[data-lt="stone"] #capabilities, html[data-lt="stone"] #packages,
-html[data-lt="stone"] #metrics,      html[data-lt="stone"] #start { --white:#dfe2e4; --off:#d3d7da; --subtle:#c8cdd1; --border: rgba(10,25,35,0.14); --muted:#515b62; --faint:#79848b; }
-html[data-lt="stone"] #packages, html[data-lt="stone"] #metrics { --white:#e9ebed; }
-html[data-lt="stone"] #capabilities::before, html[data-lt="stone"] #start::before { background: #dfe2e4; }
-html[data-lt="stone"] #packages::before,     html[data-lt="stone"] #metrics::before { background: #d3d7da; }
-
-/* dusk: dark glass, same family as process/portfolio; knot shows through */
 html[data-lt="dusk"] #capabilities, html[data-lt="dusk"] #packages,
-html[data-lt="dusk"] #metrics,      html[data-lt="dusk"] #start,
-html[data-lt="wine"] #capabilities, html[data-lt="wine"] #packages,
-html[data-lt="wine"] #metrics,      html[data-lt="wine"] #start {
+html[data-lt="dusk"] #metrics,      html[data-lt="dusk"] #start {
   --text:#f2f0ea; --muted:#a9a8a2; --faint:#7f7e79;
   --white: rgba(255,255,255,0.045); --off: rgba(255,255,255,0.03); --subtle: rgba(255,255,255,0.06);
   --border: rgba(255,255,255,0.09); --border-strong: rgba(255,255,255,0.16);
@@ -106,22 +96,36 @@ html[data-lt="wine"] #metrics,      html[data-lt="wine"] #start {
   color: var(--text);
 }
 html[data-lt="dusk"] #capabilities::before, html[data-lt="dusk"] #start::before   { background: rgba(14,14,13,0.52); }
-html[data-lt="dusk"] #packages::before,     html[data-lt="dusk"] #metrics::before { background: rgba(14,14,13,0.40); }
+html[data-lt="dusk"] #metrics::before { background: rgba(14,14,13,0.40); }
 
-/* wine: brand-red tinted dark, gives the page a rhythm instead of black/white */
-html[data-lt="wine"] #capabilities::before, html[data-lt="wine"] #start::before   { background: linear-gradient(180deg, rgba(48,10,10,0.82), rgba(30,8,8,0.82)); }
-html[data-lt="wine"] #packages::before,     html[data-lt="wine"] #metrics::before { background: linear-gradient(180deg, rgba(34,9,9,0.74), rgba(22,7,7,0.74)); }
-
-
-/* separate Capabilities from the Packages section directly below it */
-html[data-lt="stone"] #capabilities { --white:#cfd4d8; --subtle:#c1c7cc; }
-html[data-lt="stone"] #capabilities::before { background: #cfd4d8; }
-html[data-lt="stone"] #packages { --off:#eceef0; --white:#f7f8f9; --subtle:#e1e4e7; }
-html[data-lt="stone"] #packages::before { background: #eceef0; }
-
-/* dusk/wine: packages drops the tint and goes neutral near-black, cards lift off it */
+/* packages drops the tint and goes neutral near-black so it separates from
+   Capabilities above it; cards lift off it */
 html[data-lt="dusk"] #packages::before { background: rgba(8,8,8,0.62); }
-html[data-lt="wine"] #packages::before { background: rgba(9,9,9,0.66); }
-html[data-lt="dusk"] #packages .pkg-card, html[data-lt="wine"] #packages .pkg-card { background: rgba(255,255,255,0.05); }
-html[data-lt="wine"] #packages { border-top: 1px solid rgba(217,67,63,0.28); }
+html[data-lt="dusk"] #packages .pkg-card { background: rgba(255,255,255,0.05); }
 html[data-lt="dusk"] #packages { border-top: 1px solid rgba(255,255,255,0.14); }
+
+/* ════ NAV: compositor-only morph ════
+   styles.css animates top/left/right, height, max-width, font-size and padding
+   when the bar becomes a pill. Every one of those is a layout change, redone
+   each frame on the same main thread that redraws the full-screen knot canvas,
+   so the transition stutters. Here the bar keeps one fixed geometry at all
+   times and only the pill background (a pseudo-element) fades/scales in, which
+   the GPU does without any layout work. Text just changes colour. */
+#nav, #nav.scrolled { top: 16px; left: 16px; right: 16px; transition: none; }
+.nav-inner, #nav.scrolled .nav-inner {
+  position: relative; height: 60px; max-width: 1160px; border-radius: 16px;
+  background: transparent; border-color: transparent; box-shadow: none;
+  transition: none;
+}
+.nav-inner::before {
+  content: ''; position: absolute; inset: -1px; z-index: -1; pointer-events: none;
+  border-radius: 16px; background: rgba(255,255,255,0.94);
+  border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+  opacity: 0; transform: scale(1.03, 1.1);
+  transition: opacity .35s var(--ease), transform .45s var(--ease);
+  will-change: opacity, transform;
+}
+#nav.scrolled .nav-inner::before { opacity: 1; transform: none; }
+.nav-logo .lg, #nav.scrolled .nav-logo .lg { font-size: 20px; }
+.nav-cta, #nav.scrolled .nav-cta { padding: 8px 18px; font-size: 12.5px; transition: background-color .35s var(--ease), color .35s var(--ease); }
+#nav:not(.scrolled) .nav-cta:hover { background: var(--red); color: #fff; }

@@ -1,10 +1,10 @@
-/* ── Calm page-wide ASCII backdrop (index-calm.html only) ──────────────────
+/* ── Calm page-wide ASCII backdrop (index.html) ─────────────────────────────
    One fixed, viewport-sized canvas sits behind the whole page instead of an
    absolutely-positioned one inside the hero. Cuts compared to the hero knot
    in main.js:
    - ~1/3 the points (96×10 instead of 128×16)
    - no per-frame sort: points are bucketed by depth, and each bucket is
-     drawn with one fillStyle, far to near
+   drawn with one fillStyle, far to near
    - 24fps cap, dpr 1, ~4× slower rotation, no floating particles
    - the knot stays anchored on the right and only rotates; nothing tracks
      scroll, so it doesn't wander as sections pass over it
@@ -19,6 +19,13 @@
   const FRAME_MS = 1000 / 24;
 
   let w = 0, h = 0, frame = null, last = 0, time = 0;
+
+  // Boot-up intro: the knot starts almost black, flickers on, a cyan scan band
+  // sweeps down it and it overshoots into a red neon glow before settling to
+  // its normal look. boot runs 0 -> 1 over INTRO_MS; skipped for reduced motion.
+  const INTRO_MS = 7000, INTRO_DELAY = 350;
+  const LOOP_MS = 15000;   // pause between the end of one boot-up and the start of the next
+  let introStart = 0, introDelay = INTRO_DELAY, doneAt = 0, boot = reduce ? 1 : 0;
 
   function resize() {
     w = innerWidth; h = innerHeight;
@@ -55,8 +62,8 @@
     // The knot reaches ~3.4 units from its centre, so these keep it to about
     // the full viewport height and ~40% of the width, narrower than tall, with
     // its right edge pinned near the viewport edge (i.e. in the page margin).
-    const scale = h * (compact ? 0.12 : 0.15);
-    const scaleX = Math.min(scale * 0.8, w * (compact ? 0.11 : 0.065));
+    const scale = h * (compact ? 0.14 : 0.17);
+    const scaleX = Math.min(scale * 0.8, w * (compact ? 0.125 : 0.075));
     const cx = w - 3.4 * scaleX - w * 0.03;
     const cy = h * 0.5;
 
@@ -75,13 +82,34 @@
     }
 
     ctx.clearRect(0, 0, w, h);
+    const booting = boot < 1;
+    let alpha = 1, glow = 0;
+    if (booting) {
+      const e = 1 - Math.pow(1 - boot, 3);
+      const flick = boot < 0.6 ? 0.55 + 0.45 * Math.abs(Math.sin(boot * 95) * Math.sin(boot * 37 + 1)) : 1;
+      alpha = (0.05 + 0.95 * e) * flick;
+      glow = 16 * Math.sin(Math.PI * boot);
+    }
     const cs = Math.max(11, scale * 0.13);
     ctx.font = cs + 'px "JetBrains Mono", monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    if (booting) { ctx.globalAlpha = alpha; ctx.shadowColor = 'rgba(255,50,60,0.9)'; ctx.shadowBlur = glow; }
     for (let L = 1; L < LEVELS; L++) {          // level 0 is a space: skip it
       ctx.fillStyle = STYLES[L];
       const ch = CHARS[L];
       for (let i = 0; i < N; i++) if (lvl[i] === L) ctx.fillText(ch, px[i], py[i]);
+    }
+    if (booting) {
+      // cyan scan band travelling top -> bottom across the knot
+      const sy = h * (-0.1 + 1.2 * Math.min(1, boot / 0.75)), bh = h * 0.07;
+      if (boot < 0.8) {
+        ctx.globalAlpha = 1; ctx.shadowColor = 'rgba(80,255,240,0.95)'; ctx.shadowBlur = 14;
+        ctx.fillStyle = 'rgb(120,255,242)';
+        for (let i = 0; i < N; i++) {
+          if (lvl[i] > 2 && Math.abs(py[i] - sy) < bh) ctx.fillText(CHARS[lvl[i]], px[i], py[i]);
+        }
+      }
+      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
     }
 
   }
@@ -90,6 +118,13 @@
     frame = requestAnimationFrame(loop);
     if (now - last < FRAME_MS) return;
     // advance by real elapsed time so a slow frame doesn't slow the motion
+    if (boot < 1) {
+      if (!introStart) introStart = now;
+      boot = Math.max(0, Math.min(1, (now - introStart - introDelay) / INTRO_MS));
+      if (boot >= 1) doneAt = now;
+    } else if (!reduce && now - doneAt > LOOP_MS) {
+      boot = 0; introStart = now; introDelay = 0;   // replay the flicker-on
+    }
     const dt = last ? Math.min(now - last, 100) : FRAME_MS;
     last = now;
     time += dt * 0.00012;

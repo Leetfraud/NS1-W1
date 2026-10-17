@@ -4,11 +4,13 @@ Production website for NexioSol, a technology and business development partner: 
 
 ## Current Site
 
-- `index.html` - home page with animated ASCII hero, the four service groups (Software Development, CRM Solutions, AI & Automation, Business Development) in the capabilities accordion, packages, process/code interaction, metrics counters, selected work, and the discovery call request form.
+- `index.html` - home page (Dusk interface): a fixed, page-wide animated ASCII backdrop behind dark-glass sections, the four service groups (Software Development, CRM Solutions, AI & Automation, Business Development) in the capabilities accordion, packages, process/code interaction, metrics counters, selected work, and the discovery call request form.
 - `portfolio.html` - full portfolio page with service filters, a desktop constellation view, project panels/decks, and a card-grid fallback for mobile/coarse-pointer devices.
 - `dashboard.html` - private leads dashboard that reads from `/api/leads` after password authentication.
 - `css/styles.css` - shared styling for the public site, portfolio, modals, and dashboard.
-- `js/main.js` - home-page animation, counters, navigation, accordion, project form, and selected-work cards.
+- `css/calm.css` - Dusk interface layer for the home page, loaded after `styles.css`: page-wide backdrop canvas, dark-glass light sections (enabled by `<html data-lt="dusk">`), and a compositor-only nav morph.
+- `js/main.js` - home-page counters, navigation, accordion, project form, and selected-work cards.
+- `js/calm-bg.js` - fixed page-wide ASCII knot backdrop and hero cycling word for the home page (24fps cap, depth-bucketed drawing).
 - `js/portfolio-constellation.js` - single source of portfolio project data plus the constellation, filters, project panel, and deck modal.
 - `js/dashboard.js` - dashboard login, stats, search, and lead table rendering.
 - `api/leads.js` - `POST` saves leads, `GET` lists leads with password auth, and notification hooks run after submissions.
@@ -19,7 +21,7 @@ Production website for NexioSol, a technology and business development partner: 
 
 - Static HTML/CSS/JS front end deployable on Vercel.
 - Responsive navigation with mobile menu support.
-- Motion-aware hero canvas and portfolio animations that respect `prefers-reduced-motion`.
+- Motion-aware page backdrop canvas and portfolio animations that respect `prefers-reduced-motion`.
 - Three-step "Book a discovery call" form with client-side validation; visitors can select several services, budget is optional.
 - Lead capture via `/api/leads`, stored in MongoDB. Each lead keeps a `services` array plus a comma-joined `service` string.
 - Server-side dashboard protection using `DASHBOARD_PASSWORD`.
@@ -36,9 +38,11 @@ Production website for NexioSol, a technology and business development partner: 
 |-- portfolio.html
 |-- dashboard.html
 |-- css/
-|   `-- styles.css
+|   |-- styles.css
+|   `-- calm.css
 |-- js/
 |   |-- main.js
+|   |-- calm-bg.js
 |   |-- portfolio-constellation.js
 |   `-- dashboard.js
 |-- api/
@@ -129,7 +133,7 @@ No build command is required for the static pages. Vercel detects `api/*.js` as 
 
 ## Testing Checklist
 
-- Open the home page and confirm hero animation, navigation, capabilities, process tabs, counters, and selected-work cards render.
+- Open the home page and confirm the backdrop animation, navigation, capabilities, process tabs, counters, and selected-work cards render.
 - Submit the discovery call form and confirm "Request received" appears.
 - Confirm the submitted lead is stored in MongoDB.
 - Visit `/dashboard.html`, enter `DASHBOARD_PASSWORD`, and confirm the lead appears.

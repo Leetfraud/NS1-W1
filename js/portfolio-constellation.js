@@ -484,8 +484,8 @@
       el.focus({ preventScroll: true });
       if (el.classList && el.classList.contains('nodeG')) {
         const ring = el.querySelector('.ring'), dot = el.querySelector('.dot');
-        if (ring) { ring.setAttribute('r', '20'); ring.setAttribute('fill', '#0c0c0b'); }
-        if (dot)  { dot.setAttribute('r', '5'); }
+        if (ring) { ring.setAttribute('r', '25'); ring.setAttribute('fill', '#0c0c0b'); }
+        if (dot)  { dot.setAttribute('r', '6'); }
         hovered = -1;
       }
     }
@@ -599,28 +599,28 @@
       g.setAttribute('aria-label', `${n.title} — ${TYPES[n.cat].label}. Open project deck.`);
 
       const above = n.y < CY;
-      const ly1   = above ? n.y - 38 : n.y + 44;
-      const ly2   = above ? n.y - 22 : n.y + 60;
+      const ly1   = above ? n.y - 43 : n.y + 49;
+      const ly2   = above ? n.y - 27 : n.y + 65;
 
       g.innerHTML =
-        `<circle cx="${n.x}" cy="${n.y}" r="20" fill="#0c0c0b" stroke="#e0514f" stroke-width="1.1" class="ring"></circle>` +
-        `<circle cx="${n.x}" cy="${n.y}" r="5"  fill="#e0514f" class="dot"></circle>` +
-        `<text x="${n.x}" y="${n.y + 3}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#e0514f" style="pointer-events:none;">${n.num}</text>` +
+        `<circle cx="${n.x}" cy="${n.y}" r="25" fill="#0c0c0b" stroke="#e0514f" stroke-width="1.1" class="ring"></circle>` +
+        `<circle cx="${n.x}" cy="${n.y}" r="6"  fill="#e0514f" class="dot"></circle>` +
+        `<text x="${n.x}" y="${n.y + 3}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" fill="#e0514f" style="pointer-events:none;">${n.num}</text>` +
         `<text x="${n.x}" y="${ly1}" text-anchor="middle" font-family="'DM Serif Display',serif" font-size="17" fill="#fff" class="lbl" style="pointer-events:none;">${n.title}</text>` +
         `<text x="${n.x}" y="${ly2}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="rgba(255,255,255,0.45)" letter-spacing="0.04em" style="pointer-events:none;">${n.tag}</text>`;
 
       const enter = () => {
         hovered = i;
         preloadMockups(PROJECTS[n._pIdx]);   // hover usually leads the click by 200ms+
-        g.querySelector('.ring').setAttribute('r', '24');
+        g.querySelector('.ring').setAttribute('r', '30');
         g.querySelector('.ring').setAttribute('fill', 'rgba(134,18,17,0.25)');
-        g.querySelector('.dot').setAttribute('r', '6');
+        g.querySelector('.dot').setAttribute('r', '7');
       };
       const leave = () => {
         hovered = -1;
-        g.querySelector('.ring').setAttribute('r', '20');
+        g.querySelector('.ring').setAttribute('r', '25');
         g.querySelector('.ring').setAttribute('fill', '#0c0c0b');
-        g.querySelector('.dot').setAttribute('r', '5');
+        g.querySelector('.dot').setAttribute('r', '6');
       };
       g.addEventListener('mouseenter', enter);
       g.addEventListener('mouseleave', leave);
